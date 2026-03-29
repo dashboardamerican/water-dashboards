@@ -1,0 +1,2480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>US Data Center Water Calculator (AF)</title>
+  <style>
+    :root {
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --ink: #11243a;
+      --muted: #4f6479;
+      --line: #d7e1eb;
+      --brand: #0a5ea8;
+      --brand-soft: #ebf4fd;
+      --good: #1f7a3f;
+      --warn: #8a5a00;
+      --shadow: 0 8px 24px rgba(12, 30, 50, 0.08);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 24px;
+      background: radial-gradient(1200px 400px at 10% -15%, #e7f2ff, transparent 60%), var(--bg);
+      color: var(--ink);
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.45;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.08;
+      letter-spacing: 0.01em;
+    }
+    h2 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.2;
+    }
+    h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+    p {
+      margin: 8px 0;
+    }
+    .sub {
+      color: var(--muted);
+      margin-top: 8px;
+      max-width: 960px;
+    }
+    .top-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .trace-status {
+      margin-top: 8px;
+      border: 1px solid #d5e3f1;
+      border-radius: 10px;
+      background: #f5f9fe;
+      color: #234a6d;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .trace-status.good {
+      border-color: #b7dfc3;
+      background: #edf8f1;
+      color: #1f6e3e;
+    }
+    .trace-status.warn {
+      border-color: #f0d7a9;
+      background: #fff6e7;
+      color: #8a5b12;
+    }
+    .trace-links {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .trace-links a {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1f4f79;
+      background: #edf6ff;
+      border: 1px solid #c7dbef;
+      border-radius: 999px;
+      padding: 5px 9px;
+      text-decoration: none;
+    }
+    .trace-links a:hover {
+      background: #deedfc;
+      text-decoration: none;
+    }
+    .card {
+      margin-top: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .headline-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 12px;
+    }
+    .headline-card {
+      background: linear-gradient(130deg, #0a5ea8 0%, #0f78b8 60%, #3c9fcb 100%);
+      color: #ffffff;
+      border: none;
+    }
+    .headline-card .kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+    .headline-card .main {
+      margin-top: 8px;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      line-height: 1.08;
+    }
+    .headline-card .subline {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #e8f4ff;
+    }
+    .headline-card .meta {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #d7ecff;
+      font-variant-numeric: tabular-nums;
+    }
+    .scale-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .scale-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .scale-card .scale-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #5a7a96;
+    }
+    .scale-card .scale-value {
+      margin-top: 4px;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+    .scale-card .scale-denom {
+      margin-top: 3px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    @media (max-width: 600px) {
+      .scale-row {
+        grid-template-columns: 1fr;
+      }
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--brand-soft);
+      border: 1px solid #c7dcf3;
+      border-radius: 10px;
+      padding: 10px 12px;
+      color: #123c62;
+      font-weight: 600;
+    }
+    .toggle input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--brand);
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: #f3f6fa;
+      border: 1px solid var(--line);
+      color: #21415f;
+    }
+    .pill.good {
+      color: var(--good);
+      border-color: #b7dfc3;
+      background: #edf8f1;
+    }
+    .pill.warn {
+      color: var(--warn);
+      border-color: #f0d7a9;
+      background: #fff6e7;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .metrics-decomposition {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfdff;
+      padding: 12px;
+    }
+    .metric .k {
+      color: #3d5973;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: 700;
+    }
+    .metric .v {
+      margin-top: 3px;
+      font-size: 24px;
+      font-weight: 800;
+      color: #123451;
+    }
+    .metric .m {
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .metric-ref {
+      border-style: dashed;
+      background: #f6f8fb;
+    }
+    .metric-ref .k {
+      color: #6b839a;
+    }
+    .metric-ref .v {
+      font-size: 20px;
+      color: #3d5973;
+    }
+    .metric-conditional {
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+    .metric-conditional.metric-dimmed {
+      opacity: 0.35;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 12px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 9px 10px;
+      vertical-align: top;
+    }
+    th {
+      text-align: left;
+      background: #f2f6fb;
+      color: #1f3d5a;
+      font-weight: 700;
+    }
+    .num {
+      text-align: right;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+    }
+    #sourceMappingTable {
+      table-layout: fixed;
+    }
+    #sourceMappingTable th,
+    #sourceMappingTable td {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    #sourceMappingTable .num {
+      text-align: left;
+      white-space: normal;
+    }
+    .note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .info-tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #dde8f3;
+      color: #3d6a96;
+      font-size: 12px;
+      font-weight: 700;
+      font-style: italic;
+      font-family: Georgia, serif;
+      cursor: default;
+      vertical-align: middle;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+    .info-tip .info-tip-text {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 8px);
+      transform: translateX(-50%);
+      background: #1a2f44;
+      color: #e4edf6;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      font-style: normal;
+      line-height: 1.45;
+      padding: 10px 12px;
+      border-radius: 8px;
+      width: max-content;
+      max-width: 340px;
+      z-index: 100;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      pointer-events: none;
+    }
+    .info-tip .info-tip-text::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-bottom-color: #1a2f44;
+    }
+    .info-tip:hover .info-tip-text {
+      display: block;
+    }
+    .rainfall-context {
+      margin: 10px 2px 0;
+      font-size: 12px;
+      color: #5f7388;
+    }
+    .evidence-quote {
+      color: #103351;
+      font-style: italic;
+      margin: 0;
+    }
+    .evidence-meta {
+      margin-top: 4px;
+      color: #58718a;
+      font-size: 12px;
+    }
+    code, pre {
+      font-family: Menlo, Consolas, Monaco, monospace;
+    }
+    pre {
+      margin: 0;
+      padding: 12px;
+      border-radius: 10px;
+      background: #0f1f31;
+      color: #dbe8f6;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    a {
+      color: var(--brand);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul {
+      margin: 8px 0 0 18px;
+      padding: 0;
+    }
+    li {
+      margin: 6px 0;
+    }
+    .assumption-list {
+      margin-top: 10px;
+    }
+    .assumption-list code {
+      color: #163f62;
+      background: #edf5ff;
+      border: 1px solid #d7e6f6;
+      border-radius: 6px;
+      padding: 1px 4px;
+    }
+    details {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fcfdff;
+    }
+    summary {
+      cursor: pointer;
+      list-style: none;
+      padding: 10px 12px;
+      font-weight: 700;
+      color: #254765;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    details[open] summary {
+      border-bottom: 1px solid var(--line);
+      background: #f5f9fe;
+    }
+    .details-body {
+      padding: 12px;
+    }
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .field label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2f516e;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .field select,
+    .field input {
+      width: 100%;
+      border: 1px solid #bdd2e8;
+      border-radius: 8px;
+      padding: 8px 9px;
+      font-size: 14px;
+      color: #143a5c;
+      background: #fbfdff;
+    }
+    .field .hint {
+      color: #4f6479;
+      font-size: 12px;
+    }
+    .bars {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 1fr) minmax(160px, 2fr) 70px;
+      gap: 10px;
+      align-items: center;
+    }
+    .bar-row .name {
+      color: #284762;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .bar-track {
+      height: 10px;
+      border: 1px solid #d5e3f1;
+      border-radius: 999px;
+      background: #edf3f9;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3f8fcb, #0a5ea8);
+      width: 0%;
+    }
+    .bar-val {
+      text-align: right;
+      color: #3b5974;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .chart-head {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1.1fr) minmax(240px, 1.6fr) 90px 90px;
+      gap: 10px;
+      color: #3c5873;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .hchart {
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .hrow {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.1fr) minmax(240px, 1.6fr) 90px 90px;
+      gap: 10px;
+      align-items: center;
+    }
+    .hlabel {
+      font-size: 13px;
+      color: #163d60;
+      font-weight: 700;
+    }
+    .src-wrap {
+      display: inline;
+      position: relative;
+    }
+    .src-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #e4edf6;
+      color: #4f6a84;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 5px;
+      vertical-align: middle;
+      border: 1px solid #c7d8e8;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .src-icon:hover {
+      background: #d0e0f0;
+    }
+    .src-tip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a2f45;
+      color: #e8f0fa;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 7px 10px;
+      border-radius: 8px;
+      white-space: normal;
+      width: max-content;
+      max-width: 340px;
+      z-index: 10;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      line-height: 1.4;
+    }
+    .src-tip a {
+      color: #8cc4f0;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    .src-tip::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: #1a2f45;
+    }
+    .src-wrap:hover .src-tip {
+      display: block;
+    }
+    .boundary-tip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      margin-left: 8px;
+    }
+    .boundary-tip {
+      left: auto !important;
+      right: 0 !important;
+      transform: none !important;
+    }
+    .boundary-tip::after {
+      left: auto !important;
+      right: 12px !important;
+      transform: none !important;
+    }
+    .cmp-track {
+      position: relative;
+      height: 16px;
+      width: 100%;
+      border: 1px solid #d3dfec;
+      border-radius: 999px;
+      background: #eff4fa;
+      overflow: hidden;
+      display: flex;
+    }
+    .cmp-fill {
+      height: 100%;
+    }
+    .cmp-fill.direct {
+      background: linear-gradient(90deg, #0a5ea8, #2680c9);
+    }
+    .cmp-fill.indirect {
+      background: linear-gradient(90deg, #e39d32, #d9781a);
+    }
+    .cmp-fill.other {
+      background: linear-gradient(90deg, #6d86a1, #4d6680);
+    }
+    .cmp-fill.ag {
+      background: linear-gradient(90deg, #1f8e5a, #2db375);
+    }
+    .cmp-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+      color: #38546f;
+      font-size: 12px;
+    }
+    .cmp-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .cmp-dot.direct {
+      background: #1d73bd;
+    }
+    .cmp-dot.indirect {
+      background: #dd8a24;
+    }
+    .cmp-dot.other {
+      background: #5c768f;
+    }
+    .cmp-fill.policy {
+      background: linear-gradient(90deg, #b5451a, #d4652e);
+    }
+    .cmp-dot.policy {
+      background: #b5451a;
+    }
+    .rfs-mode-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin: 10px 0 8px;
+    }
+    .rfs-mode-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #444;
+      margin-right: 2px;
+    }
+    .rfs-mode-btn {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border: 1px solid #c7dcf3;
+      border-radius: 6px;
+      background: var(--brand-soft);
+      color: #123c62;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .rfs-mode-btn:hover {
+      background: #d4e4f5;
+    }
+    .rfs-mode-btn.active {
+      background: #b5451a;
+      color: #fff;
+      border-color: #b5451a;
+    }
+    .rfs-mode-note {
+      font-size: 12px;
+      color: #777;
+      font-style: italic;
+      margin-left: 4px;
+    }
+    @media (max-width: 900px) {
+      .chart-head {
+        display: none;
+      }
+      .hrow {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+    .btn-row {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid #a9c7e6;
+      border-radius: 10px;
+      background: #edf6ff;
+      color: #133f65;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #deedfc;
+    }
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .btn-trace-top {
+      flex-shrink: 0;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
+    .trace-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(10, 20, 35, 0.55);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+    .trace-modal-overlay.visible {
+      display: flex;
+    }
+    .trace-modal {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 960px;
+      max-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .trace-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px 0;
+    }
+    .trace-modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .trace-modal-close {
+      appearance: none;
+      border: none;
+      background: none;
+      font-size: 28px;
+      color: #6b839a;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+    }
+    .trace-modal-close:hover {
+      color: var(--ink);
+    }
+    .trace-modal-desc {
+      margin: 6px 24px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .trace-modal-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+    }
+    .trace-modal textarea {
+      flex: 1;
+      margin: 0 24px 24px;
+      border: 1px solid #c9d9ea;
+      border-radius: 10px;
+      padding: 12px;
+      font: 12px/1.45 Menlo, Consolas, Monaco, monospace;
+      color: #0e2438;
+      background: #f6f8fb;
+      resize: none;
+      min-height: 300px;
+    }
+    @media (max-width: 760px) {
+      body {
+        padding: 12px;
+      }
+      .card {
+        border-radius: 12px;
+      }
+      .metrics-decomposition {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="page-header">
+      <div>
+        <h1>US Data Center Water Calculator</h1>
+        <p class="sub">
+          How much U.S. water do data centers actually consume?
+          All source assumptions are embedded on this page. Last verified on <strong>March 29, 2026</strong>.
+        </p>
+      </div>
+      <button id="topTraceBtn" class="btn btn-trace-top" type="button">Export fact-check trace</button>
+    </div>
+
+    <div class="headline-grid">
+      <div class="card headline-card">
+        <div class="kicker">Direct (on-site)</div>
+        <div class="main" id="headlineDirect"></div>
+        <div class="subline">of US water consumed</div>
+      </div>
+      <div class="card headline-card">
+        <div class="kicker">Direct + grid</div>
+        <div class="main" id="headlineTotal"></div>
+        <div class="subline">of US water consumed</div>
+      </div>
+    </div>
+
+    <div class="scale-row">
+      <div class="scale-card">
+        <div class="scale-label">vs water consumed</div>
+        <div class="scale-value" id="scaleConsumed"></div>
+        <div class="scale-denom">USGS consumptive use</div>
+      </div>
+      <div class="scale-card">
+        <div class="scale-label">vs water withdrawn</div>
+        <div class="scale-value" id="scaleWithdrawn"></div>
+        <div class="scale-denom">USGS total freshwater withdrawals</div>
+      </div>
+      <div class="scale-card">
+        <div class="scale-label">vs rainfall</div>
+        <div class="scale-value" id="scaleRainfall"></div>
+        <div class="scale-denom">CONUS annual precipitation</div>
+      </div>
+    </div>
+    <p class="note" id="heroFootnote"></p>
+
+    <div class="card">
+      <div class="controls">
+        <label class="toggle">
+          <input id="hydroToggle" type="checkbox" />
+          Include hydro evaporation
+        </label>
+        <label class="toggle">
+          <input id="ppaToggle" type="checkbox" checked />
+          Include renewables-only PPA reduction
+        </label>
+        <span id="hydroFlag" class="pill"></span>
+        <span id="ppaFlag" class="pill"></span>
+        <span class="src-wrap boundary-tip-wrap"><span class="src-icon">i</span><span id="boundaryNote" class="src-tip boundary-tip"></span></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <details>
+        <summary>Advanced Settings</summary>
+        <div class="details-body">
+          <div class="input-grid">
+            <div class="field">
+              <label for="ppaCapacityGW">Tracked signed PPA capacity (GW)</label>
+              <input id="ppaCapacityGW" type="number" min="0" step="0.001" value="59.955" />
+              <div class="hint">Default uses a strict US renewables PPA-focused baseline across the big 4. Microsoft is included using a 90% renewables-PPA proxy on the US map-derived contracted value.</div>
+            </div>
+            <div class="field">
+              <label for="ppaCapacityFactorPct">Average capacity factor (%)</label>
+              <input id="ppaCapacityFactorPct" type="number" min="0" max="100" step="1" value="30" />
+              <div class="hint">Converts signed GW to delivered TWh/year</div>
+            </div>
+            <div class="field">
+              <label for="displacedThermalPreset">What are renewables displacing?</label>
+              <select id="displacedThermalPreset">
+                <option value="1.78" selected>LBNL thermoelectric avg — 1.78 L/kWh</option>
+                <option value="1.82">Coal (subcritical, tower) — 1.82 L/kWh</option>
+                <option value="0.75">Gas combined cycle (NGCC) — 0.75 L/kWh</option>
+                <option value="custom">Custom…</option>
+              </select>
+              <input id="displacedThermalLkwh" type="number" min="0" max="10" step="0.01" value="1.78" style="display:none;" />
+              <div class="hint">LBNL avg: 0.47 gal/kWh (pp. 55–57). Coal/NGCC/Nuclear from NREL/TP-6A20-50900.</div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Industry Comparison (US Consumptive Use) <span class="info-tip">i<span class="info-tip-text">Linear-scale bars in kAF/year. Data centers are stacked (direct + indirect) under current 2025 settings. Only sectors with current, primary-sourced data are shown. Alfalfa is in the agriculture chart below.</span></span></h2>
+      <div class="cmp-legend">
+        <span><span class="cmp-dot direct"></span>Data center direct</span>
+        <span><span class="cmp-dot indirect"></span>Data center indirect</span>
+        <span><span class="cmp-dot other"></span>Other industry total</span>
+        <span><span class="cmp-dot policy"></span>Policy-mandated (RFS ethanol)</span>
+      </div>
+      <div class="rfs-mode-controls">
+        <span class="rfs-mode-label">RFS ethanol scope:</span>
+        <button class="rfs-mode-btn active" data-mode="marginal" onclick="updateRfsMode('marginal')">Marginal irrigation</button>
+        <button class="rfs-mode-btn" data-mode="aquifer" onclick="updateRfsMode('aquifer')">+ Infiltration loss</button>
+        <button class="rfs-mode-btn" data-mode="total" onclick="updateRfsMode('total')">Total ethanol water</button>
+        <span id="rfsModeNote" class="rfs-mode-note">Only the additional irrigation caused by the mandate</span>
+      </div>
+      <div class="chart-head">
+        <div>Industry</div>
+        <div>kAF/year (linear bar)</div>
+        <div class="num">kAF/year</div>
+        <div class="num">vs DC total</div>
+      </div>
+      <div id="industryChart" class="hchart"></div>
+      <p class="note">All sources traced in Source Mapping below.</p>
+      <details style="margin-top:8px">
+        <summary>RFS ethanol methodology &amp; sources</summary>
+        <div class="details-body">
+          <p class="note">This bar shows only the <em>marginal</em> irrigation water that would not exist without the Renewable Fuel Standard &mdash; not the total blue water embedded in all ethanol corn.
+            Teter et al. (2018) modeled the Mandate scenario (RFS through 2030, ~15 Bgal/yr corn ethanol) vs. a no-biofuels counterfactual using coupled BEPAM economic + CropWatR biophysical models at 10 km resolution.
+            The +729 billion liters/year net irrigation increase (&asymp; 192 Bgal/year) is concentrated in Kansas, Nebraska, Oklahoma, and Texas &mdash; regions that source &gt;90% of their irrigation from the Ogallala Aquifer, a fossil groundwater system with negligible natural recharge.
+            The same mandate also <em>reduced</em> groundwater infiltration by 587 billion liters/year, compounding the aquifer stress.</p>
+          <p class="note">This is the most conservative estimate available: the total blue water of all US ethanol corn (1.0&ndash;1.4 trillion gal/yr before co-product allocation) is 5&ndash;7&times; larger.
+            Convergent support: Lark et al. (PNAS 2022) found the RFS expanded corn acreage by 2.8 Mha with corn prices up ~31%; Sampson et al. (2021) showed ethanol markets drove ~4% of total Kansas irrigated water use at the field level, scaling consistently to the Teter national estimate.</p>
+          <p class="note">Co-product note: DDGS (distillers grains) is a byproduct of ethanol, not the reverse &mdash; the RFS mandate drives the corn demand. Under energy-based LCA allocation, 57% of crop water is attributed to ethanol. The 192 Bgal marginal figure avoids the allocation question entirely by measuring only the net increase caused by the policy.</p>
+        </div>
+      </details>
+      <details style="margin-top:6px">
+        <summary>Disclosure gap — why some industries are missing</summary>
+        <div class="details-body">
+          <p class="note">Several major US industrial water consumers (chemical manufacturing, steelmaking, mining, oil refining) are excluded because no current, primary-sourced consumptive-use data exists. The Census Bureau's Survey of Water Use in Manufacturing was defunded after 1983; USGS does not break out industrial water by subsector; and these industries do not voluntarily report consumption. Data centers are among the only US industrial water consumers with transparent, audited, annually reported water data.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card">
+      <h2>Agriculture Context (Data Centers as % of Crop Water) <span class="info-tip">i<span class="info-tip-text">DC total / crop blue-water use (kAF/year). Bars on a true 0–100% axis. Each row uses its own denominator — not additive.</span></span></h2>
+      <div class="chart-head">
+        <div>Crop / aggregate</div>
+        <div>DC share of crop water (0-100% axis)</div>
+        <div class="num">DC share</div>
+        <div class="num">Crop kAF/year</div>
+      </div>
+      <div id="agChart" class="hchart"></div>
+      <details style="margin-top:8px">
+        <summary>Crop data sources</summary>
+        <div class="details-body">
+          <p class="note">Crop values follow Lamsal &amp; Marston (2025) irrigation blue-water estimates. China export figure: 44% of US alfalfa export-embedded water (~0.55 km&sup3;/yr midpoint), derived from USDA FAS 2025 export volumes and western irrigation intensities. See Source Mapping links.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card grid">
+      <div>
+        <h2>PPA Assumption Chart <span class="info-tip">i<span class="info-tip-text">Renewables-only, thermal off-site only. PPA annual energy × displaced thermal intensity = potential avoided off-site water (capped at no-hydro baseline). Delivered renewables are treated as displacing thermal generation.</span></span></h2>
+        <div class="bars">
+          <div class="bar-row">
+            <div class="name">PPA coverage of 2023 load</div>
+            <div class="bar-track"><div id="barCoverage" class="bar-fill"></div></div>
+            <div id="barCoverageVal" class="bar-val"></div>
+          </div>
+          <div class="bar-row">
+            <div class="name">Assumed displaced thermal intensity</div>
+            <div class="bar-track"><div id="barThermalIntensity" class="bar-fill"></div></div>
+            <div id="barThermalIntensityVal" class="bar-val"></div>
+          </div>
+          <div class="bar-row">
+            <div class="name">Net no-hydro reduction</div>
+            <div class="bar-track"><div id="barNetReduction" class="bar-fill"></div></div>
+            <div id="barNetReductionVal" class="bar-val"></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2>Downloads</h2>
+        <p class="note">Export full formula trace for reproducibility.</p>
+        <div class="btn-row">
+          <button id="downloadTraceBtn" class="btn" type="button">Download full trace TXT</button>
+        </div>
+        <p id="downloadNote" class="note"></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="grid">
+        <div>
+          <h2>2023 Shares of US Consumptive Water</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Share metric</th>
+                <th class="num">USGS denominator<br><span class="note">(~95,143.8 kAF/year, CONUS 2020 modeled)</span></th>
+              </tr>
+            </thead>
+            <tbody id="shareRows"></tbody>
+          </table>
+        </div>
+        <div>
+          <h2>2025 Sensitivity Range (LBNL 2028 Bounds)</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Path</th>
+                <th class="num">2025 direct kAF/year</th>
+                <th class="num">2025 total kAF/year</th>
+                <th class="num">2025 total share<br><span class="note">(USGS denominator)</span></th>
+              </tr>
+            </thead>
+            <tbody id="projRows"></tbody>
+          </table>
+        </div>
+      </div>
+      <p id="rainfallContextNote" class="note rainfall-context"></p>
+    </div>
+
+    <div class="card" id="methodsSummarySection">
+      <h2>Methods Summary</h2>
+      <p id="methodsSummary" class="note"></p>
+    </div>
+
+    <div class="card">
+      <p class="note">
+        <strong>Scope:</strong> 2023 values are source-reported. The default 2025 headline uses a buildout-calibrated
+        point estimate (IEA + CBRE scaling). A separate LBNL 2028-bound interpolation range is retained below as a
+        sensitivity view. The US denominator uses the latest available USGS modeled CONUS consumptive-use values
+        (water year 2020).
+      </p>
+    </div>
+
+    <div class="card" id="buildoutAssumptionsSection">
+      <h2>Buildout Assumptions Used for 2025 Default</h2>
+      <ul class="assumption-list">
+        <li>2023 baseline numerators: <code>66B L/year direct</code> and <code>800B L/year indirect</code> (LBNL).</li>
+        <li>Default tracked signed PPA capacity baseline (strict US renewables PPA-focused, big 4): <code>59.955 GW</code> = <code>6.485</code> (Google strict US renewable PPA set, conservative curated) + <code>20.043</code> (Amazon US off-site wind/solar floor after subtracting up to <code>0.061 GW</code> on-site) + <code>9.800</code> (Meta US wind/solar contract-backed projects) + <code>23.627</code> (Microsoft US map-derived contracted value <code>26.252 GW</code> x 90% renewables-PPA proxy).</li>
+        <li>2024 anchor: <code id="assump2024TWh"></code> TWh implied vs <code>176 TWh</code> 2023 baseline, giving <code id="assump2024Factor"></code>x.</li>
+        <li>2025 buildout step: <code>+<span id="assump2025GrowthPct"></span>%</code> key-US-market inventory growth (CBRE), giving <code id="assump2025Factor"></code>x.</li>
+        <li>Combined 2023 to 2025 scale: <code id="assumpCombinedFactor"></code>x applied to direct and selected-boundary indirect numerators.</li>
+        <li>US denominator remains <code>~95,143.8 kAF/year</code> (derived from USGS PP1894-D modeled 2020 values).</li>
+      </ul>
+      <p class="note" style="margin-top: 12px;">
+        <strong>Not modeled here: water replenishment.</strong> This calculator shows gross consumption only.
+        Major data-center operators are among the few US industrial water consumers with active replenishment programs:
+        Google replenished 4.5B gal in 2024 (~64% of consumption; 112 projects, 68 watersheds);
+        Meta replenished 1.5B gal in 2024;
+        Microsoft committed to zero-water cooling on all new builds (Aug 2024);
+        AWS operates at 0.15 L/kWh WUE (lowest among the big four).
+        Comparable replenishment or offset commitments are not standard practice in peer sectors shown in the industry comparison above
+        (golf courses, pulp/paper, swimming pools, agriculture).
+      </p>
+    </div>
+
+    <div class="card" id="sourceMappingSection">
+      <h2>Source Mapping</h2>
+      <table id="sourceMappingTable">
+        <colgroup>
+          <col style="width: 22%" />
+          <col style="width: 24%" />
+          <col style="width: 30%" />
+          <col style="width: 24%" />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Input</th>
+            <th class="num">Value in source units</th>
+            <th>How used here</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LBNL 2023 direct data-center water</td>
+            <td class="num">66,000,000,000 L/year</td>
+            <td>Direct numerator in AF</td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record (eScholarship)</a></td>
+          </tr>
+          <tr>
+            <td>LBNL 2023 indirect power-related water</td>
+            <td class="num">800,000,000,000 L/year</td>
+            <td>Off-site numerator when hydro is included</td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record (eScholarship)</a></td>
+          </tr>
+          <tr>
+            <td>LBNL 2028 direct projection range</td>
+            <td class="num">145,000,000,000 to 275,000,000,000 L/year</td>
+            <td>Used to model 2025 direct range (2023 to 2028 growth path)</td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record (eScholarship)</a></td>
+          </tr>
+          <tr>
+            <td>LBNL 2028 indirect projection range</td>
+            <td class="num">1,740,000,000,000 to 3,270,000,000,000 L/year</td>
+            <td>Used to model 2025 off-site range under selected boundary</td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record (eScholarship)</a></td>
+          </tr>
+          <tr>
+            <td>No-hydro boundary (derived from LBNL thermoelectric intensity)</td>
+            <td class="num">~308,039.2 AF/year total (direct + off-site)</td>
+            <td>Derived by applying LBNL thermoelectric intensity (0.47 gal/kWh, pp. 55–57) to full 176 TWh as upper bound (assumes all generation is thermoelectric; actual value is lower since wind/solar consume near-zero water), plus 66B L/year direct.</td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL 2024 report (pp. 55–57)</a></td>
+          </tr>
+          <tr>
+            <td>2025 interpolation method</td>
+            <td class="num">(2028 / 2023)^(2/5)</td>
+            <td>Used for sensitivity range table only (not the default headline)</td>
+            <td>Calculated in this worksheet (explicit formula block below)</td>
+          </tr>
+          <tr>
+            <td>IEA-based 2024 activity anchor for default 2025 path</td>
+            <td class="num">184.6 TWh assumed 2024 vs 176 TWh 2023 (factor 1.0489x)</td>
+            <td>First step in buildout-calibrated 2025 point estimate</td>
+            <td><a href="https://www.iea.org/reports/energy-and-ai/executive-summary" target="_blank" rel="noopener noreferrer">IEA Energy and AI (executive summary)</a></td>
+          </tr>
+          <tr>
+            <td>CBRE 2025 key-US-market data-center inventory growth</td>
+            <td class="num">+26% (2024 to 2025)</td>
+            <td>Second step in buildout-calibrated 2025 point estimate</td>
+            <td><a href="https://www.cbre.com/insights/reports/17887575722" target="_blank" rel="noopener noreferrer">CBRE North American Data Center Trends H1 2025</a></td>
+          </tr>
+          <tr>
+            <td>Default 2025 buildout scale used in headline cards</td>
+            <td class="num">1.0489 x 1.26 = 1.3216x</td>
+            <td>Applied to 2023 direct and selected-boundary indirect AF/year</td>
+            <td>Calculated in this worksheet</td>
+          </tr>
+          <tr>
+            <td>Industry comparison benchmarks (US)</td>
+            <td class="num">Golf 425 (1.63M AF applied &times; 80% ET); pulp/paper ~68 (conservative derived estimate); swimming pools 56 Bgal/year</td>
+            <td>Static context rows in industry comparison chart (linear AF/year bars). Pulp/paper uses a conservative derived estimate anchored to NCASI withdrawals and low-end consumptive share, adjusted by AF&amp;PA output decline. Sectors without current primary-sourced consumption data (chemicals, steel, mining, oil refining) were excluded rather than rely on outdated USGS sector reports from the 1960s&ndash;70s.</td>
+            <td><a href="https://journals.ashs.org/view/journals/horttech/35/5/article-p848.xml" target="_blank" rel="noopener noreferrer">GCSAA Golf Environmental Profile Phase IV; HortTechnology 35(5), 2025</a>; <a href="https://www.ncasi.org/wp-content/uploads/2019/02/tb960.pdf" target="_blank" rel="noopener noreferrer">NCASI TB960 (U.S. paper industry water profile)</a>; <a href="https://www.afandpa.org/news/2025/afpa-details-us-paper-production-and-capacity-trends" target="_blank" rel="noopener noreferrer">AF&amp;PA 2025 production/capacity release</a>; <a href="https://www.epa.gov/watersense/swimming-pools-and-spas" target="_blank" rel="noopener noreferrer">EPA WaterSense pool evaporation (12K-31K gal/yr range)</a> + CAPE Analytics 7.5M satellite pool count (conservative; PHTA estimates 10.4M); size-corrected for 41% above-ground pool mix</td>
+          </tr>
+          <tr>
+            <td>Pulp/paper conservative benchmark derivation (US)</td>
+            <td class="num">1,459 Bgal/year x 0.07 x 0.915 x 0.7293 = 68.2 Bgal/year</td>
+            <td>Used as the static pulp/paper row in the industry comparison chart. Inputs: NCASI withdrawals and low-end consumptive share, AF&amp;PA water-intensity improvement factor, and AF&amp;PA 2024 production factor <code>(78.1 x 0.875) / 93.7</code>.</td>
+            <td><a href="https://www.ncasi.org/wp-content/uploads/2019/02/tb960.pdf" target="_blank" rel="noopener noreferrer">NCASI TB960</a>; <a href="https://www.afandpa.org/sites/default/files/2025-07/2025AF%26PASustainabilityReport_FinalWeb.pdf" target="_blank" rel="noopener noreferrer">AF&amp;PA 2025 Sustainability Report</a>; <a href="https://www.afandpa.org/news/2025/afpa-details-us-paper-production-and-capacity-trends" target="_blank" rel="noopener noreferrer">AF&amp;PA production/capacity release</a></td>
+          </tr>
+          <tr>
+            <td>Agriculture comparison crop baselines (US)</td>
+            <td class="num">Alfalfa 20,162,563.5; other hay/grass 10,081,263.5; cotton 9,745,244.5; alfalfa exported to China ~446,000; all US irrigation 81,939,178.5 AF/year</td>
+            <td>Used to compute DC share (%) in agriculture chart. China export figure derived: 44% of total US alfalfa export-embedded water (~1&ndash;1.5 km&sup3;/yr at western irrigation intensities).</td>
+            <td><a href="https://doi.org/10.1029/2024WR038334" target="_blank" rel="noopener noreferrer">Lamsal &amp; Marston 2025 (DOI)</a>; <a href="https://essopenarchive.org/users/801603/articles/1183669-monthly-crop-water-requirements-of-irrigated-crops-in-the-united-states-from-1981-2019" target="_blank" rel="noopener noreferrer">ESS Open Archive preprint</a>; <a href="https://apps.fas.usda.gov/gats/" target="_blank" rel="noopener noreferrer">USDA FAS GATS (export volumes)</a>; <a href="https://hayandforage.com/article-5229-Hay-exports-flatlined-in-2024.html" target="_blank" rel="noopener noreferrer">Hay &amp; Forage Grower (destination shares)</a></td>
+          </tr>
+          <tr>
+            <td>Google strict US renewables PPA subset</td>
+            <td class="num">6,485 MW (conservative curated US wind/solar/geothermal set; hydro/nuclear/biomass and mixed non-eligible deals excluded)</td>
+            <td>Included in strict default tracked signed PPA capacity baseline</td>
+            <td><a href="https://sustainability.google/reports/" target="_blank" rel="noopener noreferrer">Google Environmental Reports</a></td>
+          </tr>
+          <tr>
+            <td>Amazon renewable project portfolio</td>
+            <td class="num">20,104 MW in the United States (table includes on-site + contracted off-site wind/solar); strict off-site PPA floor used here: 20,043 MW after subtracting up to 61 MW on-site</td>
+            <td>Included in strict default tracked signed PPA capacity baseline</td>
+            <td><a href="https://sustainability.aboutamazon.com/2024-report" target="_blank" rel="noopener noreferrer">Amazon Sustainability Report 2024</a></td>
+          </tr>
+          <tr>
+            <td>Meta renewable contract portfolio</td>
+            <td class="num">&gt;11,700 MW contracted renewables globally; 9,800 MW from 86 US wind/solar projects in study covering contracts entered through end-2022</td>
+            <td>US wind/solar contract-backed 9.8 GW used in strict default tracked signed PPA capacity baseline</td>
+            <td><a href="https://sustainability.fb.com/wp-content/uploads/2024/08/Meta-2024-Sustainability-Report.pdf" target="_blank" rel="noopener noreferrer">Meta Sustainability Report 2024 (PDF)</a></td>
+          </tr>
+          <tr>
+            <td>Microsoft contracted clean-energy portfolio (global)</td>
+            <td class="num">40 GW contracted renewable globally; 19 GW active (as of Dec 31, 2025)</td>
+            <td>Context anchor for Microsoft procurement scale and proxy basis for the strict default inclusion</td>
+            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog (Feb 18, 2026)</a>; <a href="https://aka.ms/SustainabilityReport2025" target="_blank" rel="noopener noreferrer">Microsoft 2025 sustainability report</a></td>
+          </tr>
+          <tr>
+            <td>Microsoft US-contracted renewable estimate (map-derived)</td>
+            <td class="num">26,252 MW contracted; 11,484 MW active (US ISO/RTO sum from Dec 31, 2025 map: 7,897 MISO + 8,089 PJM + 4,696 ERCOT + 3,431 WECC non-CAISO + 1,054 SERC + 907 CAISO + 178 SPP)</td>
+            <td>Included via 90% renewables-PPA proxy in strict default pending explicit US resource-level renewable PPA-only split</td>
+            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog (Dec 31, 2025 map context)</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">Microsoft renewable map image</a></td>
+          </tr>
+          <tr>
+            <td>Default tracked signed PPA baseline used here</td>
+            <td class="num">6.485 + 20.043 + 9.800 + (26.252 x 0.90) = 59.955 GW</td>
+            <td>Default value prefilled in Advanced Settings for <code>Tracked signed PPA capacity (GW)</code></td>
+            <td>Calculated from strict US renewables PPA-focused components (Google, Amazon, Meta) plus Microsoft 90% proxy inclusion</td>
+          </tr>
+          <tr>
+            <td>PPA thermal-displacement assumptions</td>
+            <td class="num">Capacity factor and assumed displaced thermal intensity are user-set</td>
+            <td>Converts signed GW into modeled avoided thermal off-site AF/year under a full-displacement assumption for delivered renewables; PPAs are treated as renewables with near-zero operational water</td>
+            <td>Explicit model assumptions in this worksheet</td>
+          </tr>
+          <tr>
+            <td>LBNL thermoelectric water consumption intensity</td>
+            <td class="num">0.47 gal/kWh = 1.78 L/kWh (default)</td>
+            <td>Default value for <code>Assumed displaced thermal intensity (L/kWh)</code>, user-editable. Same rate used to derive the no-hydro boundary (275 Mgd), ensuring consistency between the baseline and PPA displacement calculations.</td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL 2024 report (pp. 55–57)</a></td>
+          </tr>
+          <tr>
+            <td>USGS 2020 public-supply consumptive use</td>
+            <td class="num">4,656,431.9 AF/year</td>
+            <td>Component of denominator</td>
+            <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS Professional Paper 1894-D</a></td>
+          </tr>
+          <tr>
+            <td>USGS 2020 crop-irrigation consumptive use</td>
+            <td class="num">87,819,163.7 AF/year</td>
+            <td>Component of denominator</td>
+            <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS Professional Paper 1894-D</a></td>
+          </tr>
+          <tr>
+            <td>USGS 2020 thermoelectric consumptive use</td>
+            <td class="num">2,668,179.2 AF/year</td>
+            <td>Component of denominator</td>
+            <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS Professional Paper 1894-D</a></td>
+          </tr>
+          <tr>
+            <td>USGS denominator used here</td>
+            <td class="num">95,143,774.9 AF/year</td>
+            <td>Sum of the three 2020 modeled values above</td>
+            <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS Professional Paper 1894-D</a></td>
+          </tr>
+          <tr>
+            <td>USGS total freshwater withdrawals (scale context)</td>
+            <td class="num">~281,000 Mgal/d = ~314,920 kAF/year</td>
+            <td>Denominator for &ldquo;vs withdrawn&rdquo; scale card. All US freshwater withdrawals (public supply, irrigation, thermoelectric, industrial, mining, domestic, livestock, aquaculture).</td>
+            <td><a href="https://pubs.usgs.gov/publication/cir1441" target="_blank" rel="noopener noreferrer">USGS Circular 1441 (2015 water use estimates)</a></td>
+          </tr>
+          <tr>
+            <td>USGS data horizon note</td>
+            <td class="num">Model data through 2020</td>
+            <td>Context for why 2025 denominator is not observed</td>
+            <td><a href="https://www.usgs.gov/mission-areas/water-resources/science/water-use-united-states" target="_blank" rel="noopener noreferrer">USGS Water-Use Program page</a></td>
+          </tr>
+          <tr>
+            <td>Inspiration (context only): Andy Masley</td>
+            <td class="num">N/A</td>
+            <td>Helpful overview and starting point for framing and identifying sources. Numeric claims were verified by primary sources.</td>
+            <td><a href="https://www.andymasley.com/writing/" target="_blank" rel="noopener noreferrer">Website / writing hub</a>; <a href="https://www.andymasley.com/writing/the-ai-water-issue-is-fake/" target="_blank" rel="noopener noreferrer">The AI Water Issue Is Fake</a>; <a href="https://www.andymasley.com/writing/what-a-data-center-is/" target="_blank" rel="noopener noreferrer">What a Data Center Is</a></td>
+          </tr>
+          <tr>
+            <td>Inspiration (context only): Brian Potter</td>
+            <td class="num">N/A</td>
+            <td>Helpful overview and starting point for framing and identifying sources. Numeric claims were verified by primary sources.</td>
+            <td><a href="https://www.construction-physics.com/" target="_blank" rel="noopener noreferrer">Construction Physics</a>; <a href="https://www.construction-physics.com/p/how-does-the-us-use-water" target="_blank" rel="noopener noreferrer">How Does the US Use Water?</a>; <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">I Was Wrong About Data Center Water Use</a></td>
+          </tr>
+          <tr>
+            <td>CONUS annual precipitation volume</td>
+            <td class="num">~4 mi&sup3;/day &asymp; 4,933,632 kAF/year</td>
+            <td>Denominator for rainfall comparison context</td>
+            <td><a href="https://www.usgs.gov/special-topics/water-science-school/science/rain-and-precipitation" target="_blank" rel="noopener noreferrer">USGS Rain and Precipitation</a></td>
+          </tr>
+          <tr>
+            <td>Unit conversions</td>
+            <td class="num">3.785411784 L/gal; 325,851.429 gal/AF; 3,379,200 AF/mi&sup3;</td>
+            <td>All L/gal/AF conversions in this sheet</td>
+            <td><a href="https://www.nist.gov/pml/owm/metric-si/unit-conversion" target="_blank" rel="noopener noreferrer">NIST</a> and <a href="https://www.usgs.gov/special-topics/water-science-school/science/facts-about-water" target="_blank" rel="noopener noreferrer">USGS water facts/unit context</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol mandate &mdash; marginal irrigation</td>
+            <td class="num">+729 billion liters/year net irrigation (Mandate vs. no-biofuels BAU) = 192 Bgal/year</td>
+            <td>Used as industry-chart comparison bar. This is the NET marginal increase: only the additional irrigation that would not exist without the RFS mandate. Conversion: 729e9 L &divide; 3.785 L/gal = 192.5e9 gal &asymp; 192 Bgal/yr (conservative rounding).</td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018) &ldquo;Water impacts of U.S. biofuels&rdquo;, PLoS ONE 13(9): e0204298, Table 2</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; groundwater infiltration reduction</td>
+            <td class="num">&minus;587 billion liters/year (Mandate vs. BAU)</td>
+            <td>Not included in the bar value (which shows only irrigation increase), but noted as context: the mandate both increases pumping (+729B L) and reduces recharge (&minus;587B L), compounding aquifer stress.</td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018) Table 2</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; Ogallala concentration</td>
+            <td class="num">TX, OK, KS source &gt;90% of their irrigation from Ogallala; NE also Ogallala-dependent</td>
+            <td>Spatial attribution: net irrigation increases under Mandate are concentrated in regions of Texas, Oklahoma, Kansas, and Nebraska that source the vast majority (&gt;90%) of their irrigation from the Ogallala Aquifer, drawn at unsustainable rates.</td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018) pp. 11&ndash;12</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; BAU baseline irrigation</td>
+            <td class="num">109,100 billion liters/year (no-biofuels counterfactual total US irrigation for modeled crops)</td>
+            <td>Denominator context: +729B L is a 0.7% increase over 109,100B L BAU baseline. BEPAM model covers ~67% of US irrigation water applications.</td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018) Table 2</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; model methodology</td>
+            <td class="num">BEPAM (economic, CRD-level) coupled with CropWatR (FAO 56 Penman-Monteith, 10 km resolution); 15 crops; 2007&ndash;2030; Mandate target 56.8B L corn ethanol by 2030</td>
+            <td>Coupled economic-biophysical model. BEPAM determines land use changes induced by biofuel policy; CropWatR estimates water balance impacts at 10 km &times; 10 km resolution using daily weather, soil texture, and crop-specific parameters. Open-source: github.com/jacobteter/CropWatR</td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018) Section 2</a></td>
+          </tr>
+          <tr>
+            <td>RFS land-use change (convergent support)</td>
+            <td class="num">+2.8 Mha corn (+8.7%); +2.1 Mha total cropland (+2.4%); corn prices +31% [95% CI: 5%, 70%]</td>
+            <td>Independent validation of RFS-driven land use change at field level (3.6 million fields, 91.6% of US corn acreage). Expansion concentrated in Dakotas, western MN, Mississippi Alluvial Plain, and High Plains (KS, OK, TX).</td>
+            <td><a href="https://doi.org/10.1073/pnas.2101084119" target="_blank" rel="noopener noreferrer">Lark et al. (2022) &ldquo;Environmental outcomes of the US Renewable Fuel Standard&rdquo;, PNAS 119(9): e2101084119</a></td>
+          </tr>
+          <tr>
+            <td>RFS field-level irrigation response (convergent support)</td>
+            <td class="num">10% increase in ethanol plant capacity within 50 km &rarr; +0.22% annual water use per field; ethanol markets = ~4% of total Kansas irrigated water by 2017</td>
+            <td>Micro-level validation from 23,000 Kansas fields (2003&ndash;2017). Kansas is ~25% of Ogallala irrigation; scaling the 4% share nationally is consistent with Teter&rsquo;s macro estimate.</td>
+            <td><a href="https://doi.org/10.1016/j.reseneeco.2021.101249" target="_blank" rel="noopener noreferrer">Sampson, Al-Sudani &amp; Bergtold (2021) &ldquo;Local irrigation response to ethanol expansion in the High Plains Aquifer&rdquo;, Resource and Energy Economics 66: 101249</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; total blue water context (not used in chart)</td>
+            <td class="num">~1.0&ndash;1.4 trillion gal/year (all ethanol corn irrigation, no co-product allocation)</td>
+            <td>For context only. This is the total production-weighted blue water for all US ethanol corn, not just the marginal mandate increment. Derived from Argonne production-weighted ~76 gal/gal &times; 15.4B gal ethanol, cross-checked against Lamsal et al. (2025) total corn blue water (16.7 km&sup3;/yr) &times; 38% ethanol share.</td>
+            <td><a href="https://doi.org/10.2172/1490723" target="_blank" rel="noopener noreferrer">Wu et al. / Argonne (2018 Update)</a>; <a href="https://doi.org/10.1029/2024WR038334" target="_blank" rel="noopener noreferrer">Lamsal &amp; Marston (2025), Water Resources Research</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; co-product allocation (DDGS)</td>
+            <td class="num">Energy-based: 57% ethanol / 43% DDGS; mass-based: 49/51; economic: ~60&ndash;70 / 30&ndash;40</td>
+            <td>Not applied to the chart value (which is the marginal mandate increment, avoiding the allocation question). Documented for transparency: if full-production allocation were used, energy-based allocation attributes 57% of crop water to ethanol. DDGS is a byproduct of the ethanol mandate, not the reverse &mdash; RFS drove corn-to-ethanol from 14% to 40% of US corn since 2005.</td>
+            <td><a href="https://doi.org/10.2172/1490723" target="_blank" rel="noopener noreferrer">Wu et al. / Argonne (2018 Update)</a>; <a href="https://doi.org/10.1073/pnas.2101084119" target="_blank" rel="noopener noreferrer">Lark et al. (2022) &mdash; RFS stimulated 5.5 Bgal/yr additional ethanol</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card" id="evidenceSection">
+      <h2>Evidence Snippets (Primary-Source Trace)</h2>
+      <p class="note">Short, explicit excerpts used by this dashboard, with external source links for public verification.</p>
+      <table id="evidenceTable">
+        <thead>
+          <tr>
+            <th>Claim used in model</th>
+            <th>Excerpt</th>
+            <th>Source link(s)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2023 direct and indirect water inputs</td>
+            <td>
+              <p class="evidence-quote">“By 2023 ... 66-billion-liter total ...” and “The total indirect water footprint ... is nearly 800 billion liters.”</p>
+              <div class="evidence-meta">LBNL 2024 report, Water and Emission Impacts section, pp. 55-57.</div>
+            </td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record</a></td>
+          </tr>
+          <tr>
+            <td>2023 electricity anchor and 2028 range</td>
+            <td>
+              <p class="evidence-quote">“... reaching 176 TWh by 2023 ...” and “... roughly 325 and 580 TWh in 2028 ...”</p>
+              <div class="evidence-meta">LBNL 2024 report, Executive Summary (Figure ES-1 discussion).</div>
+            </td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record</a></td>
+          </tr>
+          <tr>
+            <td>PPA caveat for indirect-water method</td>
+            <td>
+              <p class="evidence-quote">“... does not incorporate any power purchase agreements ... which could significantly affect water consumption ...”</p>
+              <div class="evidence-meta">LBNL 2024 report, indirect impacts methodology note (p. 57 context).</div>
+            </td>
+            <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record</a></td>
+          </tr>
+          <tr>
+            <td>2025 buildout calibration context</td>
+            <td>
+              <p class="evidence-quote">“Primary market supply totaled ... 8,155 MW in H1 2025, up by 17.6% from H2 2024 ...”</p>
+              <div class="evidence-meta">CBRE North America Data Center Trends H1 2025, State of the Market.</div>
+            </td>
+            <td><a href="https://www.cbre.com/insights/reports/17887575722" target="_blank" rel="noopener noreferrer">CBRE H1 2025 report</a></td>
+          </tr>
+          <tr>
+            <td>Microsoft strict-renewables PPA caveat</td>
+            <td>
+              <p class="evidence-quote">“... more than 90% ... under PPAs or similar long-term contracting mechanisms ...” while Microsoft CFE definitions include hydropower and sustainable biomass.</p>
+              <div class="evidence-meta">Because the US map is not published with an explicit resource-level PPA-only split, the strict default includes Microsoft using a 90% renewables-PPA proxy on the US map-derived contracted value; keep user-editable for sensitivity.</div>
+            </td>
+            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog</a>; <a href="https://aka.ms/SustainabilityReport2025" target="_blank" rel="noopener noreferrer">Microsoft 2025 sustainability report</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">Microsoft renewable map image</a></td>
+          </tr>
+          <tr>
+            <td>Agriculture blue-water comparison anchors</td>
+            <td>
+              <p class="evidence-quote">“Corn and alfalfa accounted for approximately 16.7 and 24.8 km3 of average annual blue crop water consumption ...”</p>
+              <div class="evidence-meta">Lamsal &amp; Marston (2025) abstract, Water Resources Research.</div>
+            </td>
+            <td><a href="https://doi.org/10.1029/2024WR038334" target="_blank" rel="noopener noreferrer">DOI landing page</a>; <a href="https://essopenarchive.org/users/801603/articles/1183669-monthly-crop-water-requirements-of-irrigated-crops-in-the-united-states-from-1981-2019" target="_blank" rel="noopener noreferrer">ESS preprint</a></td>
+          </tr>
+          <tr>
+            <td>Alfalfa exported to China (embedded water)</td>
+            <td>
+              <p class="evidence-quote">"The United States also exports over 2 million metric tons of alfalfa hay annually, with China (44%), Japan (18%), Saudi Arabia (17%), and South Korea (10%) as the top destinations in 2024."</p>
+              <div class="evidence-meta">China share (44%) applied to total export-embedded water (~1&ndash;1.5 km&sup3;/yr at western irrigation intensities) yields ~0.44&ndash;0.66 km&sup3;/yr (midpoint 0.55 km&sup3; &asymp; 446 kAF/yr &asymp; 0.40 Bgal/day).</div>
+            </td>
+            <td><a href="https://apps.fas.usda.gov/gats/" target="_blank" rel="noopener noreferrer">USDA FAS GATS</a>; <a href="https://hayandforage.com/article-5229-Hay-exports-flatlined-in-2024.html" target="_blank" rel="noopener noreferrer">Hay &amp; Forage Grower</a>; Lamsal &amp; Marston 2025 (irrigation intensity basis)</td>
+          </tr>
+          <tr>
+            <td>Pulp/paper low-end conservative benchmark</td>
+            <td>
+              <p class="evidence-quote">NCASI reports 1,459 billion gallons/year withdrawn; gross consumption around 9.7% and about 7% after credits.</p>
+              <div class="evidence-meta">AF&amp;PA reports water use per ton down 8.5% since 2005, and 2024 paper and paperboard operating rate 87.5% with 78.1 million tons capacity. Low-end benchmark used here: 1,459 x 0.07 x (1-0.085) x ((78.1 x 0.875)/93.7) = 68.2 Bgal/year.</div>
+            </td>
+            <td><a href="https://www.ncasi.org/wp-content/uploads/2019/02/tb960.pdf" target="_blank" rel="noopener noreferrer">NCASI TB960</a>; <a href="https://www.afandpa.org/sites/default/files/2025-07/2025AF%26PASustainabilityReport_FinalWeb.pdf" target="_blank" rel="noopener noreferrer">AF&amp;PA 2025 Sustainability Report</a>; <a href="https://www.afandpa.org/news/2025/afpa-details-us-paper-production-and-capacity-trends" target="_blank" rel="noopener noreferrer">AF&amp;PA production/capacity release</a></td>
+          </tr>
+          <tr>
+            <td>USGS denominator component values</td>
+            <td>
+              <p class=”evidence-quote”>”Model estimates for ... consumptive use for public supply for the CONUS in water year 2020 were ... 4,157 Mgal/d ... crop irrigation ... 78,400 Mgal/d ... thermoelectric power ... 2,382 Mgal/d”</p>
+              <div class=”evidence-meta”>USGS PP 1894-D body text (CONUS, water year 2020 modeled values). Note: the abstract reports 2010-20 period averages (4,219 / 75,698 / 2,904 Mgal/d), which differ from the 2020-specific values used here.</div>
+            </td>
+            <td><a href=”https://pubs.usgs.gov/publication/pp1894D” target=”_blank” rel=”noopener noreferrer”>USGS PP 1894-D</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; marginal irrigation from Mandate scenario (Table 2)</td>
+            <td>
+              <p class=”evidence-quote”>”Net irrigation requirements increase 0.7% in Mandate and decrease 3.8% in CFS, but in both scenarios increases are concentrated in regions of Kansas and Nebraska that rely upon the Ogallala aquifer for irrigation water.”</p>
+              <div class=”evidence-meta”>Teter et al. (2018) Table 2: BAU baseline irrigation = 109,100 billion L/yr; Mandate change = +729 billion L/yr (+0.7%). Groundwater infiltration change = &minus;587 billion L/yr (&minus;0.5%). Both impacts compound aquifer stress.</div>
+            </td>
+            <td><a href=”https://doi.org/10.1371/journal.pone.0204298” target=”_blank” rel=”noopener noreferrer”>Teter et al. (2018), PLoS ONE 13(9): e0204298, Table 2 and p. 11</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; Ogallala aquifer concentration</td>
+            <td>
+              <p class=”evidence-quote”>”net increases in irrigation water requirements occur in regions of Texas, Oklahoma, and Kansas that source the vast majority (&gt;90%) of their irrigation from the Ogallala Aquifer, a resource from which water is currently being drawn at unsustainable rates”</p>
+              <div class=”evidence-meta”>Teter et al. (2018) p. 12. The Mandate scenario shifts irrigation demand to the Great Plains (Ogallala region) even as it reduces irrigated acreage nationally by 2%, because increased corn in Kansas/Nebraska/Oklahoma requires more water per acre than the crops it displaces.</div>
+            </td>
+            <td><a href=”https://doi.org/10.1371/journal.pone.0204298” target=”_blank” rel=”noopener noreferrer”>Teter et al. (2018), p. 12</a></td>
+          </tr>
+          <tr>
+            <td>RFS land-use change &mdash; corn expansion and price impacts</td>
+            <td>
+              <p class=”evidence-quote”>”the RFS increased corn prices by 30% and the prices of other crops by 20%, which, in turn, expanded US corn cultivation by 2.8 Mha (8.7%) and total cropland by 2.1 Mha (2.4%)”</p>
+              <div class=”evidence-meta”>Lark et al. (2022) abstract. The 2.8 Mha of additional corn (95% CI: 2.4&ndash;3.1 Mha) includes 2.1 Mha increase in continuous corn and 1.4 Mha additional corn in rotation. Expansion concentrated in North/South Dakota, western Minnesota, Mississippi Alluvial Plain, and High Plains (KS, OK, TX).</div>
+            </td>
+            <td><a href=”https://doi.org/10.1073/pnas.2101084119” target=”_blank” rel=”noopener noreferrer”>Lark et al. (2022), PNAS 119(9): e2101084119</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; per-BGY scaling relationship</td>
+            <td>
+              <p class=”evidence-quote”>”for every billion gallons per year (BGY) expansion of ethanol demand, we would expect a 5.6% increase in corn prices; 1.6 and 0.4% increases in the areas of US corn and cropland, respectively”</p>
+              <div class=”evidence-meta”>Lark et al. (2022) Table 1 footnote. The RFS stimulated 5.5 Bgal/yr of additional ethanol beyond what the pre-2005 policy baseline would have produced.</div>
+            </td>
+            <td><a href=”https://doi.org/10.1073/pnas.2101084119” target=”_blank” rel=”noopener noreferrer”>Lark et al. (2022), Table 1</a></td>
+          </tr>
+          <tr>
+            <td>RFS ethanol &mdash; field-level Kansas irrigation response</td>
+            <td>
+              <p class=”evidence-quote”>A 10% increase in ethanol plant capacity within 50 km leads to a +0.22% increase in annual water use per field. By 2017, ethanol markets accounted for approximately 4% of total irrigated water use in Kansas.</p>
+              <div class=”evidence-meta”>Sampson et al. (2021), 23,000 Kansas fields (2003&ndash;2017). Kansas holds ~25% of Ogallala irrigated acreage; scaling the 4% share across all Ogallala states yields ~500,000 AF/yr, consistent with Teter&rsquo;s 590,000 AF/yr (+729B L) national estimate.</div>
+            </td>
+            <td><a href=”https://doi.org/10.1016/j.reseneeco.2021.101249” target=”_blank” rel=”noopener noreferrer”>Sampson, Al-Sudani &amp; Bergtold (2021), Resource and Energy Economics 66: 101249</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class=”note”>All links above are external primary or publisher-hosted sources for public traceability.</p>
+    </div>
+
+    <div class="card" id="formulaTraceSection">
+      <details>
+        <summary>Show explicit formulas and full calculation trace</summary>
+        <div class="details-body">
+          <pre id="formulaBlock"></pre>
+        </div>
+      </details>
+    </div>
+
+    <!-- Fact-check trace modal -->
+    <div class="trace-modal-overlay" id="traceModal">
+      <div class="trace-modal">
+        <div class="trace-modal-header">
+          <h2>Fact-Check Trace</h2>
+          <button class="trace-modal-close" id="traceModalClose" type="button">&times;</button>
+        </div>
+        <p class="trace-modal-desc">Use this text for independent verification of assumptions, math, and sources.</p>
+        <div class="trace-modal-actions">
+          <button id="traceModalCopy" class="btn" type="button">Copy to Clipboard</button>
+          <button id="traceModalSelect" class="btn" type="button">Select All</button>
+          <span id="traceModalStatus" class="note"></span>
+        </div>
+        <textarea id="traceModalArea" readonly></textarea>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin:32px 0 8px;">
+      <a href="https://github.com/dashboardamerican/water-dashboards/issues/new?title=Error+report&body=%23%23+What+looks+wrong%3F%0A%0A%0A%23%23+Which+section%3F%0A%0A%0A%23%23+What+should+it+say%3F%0A%0A&labels=feedback"
+         target="_blank" rel="noopener noreferrer"
+         style="display:inline-block; padding:10px 22px; background:var(--brand); color:#fff; border-radius:6px; text-decoration:none; font-size:14px; font-weight:600; letter-spacing:0.02em;">
+        Report an error on GitHub
+      </a>
+      <p class="note" style="margin-top:8px;">Opens a pre-filled GitHub issue. Requires a GitHub account.</p>
+    </div>
+  </div>
+
+  <script>
+    const INPUT = {
+      lbnlDirectLitersPerYear: 66e9,
+      lbnlIndirectLitersPerYear: 800e9,
+      direct2028LowLitersPerYear: 145e9,
+      direct2028HighLitersPerYear: 275e9,
+      indirect2028LowLitersPerYear: 1740e9,
+      indirect2028HighLitersPerYear: 3270e9,
+      electricity2023TWh: 176,
+      buildoutReference2024TWh: 184.6,
+      cbre2025InventoryGrowthPct: 26,
+      usgsSelectedMgd: 84939,
+      litersPerGallon: 3.785411784,
+      gallonsPerAF: 325851.429,
+      noHydroSensitivityTotalMgd: 275
+    };
+
+    const GOOGLE_US_RENEWABLE_PPA_GW = 6.485;
+    const AMAZON_US_RENEWABLE_PPA_GW = 20.043;
+    const META_US_RENEWABLE_PPA_GW = 9.8;
+    const MICROSOFT_US_CONTRACTED_GW_CONTEXT = 26.252;
+    const MICROSOFT_US_ACTIVE_GW_CONTEXT = 11.484;
+    const MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR = 0.9;
+    const MICROSOFT_US_RENEWABLE_PPA_GW = MICROSOFT_US_CONTRACTED_GW_CONTEXT * MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR;
+    const LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH = 0.47;
+    const DEFAULT_DISPLACED_THERMAL_LKWH = LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH * INPUT.litersPerGallon;
+    const DEFAULT_TRACKED_SIGNED_PPA_GW =
+      GOOGLE_US_RENEWABLE_PPA_GW +
+      AMAZON_US_RENEWABLE_PPA_GW +
+      META_US_RENEWABLE_PPA_GW +
+      MICROSOFT_US_RENEWABLE_PPA_GW;
+
+    const litersPerAF = INPUT.litersPerGallon * INPUT.gallonsPerAF;
+    const afPerMgal = 1000000 / INPUT.gallonsPerAF;
+    const daysPerYear = 365;
+
+    const directAFYr = INPUT.lbnlDirectLitersPerYear / litersPerAF;
+    const indirectWithHydroAFYr = INPUT.lbnlIndirectLitersPerYear / litersPerAF;
+    const directAFDay = directAFYr / daysPerYear;
+    const indirectWithHydroAFDay = indirectWithHydroAFYr / daysPerYear;
+
+    const directMgd = directAFDay / afPerMgal;
+    const indirectNoHydroMgd = Math.max(INPUT.noHydroSensitivityTotalMgd - directMgd, 0);
+    const indirectNoHydroAFDay = indirectNoHydroMgd * afPerMgal;
+    const indirectNoHydroAFYear = indirectNoHydroAFDay * daysPerYear;
+
+    const hydroImpliedAFDay = Math.max(indirectWithHydroAFDay - indirectNoHydroAFDay, 0);
+    const hydroImpliedAFYr = hydroImpliedAFDay * daysPerYear;
+
+    const usgsAFDay = INPUT.usgsSelectedMgd * afPerMgal;
+    const usgsAFYear = usgsAFDay * daysPerYear;
+
+    let latestState = null;
+
+    const fmt = (v, d = 1) => Number(v).toLocaleString(undefined, {
+      minimumFractionDigits: d,
+      maximumFractionDigits: d
+    });
+    const fmtKaf = (afYearValue, d = 1) => fmt(Number(afYearValue) / 1000, d);
+    const pct = (v, d = 3) => `${Number(v).toFixed(d)}%`;
+    const sharePct = (num, den) => den > 0 ? (num / den) * 100 : 0;
+
+    function scale2025From2028(v2023, v2028) {
+      return Math.pow(v2028 / v2023, 2 / 5);
+    }
+
+    const directLowFactor2025 = scale2025From2028(INPUT.lbnlDirectLitersPerYear, INPUT.direct2028LowLitersPerYear);
+    const directHighFactor2025 = scale2025From2028(INPUT.lbnlDirectLitersPerYear, INPUT.direct2028HighLitersPerYear);
+    const indirectLowFactor2025 = scale2025From2028(INPUT.lbnlIndirectLitersPerYear, INPUT.indirect2028LowLitersPerYear);
+    const indirectHighFactor2025 = scale2025From2028(INPUT.lbnlIndirectLitersPerYear, INPUT.indirect2028HighLitersPerYear);
+    const buildout2024Factor = INPUT.buildoutReference2024TWh / INPUT.electricity2023TWh;
+    const buildout2025From2024Factor = 1 + (INPUT.cbre2025InventoryGrowthPct / 100);
+    const buildout2025CombinedFactor = buildout2024Factor * buildout2025From2024Factor;
+    const PULP_PAPER_BASE_WITHDRAWALS_BGAL = 1459;
+    const PULP_PAPER_LOW_END_CONSUMPTIVE_SHARE = 0.07;
+    const PULP_PAPER_INTENSITY_FACTOR = 1 - 0.085;
+    const PULP_PAPER_OUTPUT_FACTOR = (78.1 * 0.875) / 93.7;
+    const PULP_PAPER_CONSERVATIVE_LOW_BGAL =
+      PULP_PAPER_BASE_WITHDRAWALS_BGAL *
+      PULP_PAPER_LOW_END_CONSUMPTIVE_SHARE *
+      PULP_PAPER_INTENSITY_FACTOR *
+      PULP_PAPER_OUTPUT_FACTOR;
+    const industryAnnualBgal = [
+      {
+        id: "golf",
+        label: "Golf courses (US)",
+        annualBgal: 425,
+        sourceLabel: "GCSAA Phase IV: 1.63M AF applied (HortTechnology 35(5), 2025) \u00d7 80% ET consumptive",
+        sourceUrl: "https://journals.ashs.org/view/journals/horttech/35/5/article-p848.xml"
+      },
+      {
+        id: "pulp_paper",
+        label: "Pulp and paper (US)",
+        annualBgal: Number(PULP_PAPER_CONSERVATIVE_LOW_BGAL.toFixed(1)),
+        sourceLabel: "Conservative estimate: NCASI withdrawals × 7% low-end consumptive share × AF&PA output decline",
+        sourceUrl: "https://www.ncasi.org/wp-content/uploads/2019/02/tb960.pdf"
+      },
+      {
+        id: "swimming_pools",
+        label: "Residential swimming pools (US)",
+        annualBgal: 56,
+        sourceLabel: "7.5M pools (CAPE Analytics satellite) × 7,500 gal/yr size- & climate-weighted evap (EPA WaterSense)",
+        sourceUrl: "https://www.epa.gov/watersense/swimming-pools-and-spas"
+      },
+      {
+        id: "rfs_ethanol",
+        label: "RFS ethanol mandate (marginal blue water, Ogallala-concentrated)",
+        annualBgal: 192,
+        isPolicy: true,
+        sourceLabel: "Teter et al. (2018) Table 2: +729B L/yr net irrigation, Mandate vs. no-biofuels (PLoS ONE 13(9): e0204298)",
+        sourceUrl: "https://doi.org/10.1371/journal.pone.0204298",
+        rfsMode: "marginal"
+      },
+    ];
+    const RFS_MODES = {
+      marginal: {
+        annualBgal: 192,
+        label: "RFS ethanol mandate (marginal irrigation only, Ogallala-concentrated)",
+        sourceLabel: "Teter et al. (2018) Table 2: +729B L/yr net irrigation, Mandate vs. no-biofuels (PLoS ONE 13(9): e0204298)",
+        note: "Only the additional irrigation caused by the mandate"
+      },
+      aquifer: {
+        annualBgal: 347,
+        label: "RFS ethanol mandate (marginal irrigation + infiltration loss)",
+        sourceLabel: "Teter et al. (2018) Table 2: +729B L/yr irrigation + 587B L/yr infiltration loss = 1,316B L/yr net aquifer stress ≈ 347 Bgal/yr",
+        note: "+192 Bgal pumped + 155 Bgal lost recharge = 347 Bgal net aquifer stress"
+      },
+      total: {
+        annualBgal: 1200,
+        label: "RFS ethanol (total blue water, all US ethanol corn)",
+        sourceLabel: "1.0–1.4 trillion gal/yr (midpoint 1.2T): Argonne production-weighted ~76 gal/gal × 15.4B gal ethanol (Wu et al. 2018). Range reflects irrigated-share uncertainty; Lamsal & Marston (2025) national corn blue water × 38% ethanol share yields ~1.7T (higher because ethanol corn skews rainfed vs. national avg)",
+        note: "Total blue water for all US ethanol corn (not just marginal mandate increment)"
+      }
+    };
+
+    let currentRfsMode = "marginal";
+
+    function updateRfsMode(mode) {
+      currentRfsMode = mode;
+      const cfg = RFS_MODES[mode];
+      const rfs = industryAnnualBgal.find(i => i.id === "rfs_ethanol");
+      rfs.annualBgal = cfg.annualBgal;
+      rfs.label = cfg.label;
+      rfs.sourceLabel = cfg.sourceLabel;
+      rfs.rfsMode = mode;
+      document.querySelectorAll(".rfs-mode-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.mode === mode);
+      });
+      document.getElementById("rfsModeNote").textContent = cfg.note;
+      update();
+    }
+
+    const agricultureBgalDay = [
+      { id: "alfalfa", label: "Alfalfa irrigation", bgalDay: 18.0 },
+      { id: "other_hay", label: "Other hay/grass", bgalDay: 9.0 },
+      { id: "orchards", label: "Orchards (almonds, etc.)", bgalDay: 7.9 },
+      { id: "cotton", label: "Cotton irrigation", bgalDay: 8.7 },
+      { id: "alfalfa_china", label: "Alfalfa exported to China (embedded water)", bgalDay: 0.40 },
+      { id: "all_irrigation", label: "All US irrigation (aggregate)", bgalDay: 26700 / 365 }
+    ];
+
+    function clamp(v, min, max) {
+      return Math.min(Math.max(v, min), max);
+    }
+
+    function readNumber(id, fallback) {
+      const raw = Number(document.getElementById(id).value);
+      return Number.isFinite(raw) ? raw : fallback;
+    }
+
+    function setBar(fillId, valuePct, valueId) {
+      const v = clamp(valuePct, 0, 100);
+      document.getElementById(fillId).style.width = `${v}%`;
+      document.getElementById(valueId).textContent = `${v.toFixed(1)}%`;
+    }
+
+    function csvEscape(v) {
+      const s = String(v ?? "");
+      if (s.includes(",") || s.includes("\"") || s.includes("\n")) {
+        return `"${s.replace(/"/g, '""')}"`;
+      }
+      return s;
+    }
+
+    function toCsv(rows) {
+      return rows.map((row) => row.map(csvEscape).join(",")).join("\n");
+    }
+
+    function normalizeText(v) {
+      return String(v ?? "").replace(/\s+/g, " ").trim();
+    }
+
+    function escapeHtml(v) {
+      return String(v ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function tableToTraceTsv(tableEl) {
+      if (!tableEl) return "";
+      const rows = Array.from(tableEl.querySelectorAll("tr")).map((tr) => {
+        const cells = Array.from(tr.querySelectorAll("th,td")).map((cell) => {
+          const text = normalizeText(cell.textContent);
+          const links = Array.from(cell.querySelectorAll("a[href]")).map((a) => {
+            const label = normalizeText(a.textContent) || "link";
+            return `${label} (${a.href})`;
+          });
+          return links.length ? `${text} | links: ${links.join("; ")}` : text;
+        });
+        return cells.join("\t");
+      });
+      return rows.join("\n");
+    }
+
+    function collectLinksTrace(tableEls) {
+      const seen = new Map();
+      tableEls.forEach((tableEl) => {
+        if (!tableEl) return;
+        Array.from(tableEl.querySelectorAll("a[href]")).forEach((a) => {
+          const url = (a.href || "").trim();
+          if (!url) return;
+          const label = normalizeText(a.textContent) || "link";
+          if (!seen.has(url)) {
+            seen.set(url, new Set());
+          }
+          seen.get(url).add(label);
+        });
+      });
+      return Array.from(seen.entries())
+        .sort((a, b) => a[0].localeCompare(b[0]))
+        .map(([url, labels]) => `- ${url} [labels: ${Array.from(labels).join(" | ")}]`)
+        .join("\n");
+    }
+
+    function hasTraceableSourceCell(cell) {
+      if (!cell) return false;
+      if (cell.querySelector("a[href]")) return true;
+      const text = normalizeText(cell.textContent).toLowerCase();
+      if (!text) return false;
+      return [
+        "calculated in this worksheet",
+        "explicit model assumptions in this worksheet",
+        "explicit model assumptions",
+        "calculated from",
+        "calculated ="
+      ].some((token) => text.includes(token));
+    }
+
+    function updateTraceabilityStatus(state) {
+      const statusEl = document.getElementById("traceabilityStatus");
+      if (!statusEl) return;
+
+      const assumptionRows = state ? buildAssumptionRows(state).slice(1) : [];
+      const assumptionMissingSource = assumptionRows.filter((row) => !normalizeText(row[4]));
+
+      const sourceRows = Array.from(document.querySelectorAll("#sourceMappingTable tbody tr"));
+      const sourceRowsMissingTrace = sourceRows.filter((tr) => !hasTraceableSourceCell(tr.cells[3]));
+
+      const evidenceRows = Array.from(document.querySelectorAll("#evidenceTable tbody tr"));
+      const evidenceRowsMissingLinks = evidenceRows.filter((tr) => !tr.querySelector("a[href]"));
+
+      const uniqueLinks = new Set(
+        Array.from(document.querySelectorAll("#sourceMappingTable a[href], #evidenceTable a[href]"))
+          .map((a) => (a.href || "").trim())
+          .filter(Boolean)
+      ).size;
+
+      const issueCount =
+        assumptionMissingSource.length +
+        sourceRowsMissingTrace.length +
+        evidenceRowsMissingLinks.length;
+
+      const summary =
+        `Assumptions ${assumptionRows.length}; source rows ${sourceRows.length}; ` +
+        `evidence rows ${evidenceRows.length}; unique links ${uniqueLinks}.`;
+
+      if (issueCount > 0) {
+        const detail = [
+          assumptionMissingSource.length ? `${assumptionMissingSource.length} assumption rows missing source labels` : null,
+          sourceRowsMissingTrace.length ? `${sourceRowsMissingTrace.length} source-mapping rows without traceable source cells` : null,
+          evidenceRowsMissingLinks.length ? `${evidenceRowsMissingLinks.length} evidence rows without links` : null
+        ].filter(Boolean).join("; ");
+        statusEl.className = "trace-status warn";
+        statusEl.textContent = `Traceability warning: ${summary} Issues: ${detail}.`;
+        return;
+      }
+
+      statusEl.className = "trace-status good";
+      statusEl.textContent = `Traceability check passed: ${summary}`;
+    }
+
+    function annualBgalToMgd(annualBgal) {
+      return (annualBgal * 1000) / 365;
+    }
+
+    function annualBgalToAFYear(annualBgal) {
+      return annualBgalToMgd(annualBgal) * afPerMgal * daysPerYear;
+    }
+
+    function bgalDayToAFYear(bgalDay) {
+      return bgalDay * 1000 * afPerMgal * daysPerYear;
+    }
+
+    function afDayToMgd(afDay) {
+      return afDay / afPerMgal;
+    }
+
+    function afDayToBgalDay(afDay) {
+      return afDayToMgd(afDay) / 1000;
+    }
+
+    function getAgricultureRows(buildoutTotalAFYear) {
+      return agricultureBgalDay.map((item) => {
+        const cropAFYear = bgalDayToAFYear(item.bgalDay);
+        return {
+          ...item,
+          cropAFYear,
+          dcSharePct: sharePct(buildoutTotalAFYear, cropAFYear)
+        };
+      }).sort((a, b) => b.dcSharePct - a.dcSharePct);
+    }
+
+    function renderIndustryChart(buildoutDirectAFYear, buildoutTotalAFYear) {
+      const dcIndirectAFYear = Math.max(buildoutTotalAFYear - buildoutDirectAFYear, 0);
+      const rows = [
+        {
+          id: "data_centers_modeled",
+          label: "Data centers (US, 2025 modeled; current settings)",
+          directAFYear: buildoutDirectAFYear,
+          indirectAFYear: dcIndirectAFYear,
+          totalAFYear: buildoutTotalAFYear,
+          sourceLabel: "This worksheet (LBNL baseline + IEA/CBRE buildout)",
+          sourceUrl: "https://escholarship.org/uc/item/32d6m0d1"
+        },
+        ...industryAnnualBgal.map((item) => ({
+          id: item.id,
+          label: item.label,
+          directAFYear: 0,
+          indirectAFYear: 0,
+          totalAFYear: annualBgalToAFYear(item.annualBgal),
+          isPolicy: item.isPolicy || false,
+          sourceLabel: item.sourceLabel,
+          sourceUrl: item.sourceUrl
+        }))
+      ];
+
+      const maxAFYear = Math.max(...rows.map((r) => r.totalAFYear), 1);
+      const scale = (v) => (v / maxAFYear) * 100;
+
+      const rowHtml = rows.map((row) => {
+        const total = row.totalAFYear;
+        const totalWidth = clamp(scale(total), 0, 100);
+        const directWidth = total > 0 ? totalWidth * (row.directAFYear / total) : 0;
+        const indirectWidth = total > 0 ? totalWidth * (row.indirectAFYear / total) : 0;
+        const otherWidth = row.id === "data_centers_modeled" ? 0 : totalWidth;
+        const fillClass = row.isPolicy ? "policy" : "other";
+        const rel = buildoutTotalAFYear > 0 ? (total / buildoutTotalAFYear) : 0;
+        const relLabel = row.id === "data_centers_modeled"
+          ? "1.0x"
+          : `${rel >= 10 ? rel.toFixed(0) : rel.toFixed(1)}x`;
+
+        return `<div class="hrow">
+          <div class="hlabel">
+            ${row.label}<span class="src-wrap"><span class="src-icon">i</span><span class="src-tip">${row.sourceLabel} <a href="${row.sourceUrl}" target="_blank" rel="noopener noreferrer">↗&nbsp;source</a></span></span>
+          </div>
+          <div class="cmp-track">
+            ${row.id === "data_centers_modeled"
+              ? `<div class="cmp-fill direct" style="width:${directWidth.toFixed(2)}%"></div>
+                 <div class="cmp-fill indirect" style="width:${indirectWidth.toFixed(2)}%"></div>`
+              : `<div class="cmp-fill ${fillClass}" style="width:${otherWidth.toFixed(2)}%"></div>`}
+          </div>
+          <div class="num">${fmtKaf(total, 1)}</div>
+          <div class="num">${relLabel}</div>
+        </div>`;
+      }).join("");
+
+      document.getElementById("industryChart").innerHTML = rowHtml;
+    }
+
+    function renderAgricultureChart(buildoutTotalAFYear) {
+      const rows = getAgricultureRows(buildoutTotalAFYear);
+      const rowHtml = rows.map((row) => {
+        const widthPct = clamp(row.dcSharePct, 0, 100);
+        return `<div class="hrow">
+          <div class="hlabel">${row.label}</div>
+          <div class="cmp-track">
+            <div class="cmp-fill ag" style="width:${widthPct.toFixed(2)}%"></div>
+          </div>
+          <div class="num">${row.dcSharePct.toFixed(2)}%</div>
+          <div class="num">${fmtKaf(row.cropAFYear, 1)}</div>
+        </div>`;
+      }).join("");
+      document.getElementById("agChart").innerHTML = rowHtml;
+    }
+
+    const USGS_IRR_AF = 87819163.7;
+    const USGS_PUB_AF = 4656431.9;
+    const USGS_THM_AF = 2668179.2;
+    // USGS Circular 1441 (2015): total US freshwater withdrawals ~281 Bgal/d
+    const USGS_WITHDRAWAL_MGD = 281000;
+    const USGS_WITHDRAWAL_AF_YEAR = USGS_WITHDRAWAL_MGD * afPerMgal * daysPerYear;
+    // USGS: CONUS receives ~4 mi³ precipitation/day; 1 mi³ = 3,379,200 AF
+    const US_ANNUAL_PRECIP_AF = 4 * 3379200 * 365;
+
+    function buildAssumptionRows(state) {
+      return [
+        ["assumption", "value", "units", "how_used", "source"],
+        ["lbnl_direct_liters_per_year", INPUT.lbnlDirectLitersPerYear, "L/year", "2023 direct onsite numerator", "LBNL"],
+        ["lbnl_indirect_liters_per_year", INPUT.lbnlIndirectLitersPerYear, "L/year", "2023 off-site numerator (include hydro)", "LBNL"],
+        ["no_hydro_sensitivity_total_af_year", INPUT.noHydroSensitivityTotalMgd * afPerMgal * daysPerYear, "AF/year", "no-hydro boundary (LBNL thermoelectric upper bound)", "derived: 176 TWh x 0.47 gal/kWh (LBNL pp. 55–57) + 66B L/yr direct"],
+        ["usgs_denominator_af_year", usgsAFYear, "AF/year", "national denominator", "USGS PP1894-D"],
+        ["google_us_strict_renewable_ppa_gw", GOOGLE_US_RENEWABLE_PPA_GW, "GW", "strict US renewable PPA component", "Google curated US renewable deal extraction (conservative set)"],
+        ["amazon_us_strict_renewable_ppa_floor_gw", AMAZON_US_RENEWABLE_PPA_GW, "GW", "strict US renewable PPA floor (off-site wind/solar)", "Amazon 2024 report table + on-site subtraction"],
+        ["meta_us_strict_renewable_contract_gw", META_US_RENEWABLE_PPA_GW, "GW", "strict US renewable contract-backed wind/solar component", "Meta 2024 report US study reference"],
+        ["microsoft_us_strict_renewable_ppa_gw", MICROSOFT_US_RENEWABLE_PPA_GW, "GW", "strict component included in default using proxy factor", "90% proxy of Microsoft US map-derived contracted renewable total"],
+        ["microsoft_us_renewable_ppa_proxy_factor_pct", MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR * 100, "%", "applied to Microsoft US map-derived contracted total", "model assumption based on Microsoft statement that >90% is under PPAs or similar long-term contracts"],
+        ["microsoft_us_map_contracted_gw_context", MICROSOFT_US_CONTRACTED_GW_CONTEXT, "GW", "reference input for Microsoft proxy component", "Microsoft 2026 blog map-derived US ISO/RTO sum"],
+        ["microsoft_us_map_active_gw_context", MICROSOFT_US_ACTIVE_GW_CONTEXT, "GW", "context only", "Microsoft 2026 blog map-derived US ISO/RTO sum"],
+        ["default_tracked_signed_ppa_gw", DEFAULT_TRACKED_SIGNED_PPA_GW, "GW", "default value used for PPA toggle calculations", "calculated = Google strict + Amazon strict + Meta strict + Microsoft proxy-adjusted strict"],
+        ["signed_ppa_capacity_gw", state.assumptions.ppaCapacityGW, "GW", "current signed capacity input for PPA toggle (user-editable)", "default is strict US renewables PPA-focused baseline including Microsoft proxy"],
+        ["ppa_capacity_factor_pct", state.assumptions.ppaCapacityFactorPct, "%", "GW to TWh conversion", "model assumption"],
+        ["thermal_displacement_scope_pct", 100, "%", "thermal displacement scope applied in PPA reduction path", "model assumption"],
+        ["lbnl_thermoelectric_consumption_gal_per_kwh", LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH, "gal/kWh", "reference for default displaced thermal intensity", "LBNL 2024 report pp. 55–57"],
+        ["default_displaced_thermal_l_per_kwh", DEFAULT_DISPLACED_THERMAL_LKWH, "L/kWh", "default assumed displaced thermal intensity", "converted from LBNL thermoelectric average"],
+        ["assumed_displaced_thermal_l_per_kwh", state.assumptions.displacedThermalLkwh, "L/kWh", "converts PPA TWh to avoided no-hydro thermal water", "user-editable (defaults to LBNL thermoelectric average)"],
+        ["ppa_annual_twh", state.assumptions.ppaAnnualTWh, "TWh/year", "derived clean-energy supply", "calculated"],
+        ["ppa_coverage_pct", state.assumptions.ppaCoveragePct, "%", "share of 2023 load", "calculated"],
+        ["buildout_reference_2024_twh", INPUT.buildoutReference2024TWh, "TWh", "IEA-anchored 2024 activity value", "IEA"],
+        ["buildout_2024_vs_2023_factor", buildout2024Factor, "x", "first scale step in default 2025 path", "calculated"],
+        ["buildout_2025_vs_2024_factor", buildout2025From2024Factor, "x", "second scale step in default 2025 path", "CBRE"],
+        ["buildout_2025_vs_2023_factor", buildout2025CombinedFactor, "x", "headline 2025 point-estimate scale", "calculated"],
+        ["pulp_paper_withdrawals_bgal_year", PULP_PAPER_BASE_WITHDRAWALS_BGAL, "Bgal/year", "pulp/paper conservative benchmark input", "NCASI TB960"],
+        ["pulp_paper_low_end_consumptive_share_pct", PULP_PAPER_LOW_END_CONSUMPTIVE_SHARE * 100, "%", "pulp/paper conservative benchmark input", "NCASI TB960 (low-end with credits)"],
+        ["pulp_paper_intensity_factor", PULP_PAPER_INTENSITY_FACTOR, "x", "pulp/paper conservative benchmark input", "AF&PA 2025 Sustainability Report (8.5% reduction since 2005)"],
+        ["pulp_paper_output_factor", PULP_PAPER_OUTPUT_FACTOR, "x", "pulp/paper conservative benchmark input", "AF&PA production/capacity release: (78.1 x 0.875) / 93.7"],
+        ["industry_benchmark_golf_annual_bgal", 425, "Bgal/year", "industry chart benchmark", "GCSAA Phase IV: 1.63M AF applied (HortTechnology 35(5), 2025) x 80% ET consumptive"],
+        ["industry_benchmark_pulp_paper_annual_bgal", Number(PULP_PAPER_CONSERVATIVE_LOW_BGAL.toFixed(1)), "Bgal/year", "industry chart benchmark", "lowest conservative estimate = 1459 x 0.07 x (1-0.085) x ((78.1 x 0.875)/93.7); sources: NCASI TB960 + AF&PA 2025 Sustainability Report + AF&PA 2025 production/capacity release"],
+        ["industry_benchmark_swimming_pools_annual_bgal", 56, "Bgal/year", "industry chart benchmark", "Conservative estimate: 7.5M pools (CAPE Analytics satellite detection, lowest independent count) × 7,500 gal/pool/yr (EPA WaterSense 12K-31K range for 500 sq ft pool, climate-weighted to national avg ~11,700, then size-corrected ×0.74 for 41% above-ground pool mix at ~225 sq ft, cover-adjusted ×0.878 for 15% cover use rate). Range: 56-110 Bgal/yr. PHTA industry count (10.4M, unpublished methodology) would give 78-110 Bgal/yr."],
+        ["industry_benchmark_rfs_ethanol_annual_bgal", RFS_MODES[currentRfsMode].annualBgal, "Bgal/year", `industry chart benchmark (mode: ${currentRfsMode})`, RFS_MODES[currentRfsMode].sourceLabel],
+        ["ag_benchmark_alfalfa_af_year", bgalDayToAFYear(18.0), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"],
+        ["ag_benchmark_other_hay_grass_af_year", bgalDayToAFYear(9.0), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"],
+        ["ag_benchmark_cotton_af_year", bgalDayToAFYear(8.7), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"],
+        ["ag_benchmark_alfalfa_china_export_af_year", bgalDayToAFYear(0.40), "AF/year", "ag chart denominator", "Derived: 44% of export-embedded water (USDA FAS 2025; Lamsal & Marston 2025)"],
+        ["ag_benchmark_all_irrigation_af_year", bgalDayToAFYear(26700 / 365), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"]
+      ];
+    }
+
+    function buildCopyAllTraceText() {
+      if (!latestState) {
+        return "You are a truth-seeking, fact professional fact checker.\n\nDashboard state is not initialized yet.";
+      }
+
+      const directHeadline = normalizeText(document.getElementById("headlineDirect").textContent);
+      const totalHeadline = normalizeText(document.getElementById("headlineTotal").textContent);
+      const scaleConsumed = normalizeText(document.getElementById("scaleConsumed").textContent);
+      const scaleWithdrawn = normalizeText(document.getElementById("scaleWithdrawn").textContent);
+      const scaleRainfall = normalizeText(document.getElementById("scaleRainfall").textContent);
+      const boundaryNote = normalizeText(document.getElementById("boundaryNote").textContent);
+      const methodsSummary = normalizeText(document.getElementById("methodsSummary").textContent);
+      const traceabilityStatus = normalizeText((document.getElementById("traceabilityStatus") || {}).textContent || "");
+      const formulaTrace = document.getElementById("formulaBlock").textContent || "";
+      const assumptionsCsv = toCsv(buildAssumptionRows(latestState));
+      const sourceMappingTsv = tableToTraceTsv(document.getElementById("sourceMappingTable"));
+      const evidenceTsv = tableToTraceTsv(document.getElementById("evidenceTable"));
+      const linkIndex = collectLinksTrace([
+        document.getElementById("sourceMappingTable"),
+        document.getElementById("evidenceTable")
+      ]);
+
+      const dcDirectAFYear = latestState.results2025Modeled.buildoutDirectAFYear;
+      const dcTotalAFYear = latestState.results2025Modeled.buildoutTotalAFYear;
+      const dcIndirectAFYear = Math.max(dcTotalAFYear - dcDirectAFYear, 0);
+
+      // Treemap / volume context
+      const usgsGrand = USGS_IRR_AF + USGS_PUB_AF + USGS_THM_AF;
+      const dcPctOfConsumptive = ((dcTotalAFYear / usgsGrand) * 100).toFixed(4);
+      const dcDirectPctOfPublic = ((dcDirectAFYear / USGS_PUB_AF) * 100).toFixed(4);
+      const dcIndirectPctOfThermo = ((dcIndirectAFYear / USGS_THM_AF) * 100).toFixed(4);
+      const rainFracTrace = Math.round(US_ANNUAL_PRECIP_AF / dcTotalAFYear);
+
+      const industryLines = [
+        `Data centers (modeled 2025): direct ${(dcDirectAFYear / 1000).toFixed(6)} kAF/year; indirect ${(dcIndirectAFYear / 1000).toFixed(6)} kAF/year; total ${(dcTotalAFYear / 1000).toFixed(6)} kAF/year`,
+        ...industryAnnualBgal.map((item) => {
+          const afYear = annualBgalToAFYear(item.annualBgal);
+          const rel = dcTotalAFYear > 0 ? afYear / dcTotalAFYear : 0;
+          return `${item.label}: ${(afYear / 1000).toFixed(6)} kAF/year (${rel.toFixed(6)}x data-center total)`;
+        })
+      ].join("\n");
+
+      const agricultureLines = getAgricultureRows(dcTotalAFYear).map((row) => {
+        return `${row.label}: crop ${(row.cropAFYear / 1000).toFixed(6)} kAF/year; data-center share ${row.dcSharePct.toFixed(6)}%`;
+      }).join("\n");
+
+      const fullHtml = document.documentElement.outerHTML;
+
+      return [
+        "You are a truth-seeking, fact professional fact checker.",
+        "",
+        "Task:",
+        "- Verify this dashboard's calculations and sources with no hidden assumptions.",
+        "- Flag any arithmetic, unit-conversion, denominator, or source-citation errors.",
+        "- Confirm whether claims match the linked primary/secondary evidence.",
+        "",
+        `Generated UTC: ${new Date().toISOString()}`,
+        "",
+        "Current headline results:",
+        `- 2025 direct share: ${directHeadline}`,
+        `- 2025 direct + indirect share: ${totalHeadline}`,
+        `- Scale context: vs consumed ${scaleConsumed}, vs withdrawn ${scaleWithdrawn}, vs rainfall ${scaleRainfall}`,
+        "",
+        "US water budget context (USGS consumptive sectors):",
+        `- Crop irrigation: ${(USGS_IRR_AF / 1000).toFixed(1)} kAF/yr (${((USGS_IRR_AF / usgsGrand) * 100).toFixed(1)}%)`,
+        `- Public supply: ${(USGS_PUB_AF / 1000).toFixed(1)} kAF/yr (${((USGS_PUB_AF / usgsGrand) * 100).toFixed(1)}%)`,
+        `- Thermoelectric: ${(USGS_THM_AF / 1000).toFixed(1)} kAF/yr (${((USGS_THM_AF / usgsGrand) * 100).toFixed(1)}%)`,
+        `- DC direct (inside public supply): ${(dcDirectAFYear / 1000).toFixed(3)} kAF/yr = ${dcDirectPctOfPublic}% of public supply`,
+        `- DC indirect (inside thermoelectric): ${(dcIndirectAFYear / 1000).toFixed(3)} kAF/yr = ${dcIndirectPctOfThermo}% of thermoelectric`,
+        `- DC total as % of US consumptive water: ${dcPctOfConsumptive}%`,
+        `- DC total as fraction of US annual rainfall (${(US_ANNUAL_PRECIP_AF / 1000).toFixed(0)} kAF/yr): ~1/${fmt(rainFracTrace, 0)}`,
+        "",
+        "Replenishment note (not modeled — gross consumption only):",
+        "Google replenished 4.5B gal in 2024 (~64% of consumption; 112 projects, 68 watersheds).",
+        "Meta replenished 1.5B gal in 2024.",
+        "Microsoft committed to zero-water cooling on all new builds (Aug 2024).",
+        "AWS operates at 0.15 L/kWh WUE (lowest among the big four).",
+        "Comparable replenishment/offset commitments are not standard in peer sectors (golf, pulp/paper, swimming pools, agriculture).",
+        "",
+        "Current boundary note:",
+        boundaryNote,
+        "",
+        "Methods summary:",
+        methodsSummary,
+        "",
+        "Traceability check status:",
+        traceabilityStatus,
+        "",
+        "Current scenario JSON:",
+        JSON.stringify(latestState, null, 2),
+        "",
+        "Assumptions CSV:",
+        assumptionsCsv,
+        "",
+        "Industry comparison trace (kAF/year):",
+        industryLines,
+        "",
+        "Agriculture comparison trace (kAF/year; individual denominators, not additive):",
+        agricultureLines,
+        "",
+        "Source mapping table (tab-separated with links):",
+        sourceMappingTsv,
+        "",
+        "Evidence snippets table (tab-separated with links):",
+        evidenceTsv,
+        "",
+        "Link index (deduplicated for quick click-check):",
+        linkIndex,
+        "",
+        "Formula trace:",
+        formulaTrace,
+        "",
+        "Full dashboard HTML code:",
+        fullHtml
+      ].join("\n");
+    }
+
+    function openCopyAllWindow() {
+      const traceText = buildCopyAllTraceText();
+      const modal = document.getElementById("traceModal");
+      const area = document.getElementById("traceModalArea");
+      area.value = traceText;
+      document.getElementById("traceModalStatus").textContent = "";
+      modal.classList.add("visible");
+      document.body.style.overflow = "hidden";
+      area.focus();
+    }
+
+    function closeTraceModal() {
+      const modal = document.getElementById("traceModal");
+      modal.classList.remove("visible");
+      document.body.style.overflow = "";
+    }
+
+    function downloadText(filename, text, mimeType) {
+      const blob = new Blob([text], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function update() {
+      const includeHydro = document.getElementById("hydroToggle").checked;
+      const applyPpa = document.getElementById("ppaToggle").checked;
+
+      const ppaCapacityGW = Math.max(readNumber("ppaCapacityGW", DEFAULT_TRACKED_SIGNED_PPA_GW), 0);
+      const ppaCapacityFactorPct = clamp(readNumber("ppaCapacityFactorPct", 30), 0, 100);
+      const presetVal = document.getElementById("displacedThermalPreset").value;
+      const customInput = document.getElementById("displacedThermalLkwh");
+      if (presetVal === "custom") {
+        customInput.style.display = "";
+      } else {
+        customInput.style.display = "none";
+        customInput.value = presetVal;
+      }
+      const displacedThermalLkwh = Math.max(readNumber("displacedThermalLkwh", DEFAULT_DISPLACED_THERMAL_LKWH), 0);
+      const thermalSharePctFixed = 100;
+
+      document.getElementById("ppaCapacityGW").value = ppaCapacityGW;
+      document.getElementById("ppaCapacityFactorPct").value = ppaCapacityFactorPct;
+      document.getElementById("displacedThermalLkwh").value = displacedThermalLkwh.toFixed(2);
+
+      const ppaCapacityFactor = ppaCapacityFactorPct / 100;
+      const thermalShareFixed = thermalSharePctFixed / 100;
+
+      const ppaAnnualTWh = ppaCapacityGW * ppaCapacityFactor * 8.76;
+      const ppaCoverageShare = clamp(ppaAnnualTWh / INPUT.electricity2023TWh, 0, 1);
+      const ppaCoveragePct = ppaCoverageShare * 100;
+      const ppaAvoidedLitersYearPotential = ppaAnnualTWh * 1e9 * displacedThermalLkwh * thermalShareFixed;
+      const ppaAvoidedAFYearPotential = ppaAvoidedLitersYearPotential / litersPerAF;
+      const ppaAvoidedAFYearPotentialCapped = Math.min(ppaAvoidedAFYearPotential, indirectNoHydroAFYear);
+      const ppaAvoidedAFDayPotential = ppaAvoidedAFYearPotentialCapped / daysPerYear;
+      const netReductionShareNoHydro = indirectNoHydroAFYear > 0
+        ? clamp(ppaAvoidedAFYearPotentialCapped / indirectNoHydroAFYear, 0, 1)
+        : 0;
+      const ppaAvoidedAFDay = applyPpa
+        ? Math.min(ppaAvoidedAFDayPotential, indirectNoHydroAFDay)
+        : 0;
+      const ppaAvoidedAFYr = ppaAvoidedAFDay * daysPerYear;
+      const ppaAvoidedMgd = ppaAvoidedAFDay / afPerMgal;
+
+      const adjustedNoHydroAFDay = Math.max(indirectNoHydroAFDay - ppaAvoidedAFDay, 0);
+      const activeIndirectAFDay = includeHydro
+        ? hydroImpliedAFDay + adjustedNoHydroAFDay
+        : adjustedNoHydroAFDay;
+      const totalAFDay = directAFDay + activeIndirectAFDay;
+      const buildoutDirectAFDay = directAFDay * buildout2025CombinedFactor;
+      const buildoutTotalAFDay = totalAFDay * buildout2025CombinedFactor;
+      const directAFYear = directAFDay * daysPerYear;
+      const activeIndirectAFYear = activeIndirectAFDay * daysPerYear;
+      const totalAFYear = totalAFDay * daysPerYear;
+      const buildoutDirectAFYear = buildoutDirectAFDay * daysPerYear;
+      const buildoutTotalAFYear = buildoutTotalAFDay * daysPerYear;
+      const adjustedNoHydroAFYear = adjustedNoHydroAFDay * daysPerYear;
+
+      const directShareUsgs = sharePct(directAFDay, usgsAFDay);
+      const totalShareUsgs = sharePct(totalAFDay, usgsAFDay);
+      const ppaShareUsgs = sharePct(ppaAvoidedAFDay, usgsAFDay);
+      const buildoutDirectShareUsgs = sharePct(buildoutDirectAFDay, usgsAFDay);
+      const buildoutTotalShareUsgs = sharePct(buildoutTotalAFDay, usgsAFDay);
+
+      const projLowDirect = directAFDay * directLowFactor2025;
+      const projHighDirect = directAFDay * directHighFactor2025;
+      const projLowIndirect = activeIndirectAFDay * indirectLowFactor2025;
+      const projHighIndirect = activeIndirectAFDay * indirectHighFactor2025;
+      const projLowTotal = projLowDirect + projLowIndirect;
+      const projHighTotal = projHighDirect + projHighIndirect;
+      const projLowDirectYear = projLowDirect * daysPerYear;
+      const projHighDirectYear = projHighDirect * daysPerYear;
+      const projLowTotalYear = projLowTotal * daysPerYear;
+      const projHighTotalYear = projHighTotal * daysPerYear;
+      const projLowDirectShare = sharePct(projLowDirect, usgsAFDay);
+      const projHighDirectShare = sharePct(projHighDirect, usgsAFDay);
+      const projLowShare = sharePct(projLowTotal, usgsAFDay);
+      const projHighShare = sharePct(projHighTotal, usgsAFDay);
+
+      document.getElementById("assump2024TWh").textContent = fmt(INPUT.buildoutReference2024TWh, 1);
+      document.getElementById("assump2024Factor").textContent = buildout2024Factor.toFixed(4);
+      document.getElementById("assump2025GrowthPct").textContent = INPUT.cbre2025InventoryGrowthPct.toFixed(0);
+      document.getElementById("assump2025Factor").textContent = buildout2025From2024Factor.toFixed(4);
+      document.getElementById("assumpCombinedFactor").textContent = buildout2025CombinedFactor.toFixed(4);
+
+      const hydroFlag = document.getElementById("hydroFlag");
+      hydroFlag.className = includeHydro ? "pill warn" : "pill good";
+      hydroFlag.textContent = includeHydro ? "Hydro: YES" : "Hydro: NO";
+
+      const ppaFlag = document.getElementById("ppaFlag");
+      ppaFlag.className = applyPpa ? "pill warn" : "pill good";
+      ppaFlag.textContent = applyPpa ? "PPA: YES" : "PPA: NO";
+
+      document.getElementById("boundaryNote").textContent =
+        `Hydro: ${includeHydro ? "included" : "excluded"}. ` +
+        `PPA reduction: ${applyPpa
+          ? `ON (−${fmtKaf(ppaAvoidedAFYr, 1)} kAF/yr at ${displacedThermalLkwh.toFixed(2)} L/kWh displaced thermal).`
+          : `OFF (potential: ${fmtKaf(ppaAvoidedAFDayPotential * daysPerYear, 1)} kAF/yr).`}`;
+
+      document.getElementById("headlineDirect").textContent =
+        `${buildoutDirectShareUsgs.toFixed(3)}%`;
+      document.getElementById("headlineTotal").textContent =
+        `${buildoutTotalShareUsgs.toFixed(3)}%`;
+      const directFrac = Math.round(100 / buildoutDirectShareUsgs);
+      const totalFrac = Math.round(100 / buildoutTotalShareUsgs);
+      const withdrawalFrac = buildoutTotalAFYear > 0
+        ? Math.round(USGS_WITHDRAWAL_AF_YEAR / buildoutTotalAFYear) : 0;
+      const rainfallFrac = buildoutTotalAFYear > 0
+        ? Math.round(US_ANNUAL_PRECIP_AF / buildoutTotalAFYear) : 0;
+
+      document.getElementById("scaleConsumed").textContent = `1 in ${fmt(totalFrac, 0)}`;
+      document.getElementById("scaleWithdrawn").textContent = `1 in ${fmt(withdrawalFrac, 0)}`;
+      document.getElementById("scaleRainfall").textContent = `1 in ${fmt(rainfallFrac, 0)}`;
+      document.getElementById("heroFootnote").textContent =
+        `2025 modeled, all US data centers. Direct + grid = ${fmtKaf(buildoutTotalAFYear, 1)} kAF/year.`;
+
+      renderIndustryChart(buildoutDirectAFYear, buildoutTotalAFYear);
+      renderAgricultureChart(buildoutTotalAFYear);
+
+      document.getElementById("methodsSummary").textContent =
+        `Default 2025 path: buildout-calibrated point estimate using ${(buildout2024Factor).toFixed(4)}x (2024 vs 2023) x ${buildout2025From2024Factor.toFixed(4)}x (2025 vs 2024) = ${buildout2025CombinedFactor.toFixed(4)}x. ` +
+        `Boundary: ${includeHydro ? "include hydro evaporation" : "exclude hydro evaporation"}. ` +
+        `PPA adjustment: ${applyPpa ? "on" : "off"} (renewables-only, near-zero operational water assumption with full displacement of delivered renewable generation using assumed displaced thermal intensity ${displacedThermalLkwh.toFixed(2)} L/kWh; current avoided off-site: ${fmtKaf(ppaAvoidedAFYr, 1)} kAF/year). ` +
+        `Default 2025 output under current settings: direct ${fmtKaf(buildoutDirectAFYear, 1)} kAF/year (${buildoutDirectShareUsgs.toFixed(3)}%); direct + indirect ${fmtKaf(buildoutTotalAFYear, 1)} kAF/year (${buildoutTotalShareUsgs.toFixed(3)}%). ` +
+        `Sensitivity range (from LBNL 2028 bounds) for the same toggles: direct ${projLowDirectShare.toFixed(3)}% to ${projHighDirectShare.toFixed(3)}%; direct + indirect ${projLowShare.toFixed(3)}% to ${projHighShare.toFixed(3)}%.`;
+
+      document.getElementById("shareRows").innerHTML = `
+        <tr>
+          <td>Direct only</td>
+          <td class="num">${pct(directShareUsgs, 3)}</td>
+        </tr>
+        <tr>
+          <td>Direct + off-site (selected boundary)</td>
+          <td class="num">${pct(totalShareUsgs, 3)}</td>
+        </tr>
+        <tr>
+          <td>PPA-avoided off-site (thermal only)</td>
+          <td class="num">-${pct(ppaShareUsgs, 3)}</td>
+        </tr>
+      `;
+
+      document.getElementById("projRows").innerHTML = `
+        <tr>
+          <td>Lower 2028 water path</td>
+          <td class="num">${fmtKaf(projLowDirectYear, 1)}</td>
+          <td class="num">${fmtKaf(projLowTotalYear, 1)}</td>
+          <td class="num">${pct(projLowShare, 3)}</td>
+        </tr>
+        <tr>
+          <td>Upper 2028 water path</td>
+          <td class="num">${fmtKaf(projHighDirectYear, 1)}</td>
+          <td class="num">${fmtKaf(projHighTotalYear, 1)}</td>
+          <td class="num">${pct(projHighShare, 3)}</td>
+        </tr>
+      `;
+
+      const rainfallSharePct = sharePct(buildoutTotalAFYear, US_ANNUAL_PRECIP_AF);
+      const rainfallFracText = buildoutTotalAFYear > 0
+        ? `1/${fmt(Math.max(1, Math.round(US_ANNUAL_PRECIP_AF / buildoutTotalAFYear)), 0)}`
+        : "n/a";
+      document.getElementById("rainfallContextNote").textContent =
+        `Rainfall context: current 2025 modeled data-center total (${fmtKaf(buildoutTotalAFYear, 1)} kAF/year) is ` +
+        `${rainfallSharePct.toFixed(3)}% of estimated annual CONUS precipitation ` +
+        `(${fmtKaf(US_ANNUAL_PRECIP_AF, 0)} kAF/year), about ${rainfallFracText}.`;
+
+      setBar("barCoverage", ppaCoveragePct, "barCoverageVal");
+      const thermalIntensityBarPct = clamp((displacedThermalLkwh / 5) * 100, 0, 100);
+      document.getElementById("barThermalIntensity").style.width = `${thermalIntensityBarPct}%`;
+      document.getElementById("barThermalIntensityVal").textContent = `${displacedThermalLkwh.toFixed(2)} L/kWh`;
+      setBar("barNetReduction", netReductionShareNoHydro * 100, "barNetReductionVal");
+
+      document.getElementById("formulaBlock").textContent =
+`L/AF = (L/gal) x (gal/AF)
+     = ${INPUT.litersPerGallon} x ${INPUT.gallonsPerAF}
+     = ${litersPerAF.toFixed(6)} L/AF
+
+AF/Mgal = 1,000,000 / (gal/AF)
+        = 1,000,000 / ${INPUT.gallonsPerAF}
+        = ${afPerMgal.toFixed(9)} AF/Mgal
+
+Direct AF/year = 66,000,000,000 / ${litersPerAF.toFixed(6)}
+               = ${directAFYr.toFixed(6)}
+
+Indirect AF/year (include hydro) = 800,000,000,000 / ${litersPerAF.toFixed(6)}
+                                 = ${indirectWithHydroAFYr.toFixed(6)}
+
+No-hydro total cross-check (assumption, converted) = ${INPUT.noHydroSensitivityTotalMgd} x ${afPerMgal.toFixed(9)} x ${daysPerYear}
+                                                    = ${(INPUT.noHydroSensitivityTotalMgd * afPerMgal * daysPerYear).toFixed(6)} AF/year
+Indirect AF/year (exclude hydro)    = ${indirectNoHydroMgd.toFixed(6)} x ${afPerMgal.toFixed(9)} x ${daysPerYear}
+                                    = ${indirectNoHydroAFYear.toFixed(6)}
+
+Hydro-implied AF/year = include-hydro indirect - exclude-hydro indirect
+                      = ${indirectWithHydroAFYr.toFixed(6)} - ${indirectNoHydroAFYear.toFixed(6)}
+                      = ${hydroImpliedAFYr.toFixed(6)}
+
+Default tracked signed PPA baseline (strict US renewables PPA-focused; GW)
+                           = ${GOOGLE_US_RENEWABLE_PPA_GW.toFixed(3)} + ${AMAZON_US_RENEWABLE_PPA_GW.toFixed(3)} + ${META_US_RENEWABLE_PPA_GW.toFixed(3)} + ${MICROSOFT_US_RENEWABLE_PPA_GW.toFixed(3)}
+                           = ${DEFAULT_TRACKED_SIGNED_PPA_GW.toFixed(3)}
+Microsoft US-contracted estimate method (GW; map-derived reference)
+                           = 7.897 (MISO) + 8.089 (PJM) + 4.696 (ERCOT) + 3.431 (WECC non-CAISO)
+                           + 1.054 (SERC) + 0.907 (CAISO) + 0.178 (SPP)
+                           = ${MICROSOFT_US_CONTRACTED_GW_CONTEXT.toFixed(3)}
+Microsoft renewables-PPA proxy factor
+                           = ${(MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR * 100).toFixed(1)}%
+Microsoft included renewables-PPA proxy GW
+                           = ${MICROSOFT_US_CONTRACTED_GW_CONTEXT.toFixed(3)} x ${MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR.toFixed(3)}
+                           = ${MICROSOFT_US_RENEWABLE_PPA_GW.toFixed(3)}
+
+PPA annual energy (TWh/yr) = signed GW x capacity factor x 8.76
+                           = ${ppaCapacityGW.toFixed(3)} x ${ppaCapacityFactor.toFixed(4)} x 8.76
+                           = ${ppaAnnualTWh.toFixed(6)}
+PPA boundary assumption    = renewables-only PPAs (wind/solar/non-hydro) treated as near-zero operational consumptive water
+PPA coverage of 2023 load  = ${ppaAnnualTWh.toFixed(6)} / ${INPUT.electricity2023TWh}
+                           = ${(ppaCoverageShare * 100).toFixed(6)}%
+Thermal displacement scope = ${thermalSharePctFixed.toFixed(3)}%
+LBNL thermoelectric ref    = ${LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH.toFixed(3)} gal/kWh (LBNL 2024 report pp. 55–57)
+Converted to L/kWh         = ${LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH.toFixed(3)} x ${INPUT.litersPerGallon.toFixed(9)}
+                           = ${DEFAULT_DISPLACED_THERMAL_LKWH.toFixed(6)} L/kWh
+Note: same rate used to derive no-hydro boundary (275 Mgd = 176 TWh x 0.47 gal/kWh upper bound + direct)
+Displacement preset selected = ${presetVal === "custom" ? "Custom" : document.getElementById("displacedThermalPreset").selectedOptions[0].textContent}
+Assumed displaced thermal intensity = ${displacedThermalLkwh.toFixed(6)} L/kWh
+Potential PPA avoided liters/year = ${ppaAnnualTWh.toFixed(6)} x 1,000,000,000 x ${displacedThermalLkwh.toFixed(6)}
+                                  = ${ppaAvoidedLitersYearPotential.toFixed(6)}
+Potential PPA avoided AF/year (before no-hydro cap)
+                                  = ${ppaAvoidedLitersYearPotential.toFixed(6)} / ${litersPerAF.toFixed(6)}
+                                  = ${ppaAvoidedAFYearPotential.toFixed(6)}
+Potential PPA avoided AF/year (capped to no-hydro baseline)
+                                  = min(${ppaAvoidedAFYearPotential.toFixed(6)}, ${indirectNoHydroAFYear.toFixed(6)})
+                                  = ${ppaAvoidedAFYearPotentialCapped.toFixed(6)}
+Net reduction share (no-hydro indirect) = capped potential / no-hydro indirect baseline
+                                        = ${ppaAvoidedAFYearPotentialCapped.toFixed(6)} / ${indirectNoHydroAFYear.toFixed(6)}
+                                        = ${(netReductionShareNoHydro * 100).toFixed(6)}%
+
+Potential PPA avoided AF/year (no-hydro only)
+                            = ${ppaAvoidedAFYearPotentialCapped.toFixed(6)}
+                            = ${(ppaAvoidedAFDayPotential * daysPerYear).toFixed(6)}
+Applied PPA avoided AF/year = ${applyPpa ? ppaAvoidedAFYr.toFixed(6) : "0.000000"}  (${applyPpa ? "PPA ON" : "PPA OFF"})
+Adjusted no-hydro AF/year   = ${indirectNoHydroAFYear.toFixed(6)} - ${ppaAvoidedAFYr.toFixed(6)}
+                            = ${adjustedNoHydroAFYear.toFixed(6)}
+
+Selected off-site mode: ${includeHydro ? "Include hydro evaporation" : "Exclude hydro evaporation"}
+Active indirect AF/year: ${activeIndirectAFYear.toFixed(6)}
+Total AF/year           = direct + active indirect
+                        = ${directAFYr.toFixed(6)} + ${activeIndirectAFYear.toFixed(6)}
+                        = ${totalAFYear.toFixed(6)}
+
+Default 2025 buildout scale (point estimate):
+2024 vs 2023 factor      = ${INPUT.buildoutReference2024TWh.toFixed(3)} / ${INPUT.electricity2023TWh.toFixed(3)}
+                         = ${buildout2024Factor.toFixed(6)}
+2025 vs 2024 factor      = 1 + (${INPUT.cbre2025InventoryGrowthPct.toFixed(3)} / 100)
+                         = ${buildout2025From2024Factor.toFixed(6)}
+Combined 2025 factor     = ${buildout2024Factor.toFixed(6)} x ${buildout2025From2024Factor.toFixed(6)}
+                         = ${buildout2025CombinedFactor.toFixed(6)}
+2025 direct AF/year      = ${directAFYr.toFixed(6)} x ${buildout2025CombinedFactor.toFixed(6)}
+                         = ${buildoutDirectAFYear.toFixed(6)}
+2025 total AF/year       = ${totalAFYear.toFixed(6)} x ${buildout2025CombinedFactor.toFixed(6)}
+                         = ${buildoutTotalAFYear.toFixed(6)}
+2025 direct share (%)    = (${buildoutDirectAFYear.toFixed(6)} / ${usgsAFYear.toFixed(6)}) x 100
+                         = ${buildoutDirectShareUsgs.toFixed(6)}
+2025 total share (%)     = (${buildoutTotalAFYear.toFixed(6)} / ${usgsAFYear.toFixed(6)}) x 100
+                         = ${buildoutTotalShareUsgs.toFixed(6)}
+
+Sensitivity-only 2025 range from LBNL 2028 bounds:
+Direct 2025 scale (low/high)   = (145/66)^(2/5), (275/66)^(2/5)
+                               = ${directLowFactor2025.toFixed(6)}, ${directHighFactor2025.toFixed(6)}
+Indirect 2025 scale (low/high) = (1,740/800)^(2/5), (3,270/800)^(2/5)
+                               = ${indirectLowFactor2025.toFixed(6)}, ${indirectHighFactor2025.toFixed(6)}
+
+2025 low direct AF/year        = ${directAFYr.toFixed(6)} x ${directLowFactor2025.toFixed(6)}
+                               = ${projLowDirectYear.toFixed(6)}
+2025 high direct AF/year       = ${directAFYr.toFixed(6)} x ${directHighFactor2025.toFixed(6)}
+                               = ${projHighDirectYear.toFixed(6)}
+2025 low indirect AF/year      = ${activeIndirectAFYear.toFixed(6)} x ${indirectLowFactor2025.toFixed(6)}
+                               = ${(projLowIndirect * daysPerYear).toFixed(6)}
+2025 high indirect AF/year     = ${activeIndirectAFYear.toFixed(6)} x ${indirectHighFactor2025.toFixed(6)}
+                               = ${(projHighIndirect * daysPerYear).toFixed(6)}
+
+2025 low total AF/year         = ${projLowDirectYear.toFixed(6)} + ${(projLowIndirect * daysPerYear).toFixed(6)}
+                               = ${projLowTotalYear.toFixed(6)}
+2025 high total AF/year        = ${projHighDirectYear.toFixed(6)} + ${(projHighIndirect * daysPerYear).toFixed(6)}
+                               = ${projHighTotalYear.toFixed(6)}
+
+USGS denominator AF/year       = (84,939 x ${afPerMgal.toFixed(9)}) x ${daysPerYear}
+                               = ${usgsAFYear.toFixed(6)}
+2025 USGS national consumptive denominator: not yet published as an observed national value.
+
+Share (%) = (numerator AF/year / denominator AF/year) x 100`;
+
+      latestState = {
+        generatedAtUTC: new Date().toISOString(),
+        toggles: {
+          includeHydro,
+          applyPpa
+        },
+        assumptions: {
+          ppaCapacityGW,
+          ppaCapacityFactorPct,
+          thermalSharePctFixed,
+          displacedThermalLkwh,
+          ppaAnnualTWh,
+          ppaCoveragePct
+        },
+        results2023: {
+          directAFYear,
+          indirectAFYear: activeIndirectAFYear,
+          totalAFYear,
+          hydroImpliedAFYear: hydroImpliedAFYr,
+          ppaAvoidedAFYear: ppaAvoidedAFYr,
+          directShareUsgsPct: directShareUsgs,
+          totalShareUsgsPct: totalShareUsgs,
+          ppaAvoidedShareUsgsPct: ppaShareUsgs
+        },
+        results2025Modeled: {
+          buildoutDirectAFYear,
+          buildoutTotalAFYear,
+          buildoutDirectShareUsgsPct: buildoutDirectShareUsgs,
+          buildoutTotalShareUsgsPct: buildoutTotalShareUsgs,
+          lowDirectAFYear: projLowDirectYear,
+          highDirectAFYear: projHighDirectYear,
+          lowTotalAFYear: projLowTotalYear,
+          highTotalAFYear: projHighTotalYear,
+          lowTotalShareUsgsPct: projLowShare,
+          highTotalShareUsgsPct: projHighShare
+        },
+        constants: {
+          litersPerAF,
+          afPerMgal,
+          usgsAFYear
+        }
+      };
+
+      updateTraceabilityStatus(latestState);
+    }
+
+    document.getElementById("hydroToggle").addEventListener("change", update);
+    document.getElementById("ppaToggle").addEventListener("change", update);
+    document.getElementById("topTraceBtn").addEventListener("click", openCopyAllWindow);
+    document.getElementById("traceModalClose").addEventListener("click", closeTraceModal);
+    document.getElementById("traceModal").addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) closeTraceModal();
+    });
+    document.getElementById("traceModalSelect").addEventListener("click", () => {
+      const area = document.getElementById("traceModalArea");
+      area.focus();
+      area.select();
+      document.getElementById("traceModalStatus").textContent = "Selected.";
+    });
+    document.getElementById("traceModalCopy").addEventListener("click", async () => {
+      const area = document.getElementById("traceModalArea");
+      const status = document.getElementById("traceModalStatus");
+      try {
+        await navigator.clipboard.writeText(area.value);
+        status.textContent = "Copied to clipboard.";
+      } catch (err) {
+        area.focus();
+        area.select();
+        const ok = document.execCommand("copy");
+        status.textContent = ok ? "Copied (fallback)." : "Copy failed. Use Select All + manual copy.";
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeTraceModal();
+    });
+    document.getElementById("displacedThermalPreset").addEventListener("change", update);
+    ["ppaCapacityGW", "ppaCapacityFactorPct", "displacedThermalLkwh"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", update);
+      document.getElementById(id).addEventListener("change", update);
+    });
+
+    document.getElementById("downloadTraceBtn").addEventListener("click", () => {
+      const trace = document.getElementById("formulaBlock").textContent;
+      downloadText("us_data_center_water_trace.txt", trace, "text/plain;charset=utf-8");
+      document.getElementById("downloadNote").textContent = "Downloaded full formula trace TXT.";
+    });
+
+    update();
+    window.addEventListener("resize", update);
+  </script>
+</body>
+</html>

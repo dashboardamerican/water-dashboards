@@ -1,0 +1,1257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gemini Water Footprint, In Context</title>
+  <style>
+    :root {
+      --bg: #fffaf2;
+      --bg-cool: #eff8ff;
+      --panel: #ffffff;
+      --ink: #132839;
+      --muted: #566b7e;
+      --line: #d8e4ee;
+      --accent: #0e6ba8;
+      --accent-deep: #0c4f7c;
+      --chip: #edf5fa;
+      --shadow: 0 18px 42px rgba(18, 40, 57, 0.12);
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Nunito Sans", "Helvetica Neue", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1400px 560px at -10% -20%, #fff1d6, transparent 68%),
+        radial-gradient(1200px 520px at 100% -25%, #dff2ff, transparent 64%),
+        var(--bg);
+      line-height: 1.35;
+    }
+    .wrap {
+      max-width: 1020px;
+      margin: 24px auto 42px auto;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .wrap::before {
+      content: "";
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(118, 190, 222, 0.22), transparent 70%);
+      top: -180px;
+      right: -140px;
+      pointer-events: none;
+    }
+    .eyebrow {
+      margin: 0;
+      color: #27506f;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    h1 {
+      margin: 6px 0 4px 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: clamp(30px, 4vw, 44px);
+      line-height: 1.06;
+      letter-spacing: 0.01em;
+    }
+    .subtitle {
+      margin: 8px 0 0 0;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .top-actions {
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid #a9c7e6;
+      border-radius: 10px;
+      background: #edf6ff;
+      color: #133f65;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background: #deedfc;
+    }
+    .trace-status {
+      margin-top: 8px;
+      color: #335674;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .trace-copy {
+      width: 100%;
+      min-height: 260px;
+      margin-top: 8px;
+      resize: vertical;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #1f3c56;
+      border: 1px solid #c8d6e5;
+      border-radius: 10px;
+      padding: 10px;
+      background: #ffffff;
+    }
+    .panel {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .hero {
+      margin-top: 16px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #0f6ea7, #0e95b3 60%, #5bc6bd);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+      animation: rise 0.4s ease both;
+      box-shadow: 0 16px 30px rgba(14, 106, 168, 0.28);
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      right: -90px;
+      bottom: -170px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.26), transparent 70%);
+      pointer-events: none;
+    }
+    .hero-label {
+      color: #d8effa;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      font-weight: 800;
+    }
+    .hero-time {
+      margin-top: 6px;
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 900;
+      line-height: 1.06;
+      color: #ffffff;
+      text-shadow: 0 3px 20px rgba(7, 62, 98, 0.32);
+    }
+    .hero-main {
+      margin-top: 7px;
+      font-size: clamp(16px, 2.1vw, 21px);
+      color: #f2fbff;
+      max-width: 900px;
+    }
+    .hero-main strong {
+      color: #ffffff;
+      font-weight: 900;
+    }
+    .focus-cards {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .focus-card {
+      border: 1px solid #c9deee;
+      border-radius: 14px;
+      background: linear-gradient(170deg, #ffffff, #eff7ff);
+      padding: 14px;
+      box-shadow: 0 10px 22px rgba(18, 40, 57, 0.08);
+      animation: rise 0.45s ease both;
+    }
+    .focus-card .k {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #345774;
+      font-weight: 800;
+    }
+    .focus-card .v {
+      margin-top: 6px;
+      font-size: clamp(28px, 4.4vw, 42px);
+      line-height: 1.06;
+      font-weight: 900;
+      color: #153654;
+      font-variant-numeric: tabular-nums;
+    }
+    .focus-card .m {
+      margin-top: 7px;
+      color: #466684;
+      font-size: 12px;
+    }
+    .pct-card-wrap {
+      margin-top: 12px;
+    }
+    .pct-card {
+      max-width: 520px;
+    }
+    .field-note {
+      margin-top: 5px;
+      font-size: 11px;
+      color: #5a7a94;
+      line-height: 1.3;
+    }
+    .controls {
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .field {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px;
+      background: #ffffff;
+      min-width: 0;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .field:focus-within {
+      border-color: #7cb5de;
+      box-shadow: 0 0 0 3px rgba(14, 107, 168, 0.12);
+      transform: translateY(-1px);
+    }
+    .field label {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #3f5a73;
+      margin-bottom: 6px;
+      font-weight: 800;
+    }
+    select,
+    input[type="number"] {
+      width: 100%;
+      min-width: 0;
+      font: inherit;
+      font-size: 15px;
+      padding: 9px 10px;
+      border: 1px solid #c8d6e5;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+    }
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #5f7c96 50%),
+        linear-gradient(135deg, #5f7c96 50%, transparent 50%);
+      background-position:
+        calc(100% - 16px) calc(50% - 2px),
+        calc(100% - 10px) calc(50% - 2px);
+      background-size: 6px 6px, 6px 6px;
+      background-repeat: no-repeat;
+      padding-right: 30px;
+    }
+    input[disabled] {
+      background: #f3f8fc;
+      color: #4f6880;
+    }
+    .trace-gap {
+      margin-top: 12px;
+      border: 1px solid #b8d2e6;
+      border-radius: 12px;
+      background: #eef7ff;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #2f5574;
+      font-weight: 700;
+      animation: rise 0.45s ease both;
+    }
+    .trace-gap.ok {
+      border-color: #b8dcbf;
+      background: #eefaf0;
+      color: #2f6a3f;
+    }
+    .trace-gap.warn {
+      border-color: #e4c089;
+      background: #fff8ea;
+      color: #82581a;
+    }
+    details {
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fcfdff;
+    }
+    summary {
+      cursor: pointer;
+      padding: 10px 11px;
+      font-weight: 800;
+      color: #274564;
+      user-select: none;
+      list-style: none;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    details[open] summary {
+      border-bottom: 1px solid var(--line);
+      background: #f4f9ff;
+    }
+    .details-body {
+      padding: 10px;
+      font-size: 14px;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .details-grid label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4b6278;
+      font-weight: 700;
+    }
+    .calc-line {
+      margin: 6px 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: #2e4a66;
+      white-space: pre-wrap;
+      background: #f3f8fc;
+      border: 1px solid #d9e4ef;
+      border-radius: 8px;
+      padding: 8px;
+    }
+    code {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      background: #eef4fb;
+      border-radius: 5px;
+      padding: 1px 4px;
+    }
+    a {
+      color: #0a4a8f;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul.sources {
+      margin: 0;
+      padding-left: 18px;
+    }
+    ul.sources li {
+      margin: 6px 0;
+    }
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (max-width: 760px) {
+      .wrap {
+        margin: 12px;
+        padding: 14px;
+        border-radius: 16px;
+      }
+      .subtitle {
+        font-size: 14px;
+      }
+      .hero {
+        padding: 14px;
+        border-radius: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <p class="eyebrow">Blue Water Equivalence</p>
+    <h1>Gemini water footprint, in context</h1>
+    <p class="subtitle">
+      Pick a daily Gemini query level and an item. The headline gives a plain-language time equivalent using blue water.
+      Technical assumptions and sources are still included below.
+    </p>
+    <p class="muted">
+      Inspiration for data-center water framing.
+      Andy Masley:
+      <a href="https://www.andymasley.com/writing/" target="_blank" rel="noopener noreferrer">website</a>,
+      <a href="https://www.andymasley.com/writing/the-ai-water-issue-is-fake/" target="_blank" rel="noopener noreferrer">AI water piece</a>,
+      <a href="https://www.andymasley.com/writing/what-a-data-center-is/" target="_blank" rel="noopener noreferrer">data-center piece</a>.
+      Brian Potter:
+      <a href="https://www.construction-physics.com/" target="_blank" rel="noopener noreferrer">website</a>,
+      <a href="https://www.construction-physics.com/p/how-does-the-us-use-water" target="_blank" rel="noopener noreferrer">US water piece</a>,
+      <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">data-center water piece</a>.
+      Both are helpful overviews and a starting point for framing and identifying sources.
+      Numeric claims were verified by primary sources.
+    </p>
+    <div class="top-actions">
+      <button id="copyMathBtn" class="btn" type="button">Copy Full Methodology, Equations, and Sources</button>
+      <span id="copyMathNote" class="muted">One-click copy of a full trace packet: sourcing, assumptions, equations, logic, code, and archive status for each source.</span>
+    </div>
+
+    <div class="panel">
+      <div class="controls">
+        <div class="field">
+          <label for="queriesPerDay">Gemini queries per day</label>
+          <select id="queriesPerDay">
+            <option value="100" selected>100</option>
+            <option value="1000">1,000</option>
+            <option value="5000">5,000</option>
+            <option value="10000">10,000</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="compareItem">Comparison item</label>
+          <select id="compareItem">
+            <option value="jeans" selected>Pair of jeans</option>
+            <option value="cotton_shirt">Cotton shirt</option>
+            <option value="jacket_custom">Suit jacket</option>
+            <option value="leather_shoes">Leather shoes (pair, US)</option>
+            <option value="almonds_handful">Handful of almonds</option>
+            <option value="lawn_sprinkler_1hr">Lawn sprinkler (1 hour)</option>
+            <option value="cotton_sofa">Sofa (cotton)</option>
+            <option value="cotton_area_rug">Area rug (9×12 ft cotton)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="offsiteMode">Electricity water method</label>
+          <select id="offsiteMode">
+            <option value="non_hydro" selected>Power plants (default)</option>
+            <option value="lbnl">Include hydro*</option>
+          </select>
+          <div class="field-note" id="hydroNote" style="display:none">*Includes natural evaporation from hydroelectric dam reservoirs.</div>
+        </div>
+        <div class="field">
+          <label for="promptProfile">Gemini prompt setting</label>
+          <select id="promptProfile">
+            <option value="google_median">Google median</option>
+            <option value="custom">Custom prompt inputs</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="field">
+          <label for="googleDirectMl">Direct water per Gemini query (mL)</label>
+          <input id="googleDirectMl" type="number" step="0.01" min="0" value="0.26" disabled />
+        </div>
+        <div class="field">
+          <label for="googleEnergyWh">Energy per Gemini query (Wh)</label>
+          <input id="googleEnergyWh" type="number" step="0.01" min="0" value="0.24" disabled />
+        </div>
+        <div class="field">
+          <label for="offsiteLkwh">Off-site power-water intensity (L/kWh)</label>
+          <input id="offsiteLkwh" type="number" step="0.0001" min="0" value="1.7839" disabled />
+        </div>
+        <div class="field">
+          <label for="targetBlueL">Selected item blue water (L)</label>
+          <input id="targetBlueL" type="number" step="0.01" min="0" value="2640" disabled />
+        </div>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="hero-label" id="heroRate">At 100 Gemini queries/day, it would take</div>
+      <div class="hero-time" id="heroTime">-</div>
+      <div class="hero-main" id="heroMain">to equal the blue-water footprint for <strong>one pair of jeans (800 g cotton)</strong>.</div>
+    </div>
+
+    <div class="focus-cards">
+      <div class="focus-card">
+        <div class="k">Data center water only</div>
+        <div class="v" id="focusDirectTime">-</div>
+        <div class="m" id="focusDirectTimeMeta">Water used for cooling inside the data center.</div>
+      </div>
+      <div class="focus-card">
+        <div class="k">Including electricity water</div>
+        <div class="v" id="focusTotalTime">-</div>
+        <div class="m" id="focusTotalTimeMeta">Data center water plus water consumed generating electricity.</div>
+      </div>
+    </div>
+
+    <div class="pct-card-wrap">
+      <div class="focus-card pct-card">
+        <div class="k">Share of an average American's blue water consumption</div>
+        <div class="v" id="focusAmericanPct">-</div>
+        <div class="m" id="focusAmericanMeta">-</div>
+      </div>
+    </div>
+    <div id="traceCoverageBanner" class="trace-gap">Trace coverage check in progress.</div>
+
+    <details>
+      <summary>Suit jacket assumptions (optional)</summary>
+      <div class="details-body">
+        <p class="muted">
+          Only used when comparison item is <code>Suit jacket (custom assumption)</code>.
+        </p>
+        <div class="details-grid">
+          <div>
+            <label for="cottonTotalLkg">Cotton total water footprint (L/kg)</label>
+            <input id="cottonTotalLkg" type="number" step="1" min="0" value="10000" />
+          </div>
+          <div>
+            <label for="blueShare">Blue share of cotton footprint</label>
+            <input id="blueShare" type="number" step="0.01" min="0" max="1" value="0.33" />
+          </div>
+          <div>
+            <label for="jacketKg">Jacket fabric mass (kg)</label>
+            <input id="jacketKg" type="number" step="0.01" min="0" value="0.70" />
+          </div>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Show full calculation</summary>
+      <div class="details-body">
+        <p class="muted">
+          This calculator tracks <strong>blue water only</strong> for comparison items.
+        </p>
+        <div class="calc-line" id="calcBlock"></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Sources and references</summary>
+      <div class="details-body">
+        <ul class="sources">
+          <li>
+            Inspiration - Andy Masley; helpful overview and starting point
+            for framing and identifying sources:
+            <a href="https://www.andymasley.com/writing/" target="_blank" rel="noopener noreferrer">Andy Masley writing hub</a>,
+            <a href="https://www.andymasley.com/writing/the-ai-water-issue-is-fake/" target="_blank" rel="noopener noreferrer">The AI Water Issue Is Fake</a>,
+            <a href="https://www.andymasley.com/writing/what-a-data-center-is/" target="_blank" rel="noopener noreferrer">What a Data Center Is</a>.
+          </li>
+          <li>
+            Inspiration - Brian Potter; helpful overview and starting point
+            for framing and identifying sources:
+            <a href="https://www.construction-physics.com/" target="_blank" rel="noopener noreferrer">Construction Physics</a>,
+            <a href="https://www.construction-physics.com/p/how-does-the-us-use-water" target="_blank" rel="noopener noreferrer">How Does the US Use Water?</a>,
+            <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">I Was Wrong About Data Center Water Use</a>.
+          </li>
+          <li>
+            Google direct prompt water + prompt energy:
+            <a href="https://arxiv.org/pdf/2508.15734" target="_blank" rel="noopener noreferrer">Google Gemini environmental study (arXiv:2508.15734)</a>.
+          </li>
+          <li>
+            LBNL indirect intensity boundary (includes hydro evaporation treatment in that boundary):
+            <a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL US Data Center Energy Usage and Water Consumption</a>.
+          </li>
+          <li>
+            Non-hydro sensitivity path (Potter cross-check framing of ~275 Mgal/day total with hydro excluded):
+            <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">Brian Potter review</a>.
+          </li>
+          <li>
+            Cotton footprints and blue share (10,000 L/kg; 33% blue; 2495 L/shirt):
+            <a href="https://tools.waterfootprint.org/product-gallery/details.php?product=16" target="_blank" rel="noopener noreferrer">WFN cotton detail</a>.
+          </li>
+          <li>
+            Bovine leather water footprint (17,093 L/kg total; 4% blue share global baseline):
+            <a href="https://www.waterfootprint.org/resources/Mekonnen-Hoekstra-2012-WaterFootprintFarmAnimalProducts_1.pdf" target="_blank" rel="noopener noreferrer">Mekonnen &amp; Hoekstra (2012), Water Footprint of Farm Animal Products</a>.
+          </li>
+          <li>
+            US cattle blue water correction (2,275 L/kg blue for US beef, 4.33&times; M&amp;H global; applied to leather):
+            <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9667972/" target="_blank" rel="noopener noreferrer">Klopatek &amp; Oltjen (2022), Journal of Animal Science</a>.
+          </li>
+          <li>
+            California almond blue water footprint (5,290 L/kg blue; 10,240 L/kg total):
+            <a href="https://www.sciencedirect.com/science/article/pii/S1470160X17308592" target="_blank" rel="noopener noreferrer">Fulton et al. (2019), Water-indexed benefits and impacts of California almonds, Ecological Indicators</a>.
+          </li>
+          <li>
+            Lawn sprinkler flow rate (12 GPM typical residential oscillating sprinkler; 720 gal/hr):
+            <a href="https://www.epa.gov/watersense/outdoor-water-use-in-the-united-states" target="_blank" rel="noopener noreferrer">EPA WaterSense outdoor water use</a>.
+          </li>
+          <li>
+            Sofa upholstery fabric quantity (18 yards of 54-in fabric at 375 GSM &asymp; 7.5 kg cotton):
+            <a href="https://revolutionfabrics.com/blogs/gotcha-covered/how-much-upholstery-fabric-do-i-need-for-a-couch" target="_blank" rel="noopener noreferrer">Revolution Fabrics yardage guide</a>.
+          </li>
+          <li>
+            Average American annual blue-water baseline used for percentage comparison:
+            USGS modeled CONUS consumptive use = 84,939 Mgal/day (water year 2020), divided by 2020 US population
+            (331,449,281), then annualized:
+            <a href="https://www.usgs.gov/mission-areas/water-resources/science/water-use-united-states" target="_blank" rel="noopener noreferrer">USGS water-use model estimates</a>
+            and
+            <a href="https://www.census.gov/library/stories/2021/04/2020-census-data-release.html" target="_blank" rel="noopener noreferrer">US Census 2020 results</a>.
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <details id="traceDetails">
+      <summary>Copyable full trace packet</summary>
+      <div class="details-body">
+        <p class="muted">
+          Generated only from content and code that already exists on this page.
+        </p>
+        <button id="copyMathPanelBtn" class="btn" type="button">Copy trace packet</button>
+        <div id="copyMathStatus" class="trace-status">Press the copy button to generate and copy.</div>
+        <textarea id="traceCopyText" class="trace-copy" spellcheck="false" readonly></textarea>
+      </div>
+    </details>
+  </div>
+
+  <script>
+    const LITERS_PER_AF = 3.785411784 * 325851.429;
+    const AVG_US_BLUE_BASELINE = {
+      usgsConsumptiveMgd: 84939,
+      usPopulation2020: 331449281,
+      litersPerGallon: 3.785411784,
+      daysPerYear: 365
+    };
+    const AVG_US_BLUE_L_PER_PERSON_YEAR = (
+      AVG_US_BLUE_BASELINE.usgsConsumptiveMgd * 1000000 * AVG_US_BLUE_BASELINE.litersPerGallon * AVG_US_BLUE_BASELINE.daysPerYear
+    ) / AVG_US_BLUE_BASELINE.usPopulation2020;
+
+    const promptProfiles = {
+      google_median: {
+        directMl: 0.26,
+        energyWh: 0.24
+      }
+    };
+
+    const offsiteModes = {
+      lbnl: {
+        label: "Power plants + hydro dam evaporation (LBNL boundary)",
+        lPerKwh: 4.52
+      },
+      non_hydro: {
+        label: "Power plants only",
+        // Derived from Potter cross-check: total 275 Mgal/day - LBNL direct 47.768 Mgal/day at 176 TWh.
+        lPerKwh: 1.7838676580625
+      }
+    };
+
+    const itemDefs = {
+      jeans: {
+        label: "one pair of jeans (800 g cotton)",
+        blueLiters: () => 10000 * 0.33 * 0.80,
+        note: "10,000 L/kg cotton x 33% blue x 0.80 kg"
+      },
+      cotton_shirt: {
+        label: "one cotton shirt (250 g)",
+        blueLiters: () => 2495 * 0.33,
+        note: "2495 L per shirt x 33% blue"
+      },
+      jacket_custom: {
+        label: "one suit jacket",
+        blueLiters: () => n("cottonTotalLkg") * n("blueShare") * n("jacketKg"),
+        note: "cotton_L_per_kg x blue_share x jacket_kg"
+      },
+      leather_shoes: {
+        label: "one pair of leather shoes (US)",
+        blueLiters: () => 17093 * 0.04 * 4.33 * 0.50,
+        note: "17,093 L/kg bovine leather (M&H) x 4% blue x 4.33 US correction (Klopatek & Oltjen 2022) x 0.50 kg"
+      },
+      almonds_handful: {
+        label: "a handful of almonds (28 g)",
+        blueLiters: () => 5290 * 0.028,
+        note: "5,290 L/kg blue water (California almonds, Fulton et al. 2019) x 0.028 kg (1 oz serving, ~23 almonds)"
+      },
+      lawn_sprinkler_1hr: {
+        label: "one hour of lawn sprinkler",
+        blueLiters: () => 720 * 3.785411784 * 0.70,
+        note: "12 GPM x 60 min = 720 gal x 3.785 L/gal x 70% consumptive (ET + evaporative losses)"
+      },
+      cotton_sofa: {
+        label: "one sofa (cotton upholstery)",
+        blueLiters: () => 10000 * 0.33 * 7.5,
+        note: "10,000 L/kg cotton x 33% blue x 7.5 kg upholstery fabric"
+      },
+      cotton_area_rug: {
+        label: "one 9×12 ft cotton area rug",
+        blueLiters: () => 10000 * 0.33 * 20,
+        note: "10,000 L/kg cotton x 33% blue x 20 kg (9x12 ft woven cotton rug at ~2.4 kg/m²)"
+      },
+    };
+
+    const TRACE_ARCHIVE_LOOKUP = {
+      "https://escholarship.org/uc/item/32d6m0d1": {
+        archiveStatus: "challenge_or_block_page",
+        headCode: "202",
+        getCode: "202",
+        sha256: "n/a",
+        localFile: "sources/primary_trace_2026-02-24/raw/04_escholarship_org_uc_item_32d6m0d1",
+        checkedUtc: "2026-02-24T14:24:46Z",
+        archiveNote: "head_202;get_202;empty_body"
+      },
+      "https://www.usgs.gov/mission-areas/water-resources/science/water-use-united-states": {
+        archiveStatus: "archived",
+        headCode: "200",
+        getCode: "200",
+        sha256: "cb0d04ab55e9c92e4fb24e98e9941a9ac2ae3e5be7e99d1a4b11f6cf860fdb0e",
+        localFile: "sources/primary_trace_2026-02-24/raw/16_www_usgs_gov_mission-areas_water-resources_science_water-use-united-states",
+        checkedUtc: "2026-02-24T14:25:03Z",
+        archiveNote: "ok;challenge_or_block_page"
+      }
+    };
+
+    const SOURCE_EVIDENCE = [
+      {
+        id: "google_gemini_prompt_intensity",
+        valueUsed: "direct = 0.26 mL/query; energy = 0.24 Wh/query",
+        whereUsed: [
+          "promptProfiles.google_median.directMl",
+          "promptProfiles.google_median.energyWh"
+        ],
+        quality: "Primary technical paper",
+        url: "https://arxiv.org/pdf/2508.15734"
+      },
+      {
+        id: "lbnl_offsite_boundary",
+        valueUsed: "LBNL path = 4.52 L/kWh (includes hydro in boundary)",
+        whereUsed: ["offsiteModes.lbnl.lPerKwh"],
+        quality: "Primary lab publication page",
+        url: "https://escholarship.org/uc/item/32d6m0d1"
+      },
+      {
+        id: "potter_no_hydro_sensitivity",
+        valueUsed: "No-hydro sensitivity = 1.7838676580625 L/kWh",
+        whereUsed: ["offsiteModes.non_hydro.lPerKwh"],
+        quality: "Secondary sensitivity source",
+        url: "https://www.construction-physics.com/p/i-was-wrong-about-data-center-water"
+      },
+      {
+        id: "wfn_cotton_footprints",
+        valueUsed: "10,000 L/kg cotton, 33% blue, 2,495 L/shirt",
+        whereUsed: [
+          "itemDefs.jeans",
+          "itemDefs.cotton_shirt",
+          "itemDefs.jacket_custom (cottonTotalLkg, blueShare defaults)",
+          "itemDefs.cotton_sofa",
+          "itemDefs.cotton_area_rug"
+        ],
+        quality: "Secondary benchmark dataset",
+        url: "https://tools.waterfootprint.org/product-gallery/details.php?product=16"
+      },
+      {
+        id: "mekonnen_hoekstra_2012_leather",
+        valueUsed: "17,093 L/kg bovine leather total WF; 4% blue share (global baseline)",
+        whereUsed: ["itemDefs.leather_shoes"],
+        quality: "Peer-reviewed primary research",
+        url: "https://www.waterfootprint.org/resources/Mekonnen-Hoekstra-2012-WaterFootprintFarmAnimalProducts_1.pdf"
+      },
+      {
+        id: "klopatek_oltjen_2022_us_beef_blue",
+        valueUsed: "US beef blue water = 2,275 L/kg (4.33x M&H global); correction applied to leather",
+        whereUsed: ["itemDefs.leather_shoes (US correction factor)"],
+        quality: "Peer-reviewed US-specific research (Journal of Animal Science)",
+        url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9667972/"
+      },
+      {
+        id: "fulton_2018_california_almonds",
+        valueUsed: "Blue WF = 5,290 L/kg; Green = 570 L/kg; Grey = 4,380 L/kg; Total = 10,240 L/kg (California almonds, 2004-2015 avg)",
+        whereUsed: ["itemDefs.almonds_handful"],
+        quality: "Peer-reviewed primary research (Ecological Indicators)",
+        url: "https://www.sciencedirect.com/science/article/pii/S1470160X17308592"
+      },
+      {
+        id: "sprinkler_flow_rate",
+        valueUsed: "12 GPM typical residential oscillating sprinkler; 720 gal/hr = 2,725 L/hr; 70% consumptive (ET) = 1,908 L",
+        whereUsed: ["itemDefs.lawn_sprinkler_1hr"],
+        quality: "Industry standard / EPA WaterSense outdoor guidance",
+        url: "https://www.epa.gov/watersense/outdoor-water-use-in-the-united-states"
+      },
+      {
+        id: "sofa_upholstery_fabric_mass",
+        valueUsed: "7.5 kg cotton fabric (18 yards of 54-in fabric at 375 GSM)",
+        whereUsed: ["itemDefs.cotton_sofa"],
+        quality: "Industry upholstery yardage guides (Revolution Fabrics, InteriorDecorating.com)",
+        url: "https://revolutionfabrics.com/blogs/gotcha-covered/how-much-upholstery-fabric-do-i-need-for-a-couch"
+      },
+      {
+        id: "usgs_conus_consumptive_2020_model",
+        valueUsed: "84,939 Mgal/day",
+        whereUsed: ["AVG_US_BLUE_BASELINE.usgsConsumptiveMgd"],
+        quality: "Primary U.S. federal water dataset",
+        url: "https://www.usgs.gov/mission-areas/water-resources/science/water-use-united-states"
+      },
+      {
+        id: "us_census_2020_population",
+        valueUsed: "331,449,281 people",
+        whereUsed: ["AVG_US_BLUE_BASELINE.usPopulation2020"],
+        quality: "Primary U.S. federal census release",
+        url: "https://www.census.gov/library/stories/2021/04/2020-census-data-release.html"
+      },
+      {
+        id: "jacket_mass_default_assumption",
+        valueUsed: "default jacket_kg = 0.70 (editable input)",
+        whereUsed: ["itemDefs.jacket_custom", "input#jacketKg"],
+        quality: "On-page editable assumption (not externally sourced)",
+        url: ""
+      }
+    ];
+
+    const ITEM_SOURCE_REQUIREMENTS = {
+      jeans: ["wfn_cotton_footprints"],
+      cotton_shirt: ["wfn_cotton_footprints"],
+      jacket_custom: ["wfn_cotton_footprints", "jacket_mass_default_assumption"],
+      leather_shoes: ["mekonnen_hoekstra_2012_leather", "klopatek_oltjen_2022_us_beef_blue"],
+      almonds_handful: ["fulton_2018_california_almonds"],
+      lawn_sprinkler_1hr: ["sprinkler_flow_rate"],
+      cotton_sofa: ["wfn_cotton_footprints", "sofa_upholstery_fabric_mass"],
+      cotton_area_rug: ["wfn_cotton_footprints"]
+    };
+
+    const CORE_ASSUMPTION_REQUIREMENTS = [
+      {
+        label: "gemini_prompt_intensity",
+        ids: ["google_gemini_prompt_intensity"]
+      },
+      {
+        label: "offsite_intensity_modes",
+        ids: ["lbnl_offsite_boundary", "potter_no_hydro_sensitivity"]
+      },
+      {
+        label: "average_american_blue_denominator",
+        ids: ["usgs_conus_consumptive_2020_model", "us_census_2020_population"]
+      }
+    ];
+
+    function n(id) {
+      return Number(document.getElementById(id).value);
+    }
+
+    function setVal(id, value, digits = 4) {
+      document.getElementById(id).value = Number(value).toFixed(digits);
+    }
+
+    function fmtL(v) {
+      if (!isFinite(v)) return "n/a";
+      if (Math.abs(v) >= 1000) return `${v.toLocaleString(undefined, { maximumFractionDigits: 0 })} L`;
+      if (Math.abs(v) >= 1) return `${v.toLocaleString(undefined, { maximumFractionDigits: 2 })} L`;
+      return `${v.toLocaleString(undefined, { maximumFractionDigits: 4 })} L`;
+    }
+
+    function fmtPct(v) {
+      if (!isFinite(v)) return "n/a";
+      if (Math.abs(v) >= 1) return `${v.toFixed(2)}%`;
+      if (Math.abs(v) >= 0.01) return `${v.toFixed(4)}%`;
+      return `${v.toFixed(6)}%`;
+    }
+
+    function formatTime(days) {
+      if (!isFinite(days) || days <= 0) return "n/a";
+      const totalDays = Math.round(days);
+      const unit = (value, singular, plural) => `${value} ${value === 1 ? singular : plural}`;
+
+      if (days < 365) {
+        const months = Math.floor(totalDays / 30);
+        const remDays = totalDays - (months * 30);
+        if (months === 0) return unit(remDays, "day", "days");
+        if (remDays === 0) return unit(months, "month", "months");
+        return `${unit(months, "month", "months")} ${unit(remDays, "day", "days")}`;
+      }
+
+      const years = Math.floor(totalDays / 365);
+      const remDays = totalDays - (years * 365);
+      const remMonths = Math.floor(remDays / 30);
+      if (remMonths > 0) return `${unit(years, "year", "years")} ${unit(remMonths, "month", "months")}`;
+      return unit(years, "year", "years");
+    }
+
+    function selectedLabel(id) {
+      const select = document.getElementById(id);
+      if (!select || select.selectedIndex < 0) return String(select?.value ?? "");
+      return select.options[select.selectedIndex].text.trim();
+    }
+
+    function sourceLines() {
+      return Array.from(document.querySelectorAll("ul.sources li")).map((li, idx) => {
+        const link = li.querySelector("a");
+        const text = li.textContent.replace(/\s+/g, " ").trim();
+        return `${idx + 1}. ${text}${link ? ` | URL: ${link.href}` : ""}`;
+      });
+    }
+
+    function sourceEvidenceRows() {
+      return SOURCE_EVIDENCE.map((row) => {
+        const url = row.url || "";
+        const whereUsed = Array.isArray(row.whereUsed) ? row.whereUsed.join(", ") : String(row.whereUsed || "");
+        if (!url) {
+          return {
+            ...row,
+            whereUsed,
+            archiveStatus: "on_page_assumption",
+            headCode: "n/a",
+            getCode: "n/a",
+            sha256: "n/a",
+            localFile: "n/a",
+            checkedUtc: "n/a",
+            archiveNote: "not_external_source"
+          };
+        }
+
+        const archive = TRACE_ARCHIVE_LOOKUP[url];
+        if (!archive) {
+          return {
+            ...row,
+            whereUsed,
+            archiveStatus: "not_archived_in_primary_trace_2026_02_24",
+            headCode: "n/a",
+            getCode: "n/a",
+            sha256: "n/a",
+            localFile: "n/a",
+            checkedUtc: "n/a",
+            archiveNote: "no_matching_manifest_row"
+          };
+        }
+
+        return {
+          ...row,
+          whereUsed,
+          ...archive
+        };
+      });
+    }
+
+    function sourceEvidenceLines() {
+      return sourceEvidenceRows().map((row, idx) =>
+        `${idx + 1}. id=${row.id} | value_used=${row.valueUsed} | where_used=${row.whereUsed} | quality=${row.quality} | url=${row.url || "(on-page assumption)"} | archive_status=${row.archiveStatus} | head_code=${row.headCode} | get_code=${row.getCode} | sha256=${row.sha256} | local_file=${row.localFile} | checked_utc=${row.checkedUtc} | archive_note=${row.archiveNote}`
+      );
+    }
+
+    function traceCoverageResult() {
+      const ids = new Set(sourceEvidenceRows().map((row) => row.id));
+      const missing = [];
+
+      Object.keys(itemDefs).forEach((itemKey) => {
+        if (!ITEM_SOURCE_REQUIREMENTS[itemKey]) {
+          missing.push(`item=${itemKey} missing_requirement_mapping=yes`);
+        }
+      });
+
+      Object.entries(ITEM_SOURCE_REQUIREMENTS).forEach(([itemKey, requiredIds]) => {
+        const missingForItem = requiredIds.filter((id) => !ids.has(id));
+        if (missingForItem.length > 0) {
+          missing.push(`item=${itemKey} missing_source_ids=${missingForItem.join(",")}`);
+        }
+      });
+
+      CORE_ASSUMPTION_REQUIREMENTS.forEach((requirement) => {
+        const missingForRequirement = requirement.ids.filter((id) => !ids.has(id));
+        if (missingForRequirement.length > 0) {
+          missing.push(`assumption=${requirement.label} missing_source_ids=${missingForRequirement.join(",")}`);
+        }
+      });
+
+      return {
+        ok: missing.length === 0,
+        missing
+      };
+    }
+
+    function traceCoverageLines() {
+      const coverage = traceCoverageResult();
+      if (coverage.ok) {
+        return [
+          "trace_coverage_status=complete",
+          "trace_coverage_missing=none"
+        ];
+      }
+      return [
+        "trace_coverage_status=gap",
+        `trace_coverage_missing_count=${coverage.missing.length}`,
+        ...coverage.missing
+      ];
+    }
+
+    function updateTraceCoverageBanner() {
+      const coverage = traceCoverageResult();
+      const banner = document.getElementById("traceCoverageBanner");
+      if (!banner) return;
+      if (coverage.ok) {
+        banner.className = "trace-gap ok";
+        banner.textContent = "Trace coverage check: complete for all dropdown items and core assumptions.";
+        return;
+      }
+      banner.className = "trace-gap warn";
+      banner.textContent = `Trace coverage gap: ${coverage.missing.length} missing mapping(s). Copy the trace packet for details.`;
+    }
+
+    function pageHtmlSnapshot() {
+      return `<!doctype html>\n${document.documentElement.outerHTML}`;
+    }
+
+    function buildTracePacket() {
+      const qpd = n("queriesPerDay");
+      const offsiteKey = document.getElementById("offsiteMode").value;
+      const offsite = offsiteModes[offsiteKey];
+      const directLPerQuery = n("googleDirectMl") / 1000;
+      const indirectLPerQuery = (n("googleEnergyWh") / 1000) * offsite.lPerKwh;
+      const annualDirectL = qpd * directLPerQuery * AVG_US_BLUE_BASELINE.daysPerYear;
+      const annualIndirectL = qpd * indirectLPerQuery * AVG_US_BLUE_BASELINE.daysPerYear;
+      const annualTotalL = annualDirectL + annualIndirectL;
+      const annualDirectSharePctAvgAmerican = (annualDirectL / AVG_US_BLUE_L_PER_PERSON_YEAR) * 100;
+      const annualSharePctAvgAmerican = (annualTotalL / AVG_US_BLUE_L_PER_PERSON_YEAR) * 100;
+      const sourceText = sourceLines().join("\n");
+      const sourceEvidenceText = sourceEvidenceLines().join("\n");
+      const offsiteModesText = Object.entries(offsiteModes)
+        .map(([key, value]) => `${key}: ${value.lPerKwh.toFixed(4)} L/kWh | ${value.label}`)
+        .join("\n");
+      const promptProfilesText = [
+        `google_median: directMl=${promptProfiles.google_median.directMl}, energyWh=${promptProfiles.google_median.energyWh}`,
+        "custom: directMl and energyWh entered by user"
+      ].join("\n");
+      const itemDefsText = Object.entries(itemDefs)
+        .map(([key, value]) => `${key}: label=\"${value.label}\" | note=\"${value.note}\" | blue_liters_now=${value.blueLiters().toFixed(6)}`)
+        .join("\n");
+      const stateText = [
+        `queries_per_day = ${qpd} (${selectedLabel("queriesPerDay")})`,
+        `comparison_item = ${document.getElementById("compareItem").value} (${selectedLabel("compareItem")})`,
+        `offsite_mode = ${offsiteKey} (${selectedLabel("offsiteMode")})`,
+        `prompt_profile = ${document.getElementById("promptProfile").value} (${selectedLabel("promptProfile")})`,
+        `google_direct_ml_per_query = ${n("googleDirectMl")}`,
+        `google_energy_wh_per_query = ${n("googleEnergyWh")}`,
+        `offsite_l_per_kwh = ${n("offsiteLkwh")}`,
+        `target_blue_liters = ${n("targetBlueL")}`,
+        `cotton_total_lkg = ${n("cottonTotalLkg")}`,
+        `blue_share = ${n("blueShare")}`,
+        `jacket_kg = ${n("jacketKg")}`,
+        `avg_us_blue_usgs_consumptive_mgd = ${AVG_US_BLUE_BASELINE.usgsConsumptiveMgd}`,
+        `avg_us_blue_population_2020 = ${AVG_US_BLUE_BASELINE.usPopulation2020}`,
+        `avg_us_blue_liters_per_person_year = ${AVG_US_BLUE_L_PER_PERSON_YEAR.toFixed(6)}`
+      ].join("\n");
+      const coverageText = traceCoverageLines().join("\n");
+      const resultText = [
+        `hero_rate = ${document.getElementById("heroRate").textContent.trim()}`,
+        `hero_time = ${document.getElementById("heroTime").textContent.trim()}`,
+        `hero_main = ${document.getElementById("heroMain").textContent.trim()}`,
+        `focus_direct_time = ${document.getElementById("focusDirectTime").textContent.trim()}`,
+        `focus_total_time = ${document.getElementById("focusTotalTime").textContent.trim()}`,
+        `focus_american_pct = ${document.getElementById("focusAmericanPct").textContent.trim()}`,
+        `focus_american_meta = ${document.getElementById("focusAmericanMeta").textContent.trim()}`,
+        `trace_coverage_banner = ${document.getElementById("traceCoverageBanner").textContent.trim()}`,
+        `annual_direct_liters = ${annualDirectL.toFixed(6)}`,
+        `annual_indirect_liters = ${annualIndirectL.toFixed(6)}`,
+        `annual_total_liters = ${annualTotalL.toFixed(6)}`,
+        `annual_pct_direct_only_of_average_american = ${annualDirectSharePctAvgAmerican.toFixed(8)}`,
+        `annual_pct_of_average_american = ${annualSharePctAvgAmerican.toFixed(8)}`
+      ].join("\n");
+      const calcTrace = document.getElementById("calcBlock").textContent.trim();
+      const styleCode = document.querySelector("style")?.textContent.trim() || "";
+      const scriptCode = document.querySelector("script")?.textContent.trim() || "";
+
+      return [
+        "GEMINI BLUE-WATER EQUIVALENCE: COPYABLE TRACE PACK",
+        `generated_at_utc = ${new Date().toISOString()}`,
+        "scope = only content/code already on this dashboard page",
+        "",
+        "=== SOURCING (ON-PAGE) ===",
+        sourceText,
+        "",
+        "=== SOURCE EVIDENCE + ARCHIVE STATUS ===",
+        sourceEvidenceText,
+        "",
+        "=== TRACE COVERAGE CHECK ===",
+        coverageText,
+        "",
+        "=== CURRENT INPUTS / ASSUMPTIONS ===",
+        stateText,
+        "",
+        "=== CURRENT OUTPUTS ===",
+        resultText,
+        "",
+        "=== FULL CALCULATION TRACE (ON-PAGE BLOCK) ===",
+        calcTrace,
+        "",
+        "=== TRADE-OFF OPTIONS ENCODED ON THIS PAGE ===",
+        "offsite_modes:",
+        offsiteModesText,
+        "",
+        "prompt_profiles:",
+        promptProfilesText,
+        "",
+        "comparison_items:",
+        itemDefsText,
+        "",
+        "=== PAGE STYLE CODE (STYLE TAG) ===",
+        styleCode,
+        "",
+        "=== PAGE LOGIC CODE (SCRIPT TAG) ===",
+        scriptCode,
+        "",
+        "=== FULL PAGE HTML SNAPSHOT ===",
+        pageHtmlSnapshot()
+      ].join("\n");
+    }
+
+    async function copyTracePacket() {
+      compute();
+      const traceText = buildTracePacket();
+      const textArea = document.getElementById("traceCopyText");
+      const statusEl = document.getElementById("copyMathStatus");
+      const noteEl = document.getElementById("copyMathNote");
+      document.getElementById("traceDetails").open = true;
+      textArea.value = traceText;
+      textArea.focus();
+      textArea.select();
+
+      let status = `Trace packet ready (${traceText.length.toLocaleString()} characters).`;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(traceText);
+          status = `Copied trace packet (${traceText.length.toLocaleString()} characters).`;
+        } catch (_err) {
+          status = `Clipboard blocked. Trace packet is ready in the text box (${traceText.length.toLocaleString()} characters).`;
+        }
+      } else {
+        status = `Clipboard API unavailable. Trace packet is ready in the text box (${traceText.length.toLocaleString()} characters).`;
+      }
+
+      statusEl.textContent = status;
+      noteEl.textContent = status;
+    }
+
+    function applyPromptProfile() {
+      const profile = document.getElementById("promptProfile").value;
+      const directInput = document.getElementById("googleDirectMl");
+      const energyInput = document.getElementById("googleEnergyWh");
+
+      if (profile === "custom") {
+        directInput.disabled = false;
+        energyInput.disabled = false;
+        return;
+      }
+
+      directInput.disabled = true;
+      energyInput.disabled = true;
+      directInput.value = promptProfiles.google_median.directMl.toFixed(2);
+      energyInput.value = promptProfiles.google_median.energyWh.toFixed(2);
+    }
+
+    function compute() {
+      const qpd = n("queriesPerDay");
+      const compareKey = document.getElementById("compareItem").value;
+      const offsiteKey = document.getElementById("offsiteMode").value;
+      const offsite = offsiteModes[offsiteKey];
+
+      const directMl = n("googleDirectMl");
+      const energyWh = n("googleEnergyWh");
+      const directLPerQuery = directMl / 1000;
+      const indirectLPerQuery = (energyWh / 1000) * offsite.lPerKwh;
+      const totalLPerQuery = directLPerQuery + indirectLPerQuery;
+
+      const item = itemDefs[compareKey];
+      const targetBlueL = item.blueLiters();
+      setVal("offsiteLkwh", offsite.lPerKwh, 4);
+      setVal("targetBlueL", targetBlueL, 2);
+
+      const dailyDirectL = qpd * directLPerQuery;
+      const dailyIndirectL = qpd * indirectLPerQuery;
+      const dailyTotalL = qpd * totalLPerQuery;
+      const annualDirectL = dailyDirectL * AVG_US_BLUE_BASELINE.daysPerYear;
+      const annualIndirectL = dailyIndirectL * AVG_US_BLUE_BASELINE.daysPerYear;
+      const annualTotalL = dailyTotalL * AVG_US_BLUE_BASELINE.daysPerYear;
+      const annualDirectSharePctAvgAmerican = (annualDirectL / AVG_US_BLUE_L_PER_PERSON_YEAR) * 100;
+      const annualSharePctAvgAmerican = (annualTotalL / AVG_US_BLUE_L_PER_PERSON_YEAR) * 100;
+
+      const daysDirect = targetBlueL / dailyDirectL;
+      const daysTotal = targetBlueL / dailyTotalL;
+
+      document.getElementById("heroRate").textContent = `At ${qpd.toLocaleString()} Gemini queries/day, it would take`;
+      document.getElementById("heroTime").textContent = formatTime(daysTotal);
+      document.getElementById("heroMain").innerHTML =
+        `to equal the blue-water footprint for <strong>${item.label}</strong>.`;
+      document.getElementById("hydroNote").style.display = offsiteKey === "lbnl" ? "block" : "none";
+
+      document.getElementById("focusDirectTime").textContent = formatTime(daysDirect);
+      document.getElementById("focusDirectTimeMeta").textContent =
+        `Water used for cooling inside the data center.`;
+      document.getElementById("focusTotalTime").textContent = formatTime(daysTotal);
+      document.getElementById("focusTotalTimeMeta").textContent =
+        `Data center water plus water consumed generating electricity.`;
+
+      document.getElementById("focusAmericanPct").textContent = fmtPct(annualSharePctAvgAmerican);
+      document.getElementById("focusAmericanMeta").textContent =
+        `Blue water consumption only — excludes withdrawals returned to source and rain-fed (green) water. This is the most conservative comparison.`;
+      updateTraceCoverageBanner();
+
+      document.getElementById("calcBlock").textContent =
+`direct_L_per_query = ${directMl} mL / 1000 = ${directLPerQuery.toFixed(6)} L/query
+indirect_L_per_query = (${energyWh} Wh / 1000) x ${offsite.lPerKwh.toFixed(4)} L/kWh = ${indirectLPerQuery.toFixed(6)} L/query
+total_L_per_query = direct + indirect = ${totalLPerQuery.toFixed(6)} L/query
+
+target_item_blue_L = ${targetBlueL.toFixed(6)} L  [${item.note}]
+
+daily_direct_L = queries_per_day x direct_L_per_query = ${qpd} x ${directLPerQuery.toFixed(6)} = ${dailyDirectL.toFixed(6)}
+daily_indirect_L = queries_per_day x indirect_L_per_query = ${qpd} x ${indirectLPerQuery.toFixed(6)} = ${dailyIndirectL.toFixed(6)}
+daily_total_L = queries_per_day x total_L_per_query = ${qpd} x ${totalLPerQuery.toFixed(6)} = ${dailyTotalL.toFixed(6)}
+annual_direct_L = daily_direct_L x ${AVG_US_BLUE_BASELINE.daysPerYear} = ${annualDirectL.toFixed(6)}
+annual_indirect_L = daily_indirect_L x ${AVG_US_BLUE_BASELINE.daysPerYear} = ${annualIndirectL.toFixed(6)}
+annual_total_L = daily_total_L x ${AVG_US_BLUE_BASELINE.daysPerYear} = ${annualTotalL.toFixed(6)}
+
+days_direct = target_item_blue_L / daily_direct_L = ${targetBlueL.toFixed(6)} / ${dailyDirectL.toFixed(6)} = ${daysDirect.toFixed(6)}
+days_total = target_item_blue_L / daily_total_L = ${targetBlueL.toFixed(6)} / ${dailyTotalL.toFixed(6)} = ${daysTotal.toFixed(6)}
+--- % of average American blue water consumption ---
+Note: "blue water consumption" = freshwater permanently removed from source (evaporated, embedded in product).
+Excludes: withdrawals returned to source (e.g. cooling water discharged back to river), rain-fed/green water.
+This is the most conservative framing — actual total water footprints are larger.
+
+average_american_annual_blue_consumption_L = (${AVG_US_BLUE_BASELINE.usgsConsumptiveMgd} Mgal/day x 1,000,000 gal/Mgal x ${AVG_US_BLUE_BASELINE.litersPerGallon} L/gal x ${AVG_US_BLUE_BASELINE.daysPerYear}) / ${AVG_US_BLUE_BASELINE.usPopulation2020} people = ${AVG_US_BLUE_L_PER_PERSON_YEAR.toFixed(6)} L
+source: USGS modeled CONUS consumptive use (water year 2020) / US Census 2020 population
+
+gemini_annual_blue_L = ${fmtL(annualTotalL)} (at ${qpd.toLocaleString()} queries/day)
+annual_share_pct_direct_only = (${annualDirectL.toFixed(6)} / ${AVG_US_BLUE_L_PER_PERSON_YEAR.toFixed(6)}) x 100 = ${annualDirectSharePctAvgAmerican.toFixed(8)}%
+annual_share_pct_total = (${annualTotalL.toFixed(6)} / ${AVG_US_BLUE_L_PER_PERSON_YEAR.toFixed(6)}) x 100 = ${annualSharePctAvgAmerican.toFixed(8)}%
+
+L_to_AF conversion:
+1 AF = ${LITERS_PER_AF.toFixed(6)} L`;
+    }
+
+    [
+      "queriesPerDay",
+      "offsiteMode",
+      "compareItem",
+      "promptProfile",
+      "googleDirectMl",
+      "googleEnergyWh",
+      "cottonTotalLkg",
+      "blueShare",
+      "jacketKg"
+    ].forEach(id => {
+      document.getElementById(id).addEventListener("input", () => {
+        if (id === "promptProfile") applyPromptProfile();
+        compute();
+      });
+      document.getElementById(id).addEventListener("change", () => {
+        if (id === "promptProfile") applyPromptProfile();
+        compute();
+      });
+    });
+
+    document.getElementById("copyMathBtn").addEventListener("click", copyTracePacket);
+    document.getElementById("copyMathPanelBtn").addEventListener("click", copyTracePacket);
+
+    applyPromptProfile();
+    compute();
+  </script>
+</body>
+</html>
