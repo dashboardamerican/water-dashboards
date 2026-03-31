@@ -438,6 +438,7 @@
             <option value="almonds_handful">Handful of almonds</option>
             <option value="lawn_sprinkler_1hr">Lawn sprinkler (1 hour)</option>
             <option value="cotton_sofa">Sofa (cotton)</option>
+            <option value="cotton_socks">Pair of socks (cotton)</option>
             <option value="cotton_area_rug">Area rug (9×12 ft cotton)</option>
           </select>
         </div>
@@ -685,6 +686,11 @@
         blueLiters: () => 10000 * 0.33 * 7.5,
         note: "10,000 L/kg cotton x 33% blue x 7.5 kg upholstery fabric"
       },
+      cotton_socks: {
+        label: "one pair of cotton socks",
+        blueLiters: () => 10000 * 0.33 * 0.07,
+        note: "10,000 L/kg cotton x 33% blue x 0.07 kg (typical pair of crew socks)"
+      },
       cotton_area_rug: {
         label: "one 9×12 ft cotton area rug",
         blueLiters: () => 10000 * 0.33 * 20,
@@ -816,6 +822,7 @@
       leather_shoes: ["mekonnen_hoekstra_2012_leather", "klopatek_oltjen_2022_us_beef_blue"],
       almonds_handful: ["fulton_2018_california_almonds"],
       lawn_sprinkler_1hr: ["sprinkler_flow_rate"],
+      cotton_socks: ["wfn_cotton_footprints"],
       cotton_sofa: ["wfn_cotton_footprints", "sofa_upholstery_fabric_mass"],
       cotton_area_rug: ["wfn_cotton_footprints"]
     };
