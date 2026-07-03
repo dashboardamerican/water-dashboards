@@ -171,6 +171,81 @@
       color: #ffffff;
       font-weight: 900;
     }
+    .hero-prov {
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(233, 247, 255, 0.85);
+      position: relative;
+      z-index: 1;
+    }
+    .hero-prov a {
+      color: #eaf7ff;
+      text-decoration: underline;
+      text-decoration-color: rgba(234, 247, 255, 0.45);
+      text-underline-offset: 2px;
+    }
+    .audit-badge {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid #b8dcbf;
+      background: #eefaf0;
+      color: #2f6a3f;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .audit-badge a {
+      color: #215c31;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .src-tier {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 5px;
+      padding: 1px 6px;
+      margin-right: 6px;
+      vertical-align: middle;
+      border: 1px solid #cfdce8;
+      background: #f1f5f9;
+      color: #48627a;
+      white-space: nowrap;
+    }
+    .src-tier.t-peer { background: #e7f6ec; color: #22663a; border-color: #bfe3cb; }
+    .src-tier.t-fed { background: #e9f1fd; color: #1d4e89; border-color: #c3d8f2; }
+    .src-tier.t-primary { background: #efeafd; color: #4c3a8f; border-color: #d4c9f0; }
+    .src-tier.t-data { background: #e6f7f6; color: #1f6b66; border-color: #bfe5e2; }
+    .src-tier.t-assume { background: #fff3e2; color: #8a5a17; border-color: #efd4a5; }
+    .evidence-status {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #3f5a73;
+    }
+    .evidence-status table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+    .evidence-status th,
+    .evidence-status td {
+      text-align: left;
+      padding: 4px 8px;
+      border-bottom: 1px solid #e3ecf4;
+      font-size: 11px;
+      vertical-align: top;
+    }
+    .evidence-status th {
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 10px;
+      color: #4b6278;
+    }
     .focus-cards {
       margin-top: 12px;
       display: grid;
@@ -413,6 +488,7 @@
       Numeric claims were verified by primary sources.
     </p>
     <div class="top-actions">
+      <span class="audit-badge">&#10003; Fact-checked Jun 23, 2026 &mdash; 18 claims traced, 0 significant issues &middot;&nbsp;<a href="gemini_jacket_blue_equivalence-fact-check.md" target="_blank" rel="noopener noreferrer">read the audit</a></span>
       <button id="copyMathBtn" class="btn" type="button">Copy Full Methodology, Equations, and Sources</button>
       <span id="copyMathNote" class="muted">One-click copy of a full trace packet: sourcing, assumptions, equations, logic, code, and archive status for each source.</span>
     </div>
@@ -483,6 +559,7 @@
       <div class="hero-label" id="heroRate">At 100 Prompt queries/day, it would take</div>
       <div class="hero-time" id="heroTime">-</div>
       <div class="hero-main" id="heroMain">to equal the blue-water footprint for <strong>one pair of jeans (800 g cotton)</strong>.</div>
+      <div class="hero-prov">Inputs: <a href="#src-google_gemini_prompt_intensity">0.26 mL + 0.24 Wh per query (Google, arXiv:2508.15734)</a> &middot; <a href="#src-wfn_cotton_footprints" id="heroItemSrc">item source</a> &middot; blue water only</div>
     </div>
 
     <div class="focus-cards">
@@ -540,69 +617,86 @@
       </div>
     </details>
 
-    <details>
+    <details id="sourcesDetails">
       <summary>Sources and references</summary>
       <div class="details-body">
         <ul class="sources">
-          <li>
-            Inspiration - Andy Masley; helpful overview and starting point
+          <li id="src-masley_inspiration">
+            <span class="src-tier">Inspiration</span>
+            Andy Masley; helpful overview and starting point
             for framing and identifying sources:
             <a href="https://www.andymasley.com/writing/" target="_blank" rel="noopener noreferrer">Andy Masley writing hub</a>,
             <a href="https://www.andymasley.com/writing/the-ai-water-issue-is-fake/" target="_blank" rel="noopener noreferrer">The AI Water Issue Is Fake</a>,
             <a href="https://www.andymasley.com/writing/what-a-data-center-is/" target="_blank" rel="noopener noreferrer">What a Data Center Is</a>.
           </li>
-          <li>
-            Inspiration - Brian Potter; helpful overview and starting point
+          <li id="src-potter_inspiration">
+            <span class="src-tier">Inspiration</span>
+            Brian Potter; helpful overview and starting point
             for framing and identifying sources:
             <a href="https://www.construction-physics.com/" target="_blank" rel="noopener noreferrer">Construction Physics</a>,
             <a href="https://www.construction-physics.com/p/how-does-the-us-use-water" target="_blank" rel="noopener noreferrer">How Does the US Use Water?</a>,
             <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">I Was Wrong About Data Center Water Use</a>.
           </li>
-          <li>
+          <li id="src-google_gemini_prompt_intensity">
+            <span class="src-tier t-primary">Primary paper</span>
             Google direct prompt water + prompt energy:
             <a href="https://arxiv.org/pdf/2508.15734" target="_blank" rel="noopener noreferrer">Google Gemini environmental study (arXiv:2508.15734)</a>.
           </li>
-          <li>
+          <li id="src-lbnl_offsite_boundary">
+            <span class="src-tier t-fed">Federal lab</span>
             LBNL indirect intensity boundary (includes hydro evaporation treatment in that boundary):
             <a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL US Data Center Energy Usage and Water Consumption</a>.
           </li>
-          <li>
+          <li id="src-potter_no_hydro_sensitivity">
+            <span class="src-tier">Secondary</span>
             Non-hydro sensitivity path (Potter cross-check framing of ~275 Mgal/day total with hydro excluded):
             <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">Brian Potter review</a>.
           </li>
-          <li>
-            Cotton footprints and blue share (10,000 L/kg; 33% blue; 2495 L/shirt):
+          <li id="src-wfn_cotton_footprints">
+            <span class="src-tier t-data">Dataset</span>
+            Cotton footprints and blue share (10,000 L/kg; 33% blue; 2495 L/shirt &mdash; WFN published aggregates derived from Mekonnen &amp; Hoekstra seed-cotton data):
             <a href="https://tools.waterfootprint.org/product-gallery/details.php?product=16" target="_blank" rel="noopener noreferrer">WFN cotton detail</a>.
           </li>
-          <li>
+          <li id="src-mekonnen_hoekstra_2012_leather">
+            <span class="src-tier t-peer">Peer-reviewed</span>
             Bovine leather water footprint (17,093 L/kg total; 4% blue share global baseline):
             <a href="https://www.waterfootprint.org/resources/Mekonnen-Hoekstra-2012-WaterFootprintFarmAnimalProducts_1.pdf" target="_blank" rel="noopener noreferrer">Mekonnen &amp; Hoekstra (2012), Water Footprint of Farm Animal Products</a>.
           </li>
-          <li>
-            US cattle blue water correction (2,275 L/kg blue for US beef, 4.33&times; M&amp;H global; applied to leather):
+          <li id="src-klopatek_oltjen_2022_us_beef_blue">
+            <span class="src-tier t-peer">Peer-reviewed</span>
+            US cattle blue water correction: US beef blue = 2,275 L/kg (Klopatek &amp; Oltjen 2022) &divide; M&amp;H global beef blue &asymp;550 L/kg &asymp; <strong>4.14&times;</strong>; applied to leather by co-product analogy:
             <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9667972/" target="_blank" rel="noopener noreferrer">Klopatek &amp; Oltjen (2022), Journal of Animal Science</a>.
           </li>
-          <li>
+          <li id="src-fulton_2018_california_almonds">
+            <span class="src-tier t-peer">Peer-reviewed</span>
             California almond blue water footprint (5,290 L/kg blue; 10,240 L/kg total):
             <a href="https://www.sciencedirect.com/science/article/pii/S1470160X17308592" target="_blank" rel="noopener noreferrer">Fulton et al. (2019), Water-indexed benefits and impacts of California almonds, Ecological Indicators</a>.
           </li>
-          <li>
+          <li id="src-sprinkler_flow_rate">
+            <span class="src-tier t-fed">Federal</span>
             Lawn sprinkler flow rate (12 GPM typical residential oscillating sprinkler; 720 gal/hr):
             <a href="https://www.epa.gov/watersense/outdoor-water-use-in-the-united-states" target="_blank" rel="noopener noreferrer">EPA WaterSense outdoor water use</a>.
           </li>
-          <li>
+          <li id="src-sofa_upholstery_fabric_mass">
+            <span class="src-tier">Industry</span>
             Sofa upholstery fabric quantity (18 yards of 54-in fabric at 375 GSM &asymp; 7.5 kg cotton):
             <a href="https://revolutionfabrics.com/blogs/gotcha-covered/how-much-upholstery-fabric-do-i-need-for-a-couch" target="_blank" rel="noopener noreferrer">Revolution Fabrics yardage guide</a>.
           </li>
-          <li>
+          <li id="src-jacket_mass_default_assumption">
+            <span class="src-tier t-assume">Assumption</span>
+            Suit jacket fabric mass default (0.70 kg) &mdash; on-page editable assumption, not externally sourced. Adjust it under &ldquo;Suit jacket assumptions.&rdquo;
+          </li>
+          <li id="src-usgs_conus_consumptive_2020_model">
+            <span class="src-tier t-fed">Federal</span>
             Average American annual blue-water baseline used for percentage comparison:
-            USGS modeled CONUS consumptive use = 84,939 Mgal/day (water year 2020), divided by 2020 US population
+            USGS modeled CONUS consumptive use = 84,939 Mgal/day (water year 2020) <em>across all sectors, including agriculture</em>, divided by 2020 US population
             (331,449,281), then annualized:
             <a href="https://www.usgs.gov/mission-areas/water-resources/science/water-use-united-states" target="_blank" rel="noopener noreferrer">USGS water-use model estimates</a>
             and
             <a href="https://www.census.gov/library/stories/2021/04/2020-census-data-release.html" target="_blank" rel="noopener noreferrer">US Census 2020 results</a>.
           </li>
         </ul>
+        <div class="evidence-status" id="sourceEvidenceStatus"></div>
       </div>
     </details>
 
@@ -668,8 +762,8 @@
       },
       leather_shoes: {
         label: "one pair of leather shoes (US)",
-        blueLiters: () => 17093 * 0.04 * 4.33 * 0.50,
-        note: "17,093 L/kg bovine leather (M&H) x 4% blue x 4.33 US correction (Klopatek & Oltjen 2022) x 0.50 kg"
+        blueLiters: () => 17093 * 0.04 * 4.14 * 0.50,
+        note: "17,093 L/kg bovine leather (M&H) x 4% blue x 4.14 US correction (US beef blue 2,275 L/kg / M&H global ~550 L/kg; Klopatek & Oltjen 2022, applied to leather by co-product analogy) x 0.50 kg"
       },
       almonds_handful: {
         label: "a handful of almonds (28 g)",
@@ -766,7 +860,7 @@
       },
       {
         id: "klopatek_oltjen_2022_us_beef_blue",
-        valueUsed: "US beef blue water = 2,275 L/kg (4.33x M&H global); correction applied to leather",
+        valueUsed: "US beef blue water = 2,275 L/kg; 2,275 / ~550 L/kg M&H global beef blue = 4.14x correction applied to leather by co-product analogy",
         whereUsed: ["itemDefs.leather_shoes (US correction factor)"],
         quality: "Peer-reviewed US-specific research (Journal of Animal Science)",
         url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC9667972/"
@@ -841,6 +935,21 @@
         ids: ["usgs_conus_consumptive_2020_model", "us_census_2020_population"]
       }
     ];
+
+    const SOURCE_SHORT_LABELS = {
+      google_gemini_prompt_intensity: "Google arXiv:2508.15734",
+      lbnl_offsite_boundary: "LBNL 2024",
+      potter_no_hydro_sensitivity: "Potter cross-check",
+      wfn_cotton_footprints: "WFN cotton dataset",
+      mekonnen_hoekstra_2012_leather: "Mekonnen & Hoekstra 2012",
+      klopatek_oltjen_2022_us_beef_blue: "Klopatek & Oltjen 2022",
+      fulton_2018_california_almonds: "Fulton et al. 2019",
+      sprinkler_flow_rate: "EPA WaterSense",
+      sofa_upholstery_fabric_mass: "upholstery yardage guide",
+      jacket_mass_default_assumption: "on-page assumption",
+      usgs_conus_consumptive_2020_model: "USGS WY2020",
+      us_census_2020_population: "Census 2020"
+    };
 
     function n(id) {
       return Number(document.getElementById(id).value);
@@ -1189,16 +1298,25 @@
         `to equal the blue-water footprint for <strong>${item.label}</strong>.`;
       document.getElementById("hydroNote").style.display = offsiteKey === "lbnl" ? "block" : "none";
 
+      const itemSourceIds = ITEM_SOURCE_REQUIREMENTS[compareKey] || [];
+      const heroItemSrcEl = document.getElementById("heroItemSrc");
+      if (heroItemSrcEl && itemSourceIds.length > 0) {
+        heroItemSrcEl.href = `#src-${itemSourceIds[0]}`;
+        heroItemSrcEl.textContent =
+          `item: ${itemSourceIds.map((id) => SOURCE_SHORT_LABELS[id] || id).join(" + ")}`;
+      }
+
+      const offsiteSourceId = offsiteKey === "lbnl" ? "lbnl_offsite_boundary" : "potter_no_hydro_sensitivity";
       document.getElementById("focusDirectTime").textContent = formatTime(daysDirect);
-      document.getElementById("focusDirectTimeMeta").textContent =
-        `Water used for cooling inside the data center.`;
+      document.getElementById("focusDirectTimeMeta").innerHTML =
+        `Water used for cooling inside the data center. <a href="#src-google_gemini_prompt_intensity">Source: ${SOURCE_SHORT_LABELS.google_gemini_prompt_intensity}</a>`;
       document.getElementById("focusTotalTime").textContent = formatTime(daysTotal);
-      document.getElementById("focusTotalTimeMeta").textContent =
-        `Data center water plus water consumed generating electricity.`;
+      document.getElementById("focusTotalTimeMeta").innerHTML =
+        `Data center water plus water consumed generating electricity. <a href="#src-${offsiteSourceId}">Source: ${SOURCE_SHORT_LABELS.google_gemini_prompt_intensity} + ${SOURCE_SHORT_LABELS[offsiteSourceId]}</a>`;
 
       document.getElementById("focusAmericanPct").textContent = fmtPct(annualSharePctAvgAmerican);
-      document.getElementById("focusAmericanMeta").textContent =
-        `Blue water consumption only — excludes withdrawals returned to source and rain-fed (green) water. This is the most conservative comparison.`;
+      document.getElementById("focusAmericanMeta").innerHTML =
+        `Per-capita share of total <a href="#src-usgs_conus_consumptive_2020_model">US consumptive use (USGS WY2020)</a> across all sectors, including agriculture (&asymp;3/4 of the total) — not household use. Blue water only: excludes withdrawals returned to source and rain-fed (green) water.`;
       updateTraceCoverageBanner();
 
       document.getElementById("calcBlock").textContent =
@@ -1223,7 +1341,7 @@ Excludes: withdrawals returned to source (e.g. cooling water discharged back to 
 This is the most conservative framing — actual total water footprints are larger.
 
 average_american_annual_blue_consumption_L = (${AVG_US_BLUE_BASELINE.usgsConsumptiveMgd} Mgal/day x 1,000,000 gal/Mgal x ${AVG_US_BLUE_BASELINE.litersPerGallon} L/gal x ${AVG_US_BLUE_BASELINE.daysPerYear}) / ${AVG_US_BLUE_BASELINE.usPopulation2020} people = ${AVG_US_BLUE_L_PER_PERSON_YEAR.toFixed(6)} L
-source: USGS modeled CONUS consumptive use (water year 2020) / US Census 2020 population
+source: USGS modeled CONUS consumptive use (water year 2020, ALL sectors incl. agriculture ~3/4 of total — per-capita national share, not household use) / US Census 2020 population
 
 prompt_annual_blue_L = ${fmtL(annualTotalL)} (at ${qpd.toLocaleString()} queries/day)
 annual_share_pct_direct_only = (${annualDirectL.toFixed(6)} / ${AVG_US_BLUE_L_PER_PERSON_YEAR.toFixed(6)}) x 100 = ${annualDirectSharePctAvgAmerican.toFixed(8)}%
@@ -1257,8 +1375,30 @@ L_to_AF conversion:
     document.getElementById("copyMathBtn").addEventListener("click", copyTracePacket);
     document.getElementById("copyMathPanelBtn").addEventListener("click", copyTracePacket);
 
+    function renderSourceEvidenceStatus() {
+      const el = document.getElementById("sourceEvidenceStatus");
+      if (!el) return;
+      const rows = sourceEvidenceRows().map((row) => {
+        const archived = row.archiveStatus === "archived"
+          ? `archived ${row.checkedUtc.slice(0, 10)}`
+          : row.archiveStatus.replace(/_/g, " ");
+        return `<tr><td>${SOURCE_SHORT_LABELS[row.id] || row.id}</td><td>${row.quality}</td><td>${archived}</td></tr>`;
+      }).join("");
+      el.innerHTML =
+        `<strong>Trace &amp; archive status</strong> (from this page's evidence manifest; full detail in the copyable trace packet):` +
+        `<table><thead><tr><th>Source</th><th>Quality tier</th><th>Archive status</th></tr></thead><tbody>${rows}</tbody></table>`;
+    }
+
+    document.addEventListener("click", (event) => {
+      const link = event.target.closest('a[href^="#src-"]');
+      if (!link) return;
+      const details = document.getElementById("sourcesDetails");
+      if (details) details.open = true;
+    });
+
     applyPromptProfile();
     compute();
+    renderSourceEvidenceStatus();
   </script>
 </body>
 </html>

@@ -22,11 +22,16 @@
     }
     body {
       margin: 0;
-      padding: 24px;
-      background: radial-gradient(1200px 400px at 10% -15%, #e7f2ff, transparent 60%), var(--bg);
+      padding: 32px 24px 56px;
+      background:
+        radial-gradient(1400px 480px at 8% -18%, #e7f2ff, transparent 62%),
+        radial-gradient(1100px 420px at 100% -10%, #f4ecfd, transparent 68%),
+        var(--bg);
       color: var(--ink);
       font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.45;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     .wrap {
       max-width: 1100px;
@@ -34,14 +39,18 @@
     }
     h1 {
       margin: 0;
-      font-size: clamp(28px, 4vw, 40px);
-      line-height: 1.08;
-      letter-spacing: 0.01em;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: clamp(30px, 4.2vw, 44px);
+      line-height: 1.06;
+      letter-spacing: -0.01em;
+      font-weight: 700;
     }
     h2 {
       margin: 0;
-      font-size: 21px;
+      font-size: 22px;
       line-height: 1.2;
+      letter-spacing: -0.005em;
+      font-weight: 700;
     }
     h3 {
       margin: 0;
@@ -62,26 +71,6 @@
       gap: 10px;
       align-items: center;
       flex-wrap: wrap;
-    }
-    .trace-status {
-      margin-top: 8px;
-      border: 1px solid #d5e3f1;
-      border-radius: 10px;
-      background: #f5f9fe;
-      color: #234a6d;
-      padding: 10px 12px;
-      font-size: 12px;
-      font-weight: 700;
-    }
-    .trace-status.good {
-      border-color: #b7dfc3;
-      background: #edf8f1;
-      color: #1f6e3e;
-    }
-    .trace-status.warn {
-      border-color: #f0d7a9;
-      background: #fff6e7;
-      color: #8a5b12;
     }
     .trace-links {
       margin-top: 10px;
@@ -104,35 +93,51 @@
       text-decoration: none;
     }
     .card {
-      margin-top: 14px;
+      margin-top: 16px;
       background: var(--panel);
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px;
-      box-shadow: var(--shadow);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 1px 2px rgba(12, 30, 50, 0.04), 0 12px 32px rgba(12, 30, 50, 0.05);
     }
     .headline-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 12px;
+      gap: 14px;
+      margin-top: 18px;
     }
     .headline-card {
-      background: linear-gradient(130deg, #0a5ea8 0%, #0f78b8 60%, #3c9fcb 100%);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #08487f 0%, #0e6fb0 50%, #2a9ec9 100%);
       color: #ffffff;
       border: none;
+      box-shadow: 0 14px 36px rgba(10, 80, 140, 0.28), 0 1px 0 rgba(255,255,255,0.12) inset;
     }
+    .headline-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(420px 220px at 100% 0%, rgba(255,255,255,0.18), transparent 60%),
+        radial-gradient(360px 200px at 0% 110%, rgba(255,255,255,0.08), transparent 60%);
+      pointer-events: none;
+    }
+    .headline-card > * { position: relative; z-index: 1; }
     .headline-card .kicker {
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       font-size: 11px;
-      font-weight: 700;
-      opacity: 0.9;
+      font-weight: 800;
+      opacity: 0.92;
     }
     .headline-card .main {
       margin-top: 8px;
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 800;
-      line-height: 1.08;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.015em;
     }
     .headline-card .subline {
       margin-top: 8px;
@@ -281,22 +286,61 @@
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 12px;
     }
+    .clean-procurement-card {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .clean-procurement-card > div {
+      min-width: 0;
+    }
+    .water-share-grid {
+      grid-template-columns: minmax(280px, 0.75fr) minmax(660px, 1.25fr);
+      align-items: start;
+    }
+    .water-share-grid > div {
+      min-width: 0;
+    }
+    .table-scroll {
+      width: 100%;
+      margin-top: 12px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+    .table-scroll table {
+      margin-top: 0;
+      border: 0;
+      border-radius: 0;
+    }
+    .sensitivity-table {
+      min-width: 640px;
+    }
+    @media (max-width: 1050px) {
+      .water-share-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
-      margin-top: 10px;
+      margin-top: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
     }
     th, td {
-      border: 1px solid var(--line);
-      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      padding: 11px 14px;
       vertical-align: top;
     }
+    tr:last-child td { border-bottom: 0; }
+    th + th, td + td { border-left: 1px solid var(--line); }
     th {
       text-align: left;
-      background: #f2f6fb;
+      background: linear-gradient(180deg, #f5f8fc, #eef3f9);
       color: #1f3d5a;
       font-weight: 700;
+      letter-spacing: 0.005em;
     }
     .num {
       text-align: right;
@@ -423,24 +467,118 @@
       border-radius: 6px;
       padding: 1px 4px;
     }
+    .buildout-intro {
+      margin-top: 6px;
+      max-width: 880px;
+    }
+    .buildout-table {
+      table-layout: fixed;
+      font-size: 13px;
+    }
+    .buildout-table th,
+    .buildout-table td {
+      padding: 9px 11px;
+    }
+    .buildout-table th:nth-child(1) { width: 23%; }
+    .buildout-table th:nth-child(2) { width: 39%; }
+    .buildout-table th:nth-child(3) { width: 38%; }
+    .buildout-key {
+      font-weight: 800;
+      color: #163f62;
+    }
+    .value-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      align-items: center;
+    }
+    .value-chip {
+      display: inline-block;
+      border: 1px solid #cbdff3;
+      border-radius: 6px;
+      background: #edf6ff;
+      color: #143f63;
+      padding: 2px 6px;
+      font-family: Menlo, Consolas, Monaco, monospace;
+      font-size: 12px;
+      line-height: 1.35;
+      white-space: nowrap;
+    }
+    .value-chip.major {
+      border-color: #a9c9e9;
+      background: #dceeff;
+      font-weight: 700;
+    }
+    .buildout-note {
+      margin-top: 12px;
+      border-left: 3px solid #73a9d8;
+      background: #f5f9fe;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #43617c;
+      font-size: 13px;
+    }
+    .buildout-note strong {
+      color: #173d5f;
+    }
+    .trace-ledger {
+      min-width: 980px;
+      table-layout: fixed;
+      font-size: 12px;
+    }
+    .trace-ledger th,
+    .trace-ledger td {
+      padding: 9px 10px;
+    }
+    .trace-ledger th:nth-child(1) { width: 13%; }
+    .trace-ledger th:nth-child(2) { width: 23%; }
+    .trace-ledger th:nth-child(3) { width: 25%; }
+    .trace-ledger th:nth-child(4) { width: 17%; }
+    .trace-ledger th:nth-child(5) { width: 22%; }
+    .trace-ledger .confidence {
+      font-weight: 800;
+      color: #173d5f;
+    }
+    .trace-ledger .risk {
+      color: #5b7085;
+    }
     details {
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 12px;
       background: #fcfdff;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    details[open] {
+      box-shadow: 0 4px 14px rgba(12, 30, 50, 0.04);
     }
     summary {
       cursor: pointer;
       list-style: none;
-      padding: 10px 12px;
+      padding: 12px 14px;
       font-weight: 700;
       color: #254765;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    summary::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid #4f7da6;
+      border-bottom: 2px solid #4f7da6;
+      transform: rotate(-45deg);
+      transition: transform 0.18s ease;
+    }
+    details[open] summary::before {
+      transform: rotate(45deg);
     }
     summary::-webkit-details-marker {
       display: none;
     }
     details[open] summary {
       border-bottom: 1px solid var(--line);
-      background: #f5f9fe;
+      background: linear-gradient(180deg, #f5f9fe, #eef4fb);
     }
     .details-body {
       padding: 12px;
@@ -673,6 +811,201 @@
     .cmp-dot.policy {
       background: #b5451a;
     }
+    .scale-boxes-section {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--line);
+    }
+    .scale-boxes-title {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #2f516e;
+    }
+    .scale-boxes-help {
+      margin-top: 4px;
+      margin-bottom: 16px;
+    }
+    /* DC-vs-crops: "1-in-N" hero + unit-square waffle small multiples.
+       One square = the blue water of all US data centers combined. */
+    .ag-hero {
+      display: flex;
+      gap: 26px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 4px 0 26px;
+      padding-bottom: 24px;
+      border-bottom: 1px dashed var(--line);
+    }
+    .ag-hero-fig {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      flex: 0 0 auto;
+    }
+    .ag-hero-grid {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      gap: 1.5px;
+    }
+    .ag-hero-cell {
+      background: #d8efe3;
+      border-radius: 1px;
+    }
+    .ag-hero-cell.dc {
+      background: #0a5ea8;
+      box-shadow: 0 0 0 1.5px #fff, 0 0 0 3px #0a5ea8;
+      position: relative;
+      z-index: 1;
+    }
+    .ag-hero-txt { flex: 1 1 260px; }
+    .ag-hero-txt .big {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.01em;
+      color: #143a5c;
+      display: block;
+      margin-bottom: 8px;
+    }
+    .ag-hero-txt p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.55;
+      color: #2a425b;
+    }
+    .ag-hero-txt .dcword { color: #0a5ea8; font-weight: 700; }
+    .ag-hero-txt .cropword { color: #1f8e5a; font-weight: 700; }
+
+    .ag-waffle-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 22px 18px;
+    }
+    .ag-wf { display: flex; flex-direction: column; }
+    .ag-wf-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+    .ag-wf-name { font-size: 12.5px; font-weight: 600; color: #143a5c; }
+    .ag-wf-mult {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1f8e5a;
+      white-space: nowrap;
+    }
+    .ag-wf-cells { display: flex; flex-wrap: wrap; gap: 1.5px; align-content: flex-start; }
+    .ag-wf-cell { width: 6px; height: 6px; border-radius: 1px; background: #2aa56c; }
+    .ag-wf-cell.dc { background: #0a5ea8; box-shadow: 0 0 0 1px #fff, 0 0 0 2px #0a5ea8; }
+    .ag-wf-foot { font-size: 10.5px; color: #6a8095; margin-top: 7px; }
+    @media (max-width: 600px) {
+      .ag-hero-fig { width: 162px; height: 162px; }
+      .ag-hero-txt .big { font-size: 32px; }
+    }
+
+    /* Water scale grid: one square = the water all US data centers consume in a
+       year. The whole field is total US rainfall; nested prefix blocks in the
+       corner are everything withdrawn and everything actually consumed.
+       Deliberately separate from the industry/crop comparisons: these are four
+       different accounting boundaries, gridded only so the scale is countable. */
+    .casc-hero {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 23px;
+      line-height: 1.3;
+      color: #143a5c;
+      margin: 2px 0 6px;
+      letter-spacing: -0.01em;
+    }
+    .casc-hero b { color: #0a5ea8; font-weight: 700; }
+    .casc-sub {
+      margin: 0 0 4px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 820px;
+    }
+    .casc-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px 22px;
+      margin: 16px 0 14px;
+    }
+    .casc-leg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .casc-leg-sw {
+      width: 13px;
+      height: 13px;
+      border-radius: 2px;
+      flex: 0 0 auto;
+    }
+    .casc-leg-sw.sw-rain { background: #e6f0fa; box-shadow: inset 0 0 0 1px rgba(20, 58, 92, 0.18); }
+    .casc-leg-sw.sw-withdraw { background: #a6ccec; }
+    .casc-leg-sw.sw-consume { background: #4f93cf; }
+    .casc-leg-sw.sw-dc { background: #0a5ea8; box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px #0a5ea8; }
+    .casc-leg-nm { font-weight: 700; color: #143a5c; }
+    .casc-leg-meta { color: #6a8095; }
+    .casc-gridwrap { position: relative; padding: 4px; margin: 2px 0; }
+    .casc-grid {
+      display: grid;
+      grid-template-columns: repeat(130, 1fr);
+      gap: 1px;
+      width: 100%;
+      max-width: 800px;
+      background: #bcd2e8;
+      border: 1px solid rgba(20, 58, 92, 0.20);
+      border-radius: 3px;
+      overflow: visible;
+    }
+    .casc-anno {
+      position: absolute;
+      top: 62px;
+      left: 14px;
+      max-width: 290px;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 8px 11px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #2a425b;
+      box-shadow: 0 4px 14px rgba(12, 30, 50, 0.10);
+      pointer-events: none;
+    }
+    .casc-anno b { color: #0a5ea8; }
+    .casc-anno .casc-anno-arrow { color: #0a5ea8; font-weight: 800; }
+    .casc-cell { width: 100%; aspect-ratio: 1 / 1; }
+    .casc-cell.rain { background: #e6f0fa; }
+    .casc-cell.withdraw { background: #a6ccec; }
+    .casc-cell.consume { background: #4f93cf; }
+    .casc-cell.dc {
+      background: #0a5ea8;
+      box-shadow: 0 0 0 1.5px #fff, 0 0 0 2.5px #0a5ea8;
+      border-radius: 1px;
+      position: relative;
+      z-index: 2;
+    }
+    .casc-key { margin-top: 14px; }
+    .casc-key b { color: #143a5c; }
+    .casc-caveat { margin-top: 8px; }
+    @media (max-width: 720px) {
+      .casc-grid { grid-template-columns: repeat(90, 1fr); }
+      .casc-hero { font-size: 19px; }
+    }
+    @media (max-width: 480px) {
+      .casc-grid { grid-template-columns: repeat(64, 1fr); }
+    }
     .rfs-mode-controls {
       display: flex;
       flex-wrap: wrap;
@@ -822,6 +1155,40 @@
       resize: none;
       min-height: 300px;
     }
+    .audit-badge {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      margin-top: 8px;
+      border: 1px solid #b8dcbf;
+      background: #eefaf0;
+      color: #2f6a3f;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .audit-badge a {
+      color: #215c31;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .card-src {
+      margin-top: 8px;
+      font-size: 11.5px;
+      color: #5b7690;
+    }
+    .card-src a,
+    .scale-denom a {
+      color: inherit;
+      text-decoration: underline dotted;
+      text-underline-offset: 2px;
+    }
+    .card-src a:hover,
+    .scale-denom a:hover {
+      color: #0f4c81;
+    }
     @media (max-width: 760px) {
       body {
         padding: 12px;
@@ -842,8 +1209,15 @@
         <h1>US Data Center Water Calculator</h1>
         <p class="sub">
           How much U.S. water do data centers actually consume?
-          All source assumptions are embedded on this page. Last verified on <strong>March 29, 2026</strong>.
+          All source assumptions are embedded on this page. Last full audit: <strong>March 29, 2026</strong>;
+          zero-water procurement trace updated: <strong>June 30, 2026</strong>.
         </p>
+        <div class="trace-links">
+          <a href="#sourceMappingSection">Source Mapping</a>
+          <a href="#evidenceSection">Evidence Snippets</a>
+          <a href="#formulaTraceSection">Formula Trace</a>
+        </div>
+        <div class="audit-badge">&#10003; Fact-checked: 39 claims traced, claim-by-claim audit with ongoing change log &middot; <a href="us_data_center_water_calc_explicit-fact-check.md" target="_blank" rel="noopener noreferrer">read the audit report</a></div>
       </div>
       <button id="topTraceBtn" class="btn btn-trace-top" type="button">Export fact-check trace</button>
     </div>
@@ -853,11 +1227,13 @@
         <div class="kicker">Direct (on-site)</div>
         <div class="main" id="headlineDirect"></div>
         <div class="subline">of US water consumed</div>
+        <div class="card-src"><a href="#source-lbnl-direct">LBNL 2024</a> &times; <a href="#source-buildout-scale">2025 buildout 1.32&times;</a> &divide; <a href="#source-usgs-denominator">USGS 2020 consumptive use</a></div>
       </div>
       <div class="card headline-card">
         <div class="kicker">Direct + grid</div>
         <div class="main" id="headlineTotal"></div>
         <div class="subline">of US water consumed</div>
+        <div class="card-src"><a href="#source-lbnl-indirect">LBNL 2024 direct + grid</a> &times; <a href="#source-buildout-scale">2025 buildout 1.32&times;</a> &divide; <a href="#source-usgs-denominator">USGS 2020 consumptive use</a></div>
       </div>
     </div>
 
@@ -865,20 +1241,33 @@
       <div class="scale-card">
         <div class="scale-label">vs water consumed</div>
         <div class="scale-value" id="scaleConsumed"></div>
-        <div class="scale-denom">USGS consumptive use</div>
+        <div class="scale-denom"><a href="#source-usgs-denominator">USGS consumptive use</a></div>
       </div>
       <div class="scale-card">
         <div class="scale-label">vs water withdrawn</div>
         <div class="scale-value" id="scaleWithdrawn"></div>
-        <div class="scale-denom">USGS total freshwater withdrawals</div>
+        <div class="scale-denom"><a href="#source-usgs-withdrawals">USGS total freshwater withdrawals</a></div>
       </div>
       <div class="scale-card">
         <div class="scale-label">vs rainfall</div>
         <div class="scale-value" id="scaleRainfall"></div>
-        <div class="scale-denom">CONUS annual precipitation</div>
+        <div class="scale-denom"><a href="#source-conus-precip">CONUS annual precipitation</a></div>
       </div>
     </div>
     <p class="note" id="heroFootnote"></p>
+
+    <div class="card" id="waterCascadeCard">
+      <h2>From Rainfall to Data Centers &mdash; Count the Squares <span class="info-tip">i<span class="info-tip-text">One square = the water all US data centers consume in a year. The whole field is total US rainfall; the shaded blocks in the top-left corner are everything the US withdraws and everything it actually consumes. Rainfall, withdrawals, consumption, and data-center consumption are four <em>different</em> water-accounting boundaries, gridded together only so the scale is countable &mdash; not a like-for-like comparison. The data-center square updates live with the toggles below.</span></span></h2>
+      <p class="casc-hero" id="cascadeHero"></p>
+      <p class="casc-sub" id="cascadeSub"></p>
+      <div class="casc-legend" id="cascadeLegend"></div>
+      <div class="casc-gridwrap">
+        <div class="casc-grid" id="cascadeGrid" aria-hidden="true"></div>
+        <div class="casc-anno"><span class="casc-anno-arrow">&#8598;</span> The single ringed square in the top-left corner is <b>every US data center combined</b> &mdash; about 1 in 15,500 of all US rainfall.</div>
+      </div>
+      <p class="note casc-key" id="cascadeKey"></p>
+      <p class="note casc-caveat">These four figures use <strong>different accounting boundaries</strong> &mdash; gross precipitation, water withdrawn, water actually consumed (evaporated or embedded), and one industry&rsquo;s slice of that consumption. They are gridded here for scale intuition, <em>not</em> compared like-for-like &mdash; which is why this sits apart from the industry and crop benchmarks further down.</p>
+    </div>
 
     <div class="card">
       <div class="controls">
@@ -888,7 +1277,7 @@
         </label>
         <label class="toggle">
           <input id="ppaToggle" type="checkbox" checked />
-          Include renewables-only PPA reduction
+          Include clean-energy procurement credit
         </label>
         <span id="hydroFlag" class="pill"></span>
         <span id="ppaFlag" class="pill"></span>
@@ -902,27 +1291,59 @@
         <div class="details-body">
           <div class="input-grid">
             <div class="field">
-              <label for="ppaCapacityGW">Tracked signed PPA capacity (GW)</label>
-              <input id="ppaCapacityGW" type="number" min="0" step="0.001" value="59.955" />
-              <div class="hint">Default uses a strict US renewables PPA-focused baseline across the big 4. Microsoft is included using a 90% renewables-PPA proxy on the US map-derived contracted value.</div>
+              <label for="ppaBasisSelect">Procurement credit basis</label>
+              <select id="ppaBasisSelect">
+                <option value="delivered2023_conservative">Delivered PPA energy, CY2023 — conservative (41.8 TWh)</option>
+                <option value="delivered2023_central" selected>Delivered PPA energy, CY2023 — central (46.7 TWh)</option>
+                <option value="delivered2025_conservative">Delivered PPA energy, CY2025 — conservative (77.0 TWh)</option>
+                <option value="delivered2025_central">Delivered PPA energy, CY2025 — central (88.5 TWh)</option>
+                <option value="contracted">Contracted full-build (GW × CF; saturates)</option>
+                <option value="customTWh">Custom TWh…</option>
+              </select>
+              <input id="ppaCustomTWh" type="number" min="0" step="0.1" value="46.7" style="display:none;" />
+              <div class="hint">Delivered-energy scenarios use big-4 US wind/solar generation actually delivered in the year (not signed capacity). CY2023 is company-reported (LBNL footprint year); CY2025 remains an estimate. Per-company audit trail: breakdown below and <a href="#source-ppa-delivered">Source Mapping</a>.</div>
+            </div>
+            <div class="field">
+              <label for="ppaCapacityGW">Contracted capacity, full-build scenario only (GW)</label>
+              <input id="ppaCapacityGW" type="number" min="0" step="0.001" value="84.899" />
+              <div class="hint">Strict lower-bound default: Google 16.7 + Amazon 22.491 + Meta 19.558 + Microsoft 26.150 = 84.899 GW. Full decomposition, the Microsoft hydro subtraction, and the non-default 95.0&ndash;97.3 GW aggregate-adjusted cross-check: <a href="#source-ppa-default">Source Mapping</a> and the zero-water trace below.</div>
             </div>
             <div class="field">
               <label for="ppaCapacityFactorPct">Average capacity factor (%)</label>
-              <input id="ppaCapacityFactorPct" type="number" min="0" max="100" step="1" value="30" />
-              <div class="hint">Converts signed GW to delivered TWh/year</div>
+              <input id="ppaCapacityFactorPct" type="number" min="0" max="100" step="1" value="27" />
+              <div class="hint">EIA fleet CFs: utility solar 23–24%, onshore wind 33–34%; big-4 portfolios are ~70% solar → ~27% blended. Used only in the full-build scenario.</div>
             </div>
             <div class="field">
               <label for="displacedThermalPreset">What are renewables displacing?</label>
               <select id="displacedThermalPreset">
                 <option value="1.78" selected>LBNL thermoelectric avg — 1.78 L/kWh</option>
                 <option value="1.82">Coal (subcritical, tower) — 1.82 L/kWh</option>
-                <option value="0.75">Gas combined cycle (NGCC) — 0.75 L/kWh</option>
+                <option value="0.75">Gas combined cycle (NGCC, marginal) — 0.75 L/kWh</option>
                 <option value="custom">Custom…</option>
               </select>
               <input id="displacedThermalLkwh" type="number" min="0" max="10" step="0.01" value="1.78" style="display:none;" />
-              <div class="hint">LBNL avg: 0.47 gal/kWh (pp. 55–57). Coal/NGCC/Nuclear from NREL/TP-6A20-50900.</div>
+              <div class="hint">LBNL avg: 0.47 gal/kWh (pp. 55–57). Coal/NGCC/Nuclear from NREL/TP-6A20-50900. New renewables typically displace the marginal generator (usually NGCC) — the 1.78 average is the generous end; 0.75 NGCC is the conservative end.</div>
             </div>
           </div>
+          <details style="margin-top:10px">
+            <summary>Per-company procurement breakdown (US, audited June 2026)</summary>
+            <div class="details-body">
+              <table>
+                <thead>
+                  <tr><th>Company</th><th class="num">Contracted GW (vintage)</th><th class="num">Operating GW</th><th class="num">Delivered CY2023 (TWh)</th><th class="num">Delivered CY2024/FY24</th><th class="num">Delivered CY2025 est. (cons.–central)</th><th class="num">Unbundled RECs (2022)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Google (NA)</td><td class="num">16.7 strict floor; 26.8-29.1 aggregate-adjusted cross-check</td><td class="num">not disclosed (~7–9 implied)</td><td class="num">11.5</td><td class="num">18.0</td><td class="num">18.4–20.1</td><td class="num">~0%</td></tr>
+                  <tr><td>Amazon</td><td class="num">22.491 (live 2026 CSV)</td><td class="num">12.1 (end-2024) / 15.4 (end-2025)</td><td class="num">13.3</td><td class="num">23.5</td><td class="num">28.9–33.7</td><td class="num">52%</td></tr>
+                  <tr><td>Meta</td><td class="num">19.558 (live map)</td><td class="num">~7 (end-2024) / 9.8 target (end-2025)</td><td class="num">12.4</td><td class="num">16.3</td><td class="num">13.4–16.1</td><td class="num">18%</td></tr>
+                  <tr><td>Microsoft</td><td class="num">26.150 zero-water adj. (26.252 map - 0.102 hydro)</td><td class="num">11.484 (Dec 2025)</td><td class="num">9.5</td><td class="num">15.8</td><td class="num">16.3–18.6</td><td class="num">51%</td></tr>
+                  <tr><td><strong>Big-4 total</strong></td><td class="num">84.899</td><td class="num">~38–44</td><td class="num">41.8–46.7</td><td class="num">73.6</td><td class="num"><strong>77.0–88.5</strong></td><td class="num">—</td></tr>
+                </tbody>
+              </table>
+              <p class="note"><strong>CY2025 methodology</strong> (Microsoft FY25 and Meta CY2025 data indexes are still unpublished as of June 30, 2026; refresh when they publish): <em>Amazon</em> — reconstructed from Amazon's live per-project CSV; current contracted full-build count uses 22.491 GW of named US wind/solar and excludes 3.120 GW of US nuclear. <em>Google</em> — 2026 report gives 29+ GW North America clean-energy agreements through 2025, but the default contracted count uses a 16.7 GW zero-water floor because Google does not publish a US/NA wind-solar-only breakout and the 29+ GW also includes storage, EAC agreements, nuclear, hydro, geothermal, and other CFE; a separate aggregate-adjusted cross-check implies ~26.8-29.1 GW. BNEF/BCSE's 2026 Factbook gives Google 4.181 GW of US offsite corporate PPAs in 2025; digitizing the stacked chart implies roughly 2.66 GW of that was solar/wind and roughly 1.52 GW was hydro/nuclear. <em>Meta</em> — current contracted capacity is map-derived: 129 numeric US wind/solar records totaling 19.558 GW; five US records have blank capacity and are excluded. <em>Microsoft</em> — official Dec. 31, 2025 map sum is 26.252 GW contracted / 11.484 GW active; the zero-water default subtracts 0.102 GW of identified Hawk's Nest hydropower, leaving 26.150 GW. Nuclear and hydro deliveries excluded where identifiable.</p>
+              <p class="note">Delivered CY2023: Google = NA renewable allocated (11.875 TWh) trimmed to US; Amazon = per-project fleet generation reconstructed from Amazon's own project CSV (CODs × EIA capacity factors) — Amazon does not disclose total consumption; Meta = US matched load × ~82% bundled-PPA share; Microsoft = NA matched × direct-PPA share (59–78%). Conservative scenario uses the low end of each (41.8 TWh); central uses mid (46.7 TWh). Nuclear/hydro deals (Meta ~7.7 GW nuclear, Amazon ~4 GW, Google Duane Arnold + Brookfield hydro, Microsoft Crane 835 MW) are <strong>excluded</strong>: zero-carbon, not zero-water. Sources: company reports (EY/Deloitte-reviewed where noted), EPA Green Power Partnership, CEBA, ACP, BNEF, EIA — full trace in Source Mapping and the <a href="ppa_big4_us_dataset.csv" download>downloadable dataset (CSV)</a>.</p>
+            </div>
+          </details>
         </div>
       </details>
     </div>
@@ -933,7 +1354,29 @@
         <span><span class="cmp-dot direct"></span>Data center direct</span>
         <span><span class="cmp-dot indirect"></span>Data center indirect</span>
         <span><span class="cmp-dot other"></span>Other industry total</span>
-        <span><span class="cmp-dot policy"></span>Policy-mandated (RFS ethanol)</span>
+      </div>
+      <div class="chart-head">
+        <div>Industry</div>
+        <div>kAF/year (linear bar)</div>
+        <div class="num">kAF/year</div>
+        <div class="num">vs DC total</div>
+      </div>
+      <div id="industryChart" class="hchart"></div>
+      <p class="note">Industrial peer benchmarks only. RFS ethanol is a policy-mandated agricultural fuel pathway, shown separately below. Sources: <a href="#source-industry-benchmarks">GCSAA Phase IV (golf), NCASI/AF&amp;PA (pulp/paper), EPA WaterSense + CAPE Analytics (pools)</a> &mdash; hover the <strong>i</strong> icon on any bar for its source, or open the linked Source Mapping row.</p>
+      <details style="margin-top:6px">
+        <summary>Disclosure gap — why some industries are missing</summary>
+        <div class="details-body">
+          <p class="note">Several major US industrial water consumers (chemical manufacturing, steelmaking, mining, oil refining) are excluded because no current, primary-sourced consumptive-use data exists. The Census Bureau's Survey of Water Use in Manufacturing was defunded after 1983; USGS does not break out industrial water by subsector; and these industries do not voluntarily report consumption. Data centers are among the only US industrial water consumers with transparent, audited, annually reported water data.</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="card" id="rfsEthanolSection">
+      <h2>RFS Ethanol Mandate Water Context <span class="info-tip">i<span class="info-tip-text">Separate policy module. RFS ethanol is neither a normal industrial water-use benchmark nor a crop category; this section isolates the mandate-driven marginal irrigation and related sensitivity views.</span></span></h2>
+      <div class="cmp-legend">
+        <span><span class="cmp-dot direct"></span>Data center direct</span>
+        <span><span class="cmp-dot indirect"></span>Data center indirect</span>
+        <span><span class="cmp-dot policy"></span>RFS ethanol scope</span>
       </div>
       <div class="rfs-mode-controls">
         <span class="rfs-mode-label">RFS ethanol scope:</span>
@@ -943,13 +1386,13 @@
         <span id="rfsModeNote" class="rfs-mode-note">Only the additional irrigation caused by the mandate</span>
       </div>
       <div class="chart-head">
-        <div>Industry</div>
+        <div>Scope</div>
         <div>kAF/year (linear bar)</div>
         <div class="num">kAF/year</div>
         <div class="num">vs DC total</div>
       </div>
-      <div id="industryChart" class="hchart"></div>
-      <p class="note">All sources traced in Source Mapping below.</p>
+      <div id="rfsEthanolChart" class="hchart"></div>
+      <p class="note">Policy-mandated ethanol water impacts are shown separately from industrial and crop benchmarks to keep the comparison boundary explicit. Sources: Teter et al. (2018) marginal-irrigation model; Lark et al. (PNAS 2022) &mdash; methodology below, full trace in <a href="#sourceMappingSection">Source Mapping</a>.</p>
       <details style="margin-top:8px">
         <summary>RFS ethanol methodology &amp; sources</summary>
         <div class="details-body">
@@ -962,37 +1405,48 @@
           <p class="note">Co-product note: DDGS (distillers grains) is a byproduct of ethanol, not the reverse &mdash; the RFS mandate drives the corn demand. Under energy-based LCA allocation, 57% of crop water is attributed to ethanol. The 192 Bgal marginal figure avoids the allocation question entirely by measuring only the net increase caused by the policy.</p>
         </div>
       </details>
-      <details style="margin-top:6px">
-        <summary>Disclosure gap — why some industries are missing</summary>
-        <div class="details-body">
-          <p class="note">Several major US industrial water consumers (chemical manufacturing, steelmaking, mining, oil refining) are excluded because no current, primary-sourced consumptive-use data exists. The Census Bureau's Survey of Water Use in Manufacturing was defunded after 1983; USGS does not break out industrial water by subsector; and these industries do not voluntarily report consumption. Data centers are among the only US industrial water consumers with transparent, audited, annually reported water data.</p>
-        </div>
-      </details>
     </div>
 
     <div class="card">
-      <h2>Agriculture Context (Data Centers as % of Crop Water) <span class="info-tip">i<span class="info-tip-text">DC total / crop blue-water use (kAF/year). Bars on a true 0–100% axis. Each row uses its own denominator — not additive.</span></span></h2>
+      <h2>Agriculture Context (Crop Blue Water vs Data Centers) <span class="info-tip">i<span class="info-tip-text">Linear-scale bars in kAF/year. Each row's bar length is proportional to its absolute blue-water volume. The "vs DC" column shows how many times more blue water each crop or aggregate uses than total US data center consumption at current settings.</span></span></h2>
       <div class="chart-head">
         <div>Crop / aggregate</div>
-        <div>DC share of crop water (0-100% axis)</div>
-        <div class="num">DC share</div>
-        <div class="num">Crop kAF/year</div>
+        <div>kAF/year (linear bar)</div>
+        <div class="num">kAF/year</div>
+        <div class="num">vs DC total</div>
       </div>
       <div id="agChart" class="hchart"></div>
+      <p class="note">Sources: crop rows from <a href="#source-ag-baselines">Lamsal &amp; Marston (2025)</a>; food waste from <a href="#source-food-waste">Conrad et al. (2018)</a> &mdash; hover the <strong>i</strong> icon on any bar for its source.</p>
+
+      <div class="scale-boxes-section">
+        <h3 class="scale-boxes-title">How much more water does farming use?</h3>
+        <p class="note scale-boxes-help">One square = the blue water of <strong>all US data centers combined</strong> at the current settings. Each crop below is built from however many of those squares it takes to match its blue-water use &mdash; so you can <em>count</em> the gap instead of guessing at it. (The all-US-irrigation aggregate is left out here because at this scale it is over 1,000 squares; it stays in the chart above.)</p>
+        <div id="agScaleBoxes"></div>
+      </div>
+
       <details style="margin-top:8px">
         <summary>Crop data sources</summary>
         <div class="details-body">
           <p class="note">Crop values follow Lamsal &amp; Marston (2025) irrigation blue-water estimates. China export figure: 44% of US alfalfa export-embedded water (~0.55 km&sup3;/yr midpoint), derived from USDA FAS 2025 export volumes and western irrigation intensities. See Source Mapping links.</p>
         </div>
       </details>
+      <details style="margin-top:6px">
+        <summary>Food waste blue-water methodology &amp; sources</summary>
+        <div class="details-body">
+          <p class="note">This row represents <strong>blue water</strong> &mdash; surface and groundwater drawn for irrigation, under the Hoekstra/Mekonnen water-footprint definition &mdash; embedded in US food that is ultimately wasted at retail or consumer levels. <em>Green water</em> (rainfall used by rainfed crops) and <em>grey water</em> (pollution dilution) are deliberately excluded so the figure is comparable to the other irrigation-based rows in this chart.</p>
+          <p class="note">Headline value &mdash; Conrad et al. (2018, PLoS ONE): <strong>4.2 trillion gal/year (95% CI: 4.1&ndash;4.3T)</strong>, computed by taking per-capita food waste from NHANES 2007&ndash;2014 dietary intake, disaggregating to ingredient-level cropland demand via the US Foodprint Model, then applying USDA-NASS irrigation rates by crop. The majority is concentrated in fruits (1.3T gal), vegetables (1.05T gal), and hay (1.01T gal) &mdash; reflecting both irrigation-intensive crops and high spoilage rates of fresh produce.</p>
+          <p class="note">Convergent support &mdash; Birney et al. (2017, ERL) explicitly report ~54,000 L/person/year blue water in US food waste, which scales to ~13.9 km&sup3;/year (&asymp; 3,680 Bgal/year) for the US adult population &mdash; same order of magnitude. ReFED (2025) reports 16.2 trillion gallons of <em>total</em> fresh water (blue + green) for 2023 surplus food; the larger figure includes rainfall on rainfed crops and is not the same metric as the blue-water-only figure used here.</p>
+          <p class="note">Why this belongs in the agriculture chart: food waste is an agricultural blue-water flow &mdash; it's the share of US irrigation that produces food we never eat. At ~4,200 Bgal/year, it is roughly 15% of total US crop-irrigation blue water (Conrad's figure / 28,600 Bgal/year USGS irrigation withdrawals).</p>
+        </div>
+      </details>
     </div>
 
-    <div class="card grid">
+    <div class="card grid clean-procurement-card">
       <div>
-        <h2>PPA Assumption Chart <span class="info-tip">i<span class="info-tip-text">Renewables-only, thermal off-site only. PPA annual energy × displaced thermal intensity = potential avoided off-site water (capped at no-hydro baseline). Delivered renewables are treated as displacing thermal generation.</span></span></h2>
+        <h2>Clean-Energy Procurement Credit <span class="info-tip">i<span class="info-tip-text">Wind/solar energy from big-4 US PPAs (nuclear/hydro excluded — zero-carbon, not zero-water). Credit TWh × displaced thermal intensity = avoided off-site water, capped at the no-hydro baseline. Default basis is energy actually delivered in CY2023 (the LBNL footprint year), not signed capacity; coverage above 100% flags a basis mismatch instead of being hidden. Per-company audit in Advanced Settings and Source Mapping.</span></span></h2>
         <div class="bars">
           <div class="bar-row">
-            <div class="name">PPA coverage of 2023 load</div>
+            <div class="name" id="barCoverageName">Procurement coverage of 2023 load</div>
             <div class="bar-track"><div id="barCoverage" class="bar-fill"></div></div>
             <div id="barCoverageVal" class="bar-val"></div>
           </div>
@@ -1007,6 +1461,123 @@
             <div id="barNetReductionVal" class="bar-val"></div>
           </div>
         </div>
+        <details style="margin-top:12px">
+          <summary>Zero-water procurement source trace and extraction methods</summary>
+          <div class="details-body">
+            <ul class="assumption-list">
+              <li><code>84.899 GW</code> strict lower-bound contracted full-build scenario = <code>16.700</code> Google North America zero-water floor + <code>22.491</code> Amazon current US named wind/solar project list + <code>19.558</code> Meta current US numeric wind/solar map total + <code>26.150</code> Microsoft zero-water-adjusted US capacity (<code>26.252</code> official map minus <code>0.102</code> Hawk's Nest hydropower).</li>
+              <li>Google's 2026 Environmental Report reports <code>29+ GW</code> of North America clean-energy agreements through 2025, but that is not used as the zero-water default because Google says the GW total includes PPAs, storage agreements, and EAC agreements across solar, wind, geothermal, hydropower, nuclear, and other CFE. A deep-dive aggregate cross-check adds 2026 Google solar/wind PPAs (<code>1.17 GW</code> Clearway + <code>1.0 GW</code> TotalEnergies) and subtracts known non-zero-water CFE (<code>0.670-3.000 GW</code> hydro, <code>0.600 GW</code> Duane Arnold nuclear, <code>0.500 GW</code> Kairos nuclear, <code>0.115 GW</code> geothermal, <code>0.200 GW</code> fusion), implying Google zero-water procurement around <code>26.8-29.1 GW</code> and a Big-4 total around <code>95.0-97.3 GW</code>. That range is a cross-check, not the model default, because storage/EAC/resource split ambiguity remains.</li>
+              <li>Amazon extraction filters the live current project CSV to United States records whose project names identify wind or solar and totals <code>22,490.83 MW</code>. COD parsing from the same file gives <code>6,225.69 MW</code> online by end-2023, <code>12,129.23 MW</code> online by end-2024, <code>15,420.63 MW</code> online by end-2025, and <code>16,160.63 MW</code> online by June 30, 2026. The current CSV also lists <code>3,120 MW</code> of US nuclear and <code>21.33 MW</code> of unlabeled / Whole Foods rows, which are excluded from the strict named wind/solar default.</li>
+              <li>Meta extraction uses the live energy-page map: <code>134</code> US wind/solar records; <code>129</code> records have numeric capacities totaling <code>19,558 MW</code>: <code>16,747 MW</code> solar and <code>2,811 MW</code> wind. Five blank-capacity records are excluded.</li>
+              <li>Microsoft extraction sums the Dec. 31, 2025 US ISO/RTO map values to <code>26.252 GW</code> contracted, then subtracts <code>0.102 GW</code> for Hawk's Nest hydropower identified in Microsoft/Brookfield project materials. No <code>90%</code> haircut is applied to contracted capacity; Microsoft's <code>&gt;90%</code> disclosure is an energy-share statement used only in delivered-energy sensitivity logic. The remaining residual uncertainty is any additional undisclosed US hydropower inside the regional map.</li>
+              <li>Solar/wind split diagnostic: Amazon and Meta are exact source-derived splits; Google and Microsoft are conservative chart-derived estimates from the BNEF/BCSE 2026 Factbook buyer chart because their default inputs lack public project-level wind/solar tables. The mixed split estimate is <code>67.287 GW</code> solar and <code>17.611 GW</code> wind, or about <code>79.3%</code> solar / <code>20.7%</code> wind. This does not change the <code>84.899 GW</code> default capacity.</li>
+              <li>Water method: <code>procurement GW x capacity factor x 8.76</code> converts capacity to TWh/year; <code>TWh x displaced thermal L/kWh</code> estimates avoided thermal water and is capped at the no-hydro off-site baseline.</li>
+            </ul>
+            <div class="table-scroll">
+              <table class="trace-ledger">
+                <thead>
+                  <tr>
+                    <th>Component</th>
+                    <th>Exact source links</th>
+                    <th>Extraction method</th>
+                    <th>Zero-water rule</th>
+                    <th>Confidence and known limitation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Google</td>
+                    <td><a href="https://sustainability.google/reports/google-2026-environmental-report/" target="_blank" rel="noopener noreferrer">2026 report</a>; <a href="https://sustainability.google/operations/" target="_blank" rel="noopener noreferrer">operations page</a>; <a href="https://bcse.org/wp-content/uploads/2026/02/2026-Sustainable-Energy-in-America-Factbook.pdf" target="_blank" rel="noopener noreferrer">BCSE/BNEF Factbook</a>; <a href="https://www.clearwayenergygroup.com/press-releases/clearway-signs-portfolio-of-power-purchase-agreements-with-google-totaling-nearly-1-2-gw-across-three-states/" target="_blank" rel="noopener noreferrer">Clearway</a>; <a href="https://totalenergies.com/news/press-releases/united-states-totalenergies-provide-1-gw-solar-capacity-power-googles-data" target="_blank" rel="noopener noreferrer">TotalEnergies</a>; <a href="https://bam.brookfield.com/press-releases/brookfield-and-google-sign-hydro-framework-agreement-deliver-3000-mw-homegrown" target="_blank" rel="noopener noreferrer">Brookfield hydro</a>; <a href="https://blog.google/feed/infrastructureduane-arnold-nuclear-plant-iowa/" target="_blank" rel="noopener noreferrer">Duane Arnold nuclear</a>; <a href="https://blog.google/company-news/outreach-and-initiatives/sustainability/google-kairos-power-nuclear-energy-agreement/" target="_blank" rel="noopener noreferrer">Kairos nuclear</a>; <a href="https://blog.google/feed/nevada-clean-energy/" target="_blank" rel="noopener noreferrer">Fervo geothermal</a>; <a href="https://cfs.energy/news-and-media/google-and-commonwealth-fusion-systems-sign-strategic-partnership/" target="_blank" rel="noopener noreferrer">CFS fusion</a></td>
+                    <td>Use the <code>16.700 GW</code> North America zero-water floor in the model default. Retain <code>26.8-29.1 GW</code> as a sensitivity by starting with Google's <code>29+ GW</code> North America clean-energy aggregate, adding known 2026 solar/wind PPAs, and subtracting known hydro/nuclear/geothermal/fusion. Use BNEF/BCSE page 44 chart digitization only as a 2025 US offsite split cross-check: <code>~2.66 GW</code> solar/wind vs <code>~1.52 GW</code> hydro/nuclear.</td>
+                    <td>Include only wind/solar zero-operational-water procurement in default. Exclude hydro, nuclear, geothermal, fusion, storage-only, and EAC-only ambiguity.</td>
+                    <td><span class="confidence">Medium as a lower-bound default; medium-low for true total.</span><br><span class="risk">Known limitation: Google does not publish a US/NA project-level wind/solar table, so the higher aggregate-adjusted value stays out of the default.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Amazon</td>
+                    <td><a href="https://sustainability.aboutamazon.com/climate-solutions/carbon-free-energy" target="_blank" rel="noopener noreferrer">project page</a>; <a href="https://sustainability.aboutamazon.com/content/dam/sustainability-marketing-site/05-carbon-free-energy/amazon-carbon-free-energy-projects.csv" target="_blank" rel="noopener noreferrer">live CSV</a></td>
+                    <td>Download the company CSV, filter <code>Country = United States</code>, include rows whose project/site name identifies wind or solar, and sum <code>System Size (MW)</code>. Current named zero-water total: <code>18,112.41 MW</code> solar + <code>4,378.42 MW</code> wind = <code>22.491 GW</code>.</td>
+                    <td>Include identifiable wind and solar, including on-site solar where named. Exclude <code>3.120 GW</code> US nuclear and <code>21.33 MW</code> unlabeled / Whole Foods rows rather than imputing technology.</td>
+                    <td><span class="confidence">High for contracted capacity; medium-high for COD-derived operating vintages.</span><br><span class="risk">Known limitation: the live CSV can change fields or dates; COD fields may include expected dates, so delivered-energy vintages are separate from the contracted count.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Meta</td>
+                    <td><a href="https://sustainability.atmeta.com/energy/" target="_blank" rel="noopener noreferrer">energy map</a>; <a href="https://sustainability.atmeta.com/wp-content/uploads/2025/10/Meta_2025-Environmental-Data-Index.pdf" target="_blank" rel="noopener noreferrer">2025 data index</a></td>
+                    <td>Parse the live energy-page map records, filter to US wind and solar, and include only records with numeric capacity fields. Current count: <code>134</code> US wind/solar records, <code>129</code> numeric records, <code>19.558 GW</code> total.</td>
+                    <td>Include US wind/solar numeric records. Exclude five blank-capacity records and exclude nuclear deals from zero-water capacity.</td>
+                    <td><span class="confidence">Medium-high.</span><br><span class="risk">Known limitation: the page is a live map rather than a downloadable audited table; blank-capacity records are excluded until Meta publishes capacities.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Microsoft</td>
+                    <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">procurement blog</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">US map image</a>; <a href="https://news.microsoft.com/source/features/sustainability/6-projects-that-helped-microsoft-meet-its-renewable-energy-goal/" target="_blank" rel="noopener noreferrer">project examples</a>; <a href="https://lowimpacthydro.org/hawks-nest-project-wv/" target="_blank" rel="noopener noreferrer">LIHI Hawk's Nest</a></td>
+                    <td>Sum official Dec. 31, 2025 US ISO/RTO map contracted values: <code>26.252 GW</code>. Subtract the full <code>0.102 GW</code> installed capacity of identified Hawk's Nest hydropower as a conservative hydro exclusion, yielding <code>26.150 GW</code>.</td>
+                    <td>Use map capacity directly; do not apply the <code>&gt;90%</code> PPA share as a capacity haircut because it is an energy-share disclosure. Exclude identified hydropower; nuclear/fusion deals sit outside the renewable map.</td>
+                    <td><span class="confidence">High for renewable map capacity; medium-high for zero-water capacity.</span><br><span class="risk">Known limitation: the public map is regional capacity, not a complete project-level resource table; any additional undisclosed hydro would need removal if identified.</span></td>
+                  </tr>
+                  <tr>
+                    <td>Default total</td>
+                    <td><a href="#source-ppa-default">Source Mapping total row</a>; <a href="#evidence-ppa-google">Evidence rows</a>; <a href="ppa_big4_us_dataset.csv" download>downloadable CSV</a></td>
+                    <td><code>16.700 + 22.491 + 19.558 + 26.150 = 84.899 GW</code>. Non-default Google aggregate-adjusted sensitivity gives <code>95.0-97.3 GW</code>.</td>
+                    <td>Default is a strict lower-bound contracted full-build zero-operational-water capacity. Delivered-energy scenarios remain the headline/default credit basis for footprint-year water displacement.</td>
+                    <td><span class="confidence">Medium-high for the default.</span><br><span class="risk">Known limitation: signed GW is not delivered MWh in the footprint year; use delivered-energy scenarios for year-matched displacement.</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <h3 style="margin:14px 0 0;">Solar/wind split diagnostic</h3>
+            <p class="note">This split does not change the <code>84.899 GW</code> default. Amazon and Meta are exact source-derived splits; Google and Microsoft are chart-derived estimates because their default inputs lack public project-level wind/solar tables.</p>
+            <div class="table-scroll">
+              <table class="trace-ledger">
+                <thead>
+                  <tr>
+                    <th>Component</th>
+                    <th>Solar GW</th>
+                    <th>Wind GW</th>
+                    <th>Other / excluded</th>
+                    <th>Basis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Amazon default (exact)</td>
+                    <td class="num">18.112</td>
+                    <td class="num">4.378</td>
+                    <td>3.120 GW nuclear + 0.021 GW unknown excluded</td>
+                    <td>Live Amazon CSV; <code>Country = United States</code>; site-name technology parse. High confidence.</td>
+                  </tr>
+                  <tr>
+                    <td>Meta default (exact numeric records)</td>
+                    <td class="num">16.747</td>
+                    <td class="num">2.811</td>
+                    <td>Five blank records excluded: four solar, one wind</td>
+                    <td>Live Meta map markers; CONUS lat/lon filter; <code>type = solar/wind</code>; numeric capacity only. Medium-high confidence.</td>
+                  </tr>
+                  <tr>
+                    <td>Google default (estimated split)</td>
+                    <td class="num">13.113</td>
+                    <td class="num">3.587</td>
+                    <td>Default remains the 16.700 GW North America zero-water floor</td>
+                    <td>Applies Google's BNEF/BCSE 2025 US offsite zero-water chart split, 2.091 GW solar / 0.572 GW wind, to the 16.700 GW floor. Low-medium confidence; diagnostic only.</td>
+                  </tr>
+                  <tr>
+                    <td>Microsoft default (estimated split)</td>
+                    <td class="num">19.315</td>
+                    <td class="num">6.835</td>
+                    <td>0.102 GW Hawk's Nest hydropower excluded from default</td>
+                    <td>Applies Microsoft's BNEF/BCSE 2025 US offsite chart split, 0.919 GW solar / 0.325 GW wind, to the 26.150 GW zero-water adjusted map total. Low-medium confidence; diagnostic only.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>84.899 GW default split estimate</strong></td>
+                    <td class="num"><strong>67.287</strong></td>
+                    <td class="num"><strong>17.611</strong></td>
+                    <td>About 79.3% solar / 20.7% wind</td>
+                    <td>Mixed exact/inferred. Use for capacity-factor sanity checks only, not as an independent source of capacity.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="note">Trace surfaces for every PPA value: this ledger, the zero-water procurement rows of <a href="#sourceMappingSection">Source Mapping</a>, supporting extraction notes in <a href="#evidenceSection">Evidence Snippets</a>, the <a href="ppa_big4_us_dataset.csv" download>downloadable dataset (CSV)</a>, and the full export trace.</p>
+          </div>
+        </details>
       </div>
       <div>
         <h2>Downloads</h2>
@@ -1019,32 +1590,36 @@
     </div>
 
     <div class="card">
-      <div class="grid">
+      <div class="grid water-share-grid">
         <div>
           <h2>2023 Shares of US Consumptive Water</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Share metric</th>
-                <th class="num">USGS denominator<br><span class="note">(~95,143.8 kAF/year, CONUS 2020 modeled)</span></th>
-              </tr>
-            </thead>
-            <tbody id="shareRows"></tbody>
-          </table>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Share metric</th>
+                  <th class="num">USGS denominator<br><span class="note">(~95,143.8 kAF/year, CONUS 2020 modeled)</span></th>
+                </tr>
+              </thead>
+              <tbody id="shareRows"></tbody>
+            </table>
+          </div>
         </div>
         <div>
           <h2>2025 Sensitivity Range (LBNL 2028 Bounds)</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Path</th>
-                <th class="num">2025 direct kAF/year</th>
-                <th class="num">2025 total kAF/year</th>
-                <th class="num">2025 total share<br><span class="note">(USGS denominator)</span></th>
-              </tr>
-            </thead>
-            <tbody id="projRows"></tbody>
-          </table>
+          <div class="table-scroll">
+            <table class="sensitivity-table">
+              <thead>
+                <tr>
+                  <th>Path</th>
+                  <th class="num">2025 direct kAF/year</th>
+                  <th class="num">2025 total kAF/year</th>
+                  <th class="num">2025 total share<br><span class="note">(USGS denominator)</span></th>
+                </tr>
+              </thead>
+              <tbody id="projRows"></tbody>
+            </table>
+          </div>
         </div>
       </div>
       <p id="rainfallContextNote" class="note rainfall-context"></p>
@@ -1066,24 +1641,88 @@
 
     <div class="card" id="buildoutAssumptionsSection">
       <h2>Buildout Assumptions Used for 2025 Default</h2>
-      <ul class="assumption-list">
-        <li>2023 baseline numerators: <code>66B L/year direct</code> and <code>800B L/year indirect</code> (LBNL).</li>
-        <li>Default tracked signed PPA capacity baseline (strict US renewables PPA-focused, big 4): <code>59.955 GW</code> = <code>6.485</code> (Google strict US renewable PPA set, conservative curated) + <code>20.043</code> (Amazon US off-site wind/solar floor after subtracting up to <code>0.061 GW</code> on-site) + <code>9.800</code> (Meta US wind/solar contract-backed projects) + <code>23.627</code> (Microsoft US map-derived contracted value <code>26.252 GW</code> x 90% renewables-PPA proxy).</li>
-        <li>2024 anchor: <code id="assump2024TWh"></code> TWh implied vs <code>176 TWh</code> 2023 baseline, giving <code id="assump2024Factor"></code>x.</li>
-        <li>2025 buildout step: <code>+<span id="assump2025GrowthPct"></span>%</code> key-US-market inventory growth (CBRE), giving <code id="assump2025Factor"></code>x.</li>
-        <li>Combined 2023 to 2025 scale: <code id="assumpCombinedFactor"></code>x applied to direct and selected-boundary indirect numerators.</li>
-        <li>US denominator remains <code>~95,143.8 kAF/year</code> (derived from USGS PP1894-D modeled 2020 values).</li>
-      </ul>
-      <p class="note" style="margin-top: 12px;">
-        <strong>Not modeled here: water replenishment.</strong> This calculator shows gross consumption only.
-        Major data-center operators are among the few US industrial water consumers with active replenishment programs:
-        Google replenished 4.5B gal in 2024 (~64% of consumption; 112 projects, 68 watersheds);
-        Meta replenished 1.5B gal in 2024;
-        Microsoft committed to zero-water cooling on all new builds (Aug 2024);
-        AWS operates at 0.15 L/kWh WUE (lowest among the big four).
-        Comparable replenishment or offset commitments are not standard practice in peer sectors shown in the industry comparison above
-        (golf courses, pulp/paper, swimming pools, agriculture).
-      </p>
+      <p class="note buildout-intro">Inputs for the headline 2025 point estimate. Values remain traceable through Source Mapping and the exportable formula trace.</p>
+      <div class="table-scroll">
+        <table class="buildout-table">
+          <thead>
+            <tr>
+              <th>Input</th>
+              <th>Value</th>
+              <th>Use in model</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="buildout-key">2023 baseline</span></td>
+              <td>
+                <div class="value-stack">
+                  <span class="value-chip major">66B L/year direct</span>
+                  <span class="value-chip major">800B L/year indirect</span>
+                </div>
+              </td>
+              <td>LBNL source-reported direct and off-site water numerators.</td>
+            </tr>
+            <tr>
+              <td><span class="buildout-key">Zero-water procurement baseline</span></td>
+              <td>
+                <div class="value-stack">
+                  <span class="value-chip major">84.899 GW</span>
+                  <span class="value-chip">16.700 Google NA floor</span>
+                  <span class="value-chip">22.491 Amazon</span>
+                  <span class="value-chip">19.558 Meta</span>
+                  <span class="value-chip">26.150 Microsoft</span>
+                </div>
+              </td>
+              <td>Default contracted full-build zero-operational-water clean-energy procurement capacity for the displacement sensitivity. Exact links, extraction notes, confidence labels, and known limitations are in the PPA trace ledger above, <a href="#source-ppa-google">Source Mapping</a>, Evidence Snippets, the CSV, and the export trace.</td>
+            </tr>
+            <tr>
+              <td><span class="buildout-key">Non-default cross-check</span></td>
+              <td>
+                <div class="value-stack">
+                  <span class="value-chip major">~95.0-97.3 GW</span>
+                  <span class="value-chip">Google adjusted: ~26.8-29.1</span>
+                </div>
+              </td>
+              <td>Uses Google's North America clean-energy aggregate adjusted for known non-zero-water CFE and 2026 solar/wind announcements. Kept out of the model default because Google and Microsoft do not publish complete public resource-level regional tables.</td>
+            </tr>
+            <tr>
+              <td><span class="buildout-key">2024 activity anchor</span></td>
+              <td>
+                <div class="value-stack">
+                  <span class="value-chip"><span id="assump2024TWh"></span> TWh</span>
+                  <span class="value-chip">176 TWh baseline</span>
+                  <span class="value-chip major"><span id="assump2024Factor"></span>x</span>
+                </div>
+              </td>
+              <td>IEA-based first step from the 2023 electricity baseline.</td>
+            </tr>
+            <tr>
+              <td><span class="buildout-key">2025 buildout step</span></td>
+              <td>
+                <div class="value-stack">
+                  <span class="value-chip">+<span id="assump2025GrowthPct"></span>% inventory growth</span>
+                  <span class="value-chip major"><span id="assump2025Factor"></span>x</span>
+                </div>
+              </td>
+              <td>CBRE key-US-market inventory growth from 2024 to 2025.</td>
+            </tr>
+            <tr>
+              <td><span class="buildout-key">Combined scale</span></td>
+              <td><span class="value-chip major"><span id="assumpCombinedFactor"></span>x</span></td>
+              <td>Applied to direct and selected-boundary indirect numerators.</td>
+            </tr>
+            <tr>
+              <td><span class="buildout-key">US denominator</span></td>
+              <td><span class="value-chip major">~95,143.8 kAF/year</span></td>
+              <td>USGS PP1894-D modeled 2020 CONUS consumptive-use denominator.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="buildout-note">
+        <strong>Not modeled: water replenishment.</strong>
+        Gross consumption only. Reported context: Google replenished 4.5B gal in 2024 (~64% of freshwater consumption), Meta replenished 1.5B gal, Microsoft committed to zero-water cooling on new builds, and AWS reports 0.15 L/kWh WUE. Comparable offset commitments are not standard in the peer sectors shown above.
+      </div>
     </div>
 
     <div class="card" id="sourceMappingSection">
@@ -1104,13 +1743,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr id="source-lbnl-direct">
             <td>LBNL 2023 direct data-center water</td>
             <td class="num">66,000,000,000 L/year</td>
             <td>Direct numerator in AF</td>
             <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record (eScholarship)</a></td>
           </tr>
-          <tr>
+          <tr id="source-lbnl-indirect">
             <td>LBNL 2023 indirect power-related water</td>
             <td class="num">800,000,000,000 L/year</td>
             <td>Off-site numerator when hydro is included</td>
@@ -1152,13 +1791,13 @@
             <td>Second step in buildout-calibrated 2025 point estimate</td>
             <td><a href="https://www.cbre.com/insights/reports/17887575722" target="_blank" rel="noopener noreferrer">CBRE North American Data Center Trends H1 2025</a></td>
           </tr>
-          <tr>
+          <tr id="source-buildout-scale">
             <td>Default 2025 buildout scale used in headline cards</td>
             <td class="num">1.0489 x 1.26 = 1.3216x</td>
             <td>Applied to 2023 direct and selected-boundary indirect AF/year</td>
             <td>Calculated in this worksheet</td>
           </tr>
-          <tr>
+          <tr id="source-industry-benchmarks">
             <td>Industry comparison benchmarks (US)</td>
             <td class="num">Golf 425 (1.63M AF applied &times; 80% ET); pulp/paper ~68 (conservative derived estimate); swimming pools 56 Bgal/year</td>
             <td>Static context rows in industry comparison chart (linear AF/year bars). Pulp/paper uses a conservative derived estimate anchored to NCASI withdrawals and low-end consumptive share, adjusted by AF&amp;PA output decline. Sectors without current primary-sourced consumption data (chemicals, steel, mining, oil refining) were excluded rather than rely on outdated USGS sector reports from the 1960s&ndash;70s.</td>
@@ -1170,58 +1809,76 @@
             <td>Used as the static pulp/paper row in the industry comparison chart. Inputs: NCASI withdrawals and low-end consumptive share, AF&amp;PA water-intensity improvement factor, and AF&amp;PA 2024 production factor <code>(78.1 x 0.875) / 93.7</code>.</td>
             <td><a href="https://www.ncasi.org/wp-content/uploads/2019/02/tb960.pdf" target="_blank" rel="noopener noreferrer">NCASI TB960</a>; <a href="https://www.afandpa.org/sites/default/files/2025-07/2025AF%26PASustainabilityReport_FinalWeb.pdf" target="_blank" rel="noopener noreferrer">AF&amp;PA 2025 Sustainability Report</a>; <a href="https://www.afandpa.org/news/2025/afpa-details-us-paper-production-and-capacity-trends" target="_blank" rel="noopener noreferrer">AF&amp;PA production/capacity release</a></td>
           </tr>
-          <tr>
+          <tr id="source-food-waste">
+            <td>US food waste &mdash; embedded blue water</td>
+            <td class="num">4,200 Bgal/year (95% CI: 4,100&ndash;4,300 Bgal/year)</td>
+            <td>Blue water (surface + groundwater) embedded in food that is wasted at retail or consumer levels, used as a static row in the Agriculture Context chart. Methodology: NHANES 2007&ndash;2014 dietary intake data disaggregated into ingredient-level cropland demand via the US Foodprint Model, then multiplied by USDA-NASS irrigation rates by crop. Irrigation water from surface and groundwater sources is blue water by the Hoekstra/Mekonnen water-footprint definition; green water (rainfall on rainfed crops) and grey water (pollution dilution) are excluded. Convergent support: Birney et al. (2017) ERL 12:105008 explicitly reports ~54,000 L/person/year blue water in US food waste, yielding ~13.9 km&sup3;/year (&asymp; 3,680 Bgal/year) when scaled by US adult population &mdash; same order of magnitude. Hall et al. (2009) and ReFED (2025) report 30&ndash;40% of US food supply wasted, anchoring the dietary-loss fraction. (Note: ReFED's headline 16.2T gal/year is <em>total</em> fresh water including green water from rainfall &mdash; not directly comparable to the blue-water figure used here.)</td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0195405" target="_blank" rel="noopener noreferrer">Conrad et al. (2018) &ldquo;Relationship between food waste, diet quality, and environmental sustainability,&rdquo; PLoS ONE 13(4): e0195405</a>; <a href="https://doi.org/10.1088/1748-9326/aa8494" target="_blank" rel="noopener noreferrer">Birney et al. (2017) ERL 12:105008 (explicit blue-water cross-check)</a>; <a href="https://refed.org/articles/refed-s-new-estimates-on-food-waste-in-the-united-states-2020-2021-trends-and-covid-19-impact/" target="_blank" rel="noopener noreferrer">ReFED 2025 food waste report (retail + consumer waste fraction)</a></td>
+          </tr>
+          <tr id="source-ag-baselines">
             <td>Agriculture comparison crop baselines (US)</td>
-            <td class="num">Alfalfa 20,162,563.5; other hay/grass 10,081,263.5; cotton 9,745,244.5; alfalfa exported to China ~446,000; all US irrigation 81,939,178.5 AF/year</td>
-            <td>Used to compute DC share (%) in agriculture chart. China export figure derived: 44% of total US alfalfa export-embedded water (~1&ndash;1.5 km&sup3;/yr at western irrigation intensities).</td>
-            <td><a href="https://doi.org/10.1029/2024WR038334" target="_blank" rel="noopener noreferrer">Lamsal &amp; Marston 2025 (DOI)</a>; <a href="https://essopenarchive.org/users/801603/articles/1183669-monthly-crop-water-requirements-of-irrigated-crops-in-the-united-states-from-1981-2019" target="_blank" rel="noopener noreferrer">ESS Open Archive preprint</a>; <a href="https://apps.fas.usda.gov/gats/" target="_blank" rel="noopener noreferrer">USDA FAS GATS (export volumes)</a>; <a href="https://hayandforage.com/article-5229-Hay-exports-flatlined-in-2024.html" target="_blank" rel="noopener noreferrer">Hay &amp; Forage Grower (destination shares)</a></td>
+            <td class="num">Alfalfa 20,162,563.5; other hay/grass 10,081,263.5; cotton 9,745,244.5; orchards (almonds, etc.) 8,849,124.9; alfalfa exported to China ~446,000; all US irrigation 81,939,178.5 AF/year</td>
+            <td>Used to compute DC share (%) in agriculture chart. China export figure derived: 44% of total US alfalfa export-embedded water (~1&ndash;1.5 km&sup3;/yr at western irrigation intensities). Orchards row (7.9 Bgal/day) is a synthesis benchmark from Construction Physics based on USDA/USGS irrigation data &mdash; it is not itemized in the Lamsal &amp; Marston extract used for the other crop rows, and is flagged as such in the fact-check audit.</td>
+            <td><a href="https://doi.org/10.1029/2024WR038334" target="_blank" rel="noopener noreferrer">Lamsal &amp; Marston 2025 (DOI)</a>; <a href="https://essopenarchive.org/users/801603/articles/1183669-monthly-crop-water-requirements-of-irrigated-crops-in-the-united-states-from-1981-2019" target="_blank" rel="noopener noreferrer">ESS Open Archive preprint</a>; <a href="https://apps.fas.usda.gov/gats/" target="_blank" rel="noopener noreferrer">USDA FAS GATS (export volumes)</a>; <a href="https://hayandforage.com/article-5229-Hay-exports-flatlined-in-2024.html" target="_blank" rel="noopener noreferrer">Hay &amp; Forage Grower (destination shares)</a>; <a href="https://www.construction-physics.com/p/how-does-the-us-use-water" target="_blank" rel="noopener noreferrer">Construction Physics (orchards synthesis)</a></td>
           </tr>
-          <tr>
-            <td>Google strict US renewables PPA subset</td>
-            <td class="num">6,485 MW (conservative curated US wind/solar/geothermal set; hydro/nuclear/biomass and mixed non-eligible deals excluded)</td>
-            <td>Included in strict default tracked signed PPA capacity baseline</td>
-            <td><a href="https://sustainability.google/reports/" target="_blank" rel="noopener noreferrer">Google Environmental Reports</a></td>
+          <tr id="source-ppa-google">
+            <td>Google North America zero-water procurement floor</td>
+            <td class="num">16,700 MW strict lower-bound used in the contracted scenario. Deep-dive aggregate cross-check: 29+ GW North America clean-energy through 2025 + 2.17 GW known 2026 solar/wind PPAs - 2.085 to 4.415 GW known non-zero-water CFE = ~26.8 to 29.1 GW implied Google zero-water procurement. BNEF/BCSE 2026 Factbook confirms Google signed 4,181 MW of US offsite corporate PPAs in 2025; chart digitization implies ~2.091 GW solar, ~0.572 GW wind, and ~1.519 GW hydro/nuclear.</td>
+            <td>Included as a conservative proxy in the contracted full-build scenario; not a clean US-only project list. Extraction method: keep the strict floor as the model default because Google does not publish a US/NA wind-solar project table and states that its GW total includes PPAs, storage agreements, and EAC agreements. The aggregate-adjusted range is retained only as a sensitivity: subtract known hydro/nuclear/geothermal/fusion from the North America clean-energy aggregate and add the 2026 Clearway/TotalEnergies solar/wind announcements. The BNEF/BCSE chart is used as corroborating image-derived evidence for the 2025 US offsite split, not as an additive cumulative figure.</td>
+            <td><a href="https://sustainability.google/reports/google-2026-environmental-report/" target="_blank" rel="noopener noreferrer">Google 2026 Environmental Report</a>; <a href="https://sustainability.google/operations/" target="_blank" rel="noopener noreferrer">Google Operations page</a>; <a href="https://bcse.org/wp-content/uploads/2026/02/2026-Sustainable-Energy-in-America-Factbook.pdf" target="_blank" rel="noopener noreferrer">BCSE/BNEF 2026 Sustainable Energy in America Factbook</a>; <a href="https://www.clearwayenergygroup.com/press-releases/clearway-signs-portfolio-of-power-purchase-agreements-with-google-totaling-nearly-1-2-gw-across-three-states/" target="_blank" rel="noopener noreferrer">Clearway Google PPAs</a>; <a href="https://totalenergies.com/news/press-releases/united-states-totalenergies-provide-1-gw-solar-capacity-power-googles-data" target="_blank" rel="noopener noreferrer">TotalEnergies Google PPAs</a>; <a href="https://bam.brookfield.com/press-releases/brookfield-and-google-sign-hydro-framework-agreement-deliver-3000-mw-homegrown" target="_blank" rel="noopener noreferrer">Brookfield Google hydro framework</a>; <a href="https://blog.google/feed/infrastructureduane-arnold-nuclear-plant-iowa/" target="_blank" rel="noopener noreferrer">Google-Duane Arnold nuclear agreement</a>; <a href="https://blog.google/company-news/outreach-and-initiatives/sustainability/google-kairos-power-nuclear-energy-agreement/" target="_blank" rel="noopener noreferrer">Google-Kairos nuclear agreement</a>; <a href="https://blog.google/feed/nevada-clean-energy/" target="_blank" rel="noopener noreferrer">Google/Fervo geothermal tariff</a>; <a href="https://cfs.energy/news-and-media/google-and-commonwealth-fusion-systems-sign-strategic-partnership/" target="_blank" rel="noopener noreferrer">Google-CFS fusion agreement</a></td>
           </tr>
-          <tr>
+          <tr id="source-ppa-amazon">
             <td>Amazon renewable project portfolio</td>
-            <td class="num">20,104 MW in the United States (table includes on-site + contracted off-site wind/solar); strict off-site PPA floor used here: 20,043 MW after subtracting up to 61 MW on-site</td>
-            <td>Included in strict default tracked signed PPA capacity baseline</td>
-            <td><a href="https://sustainability.aboutamazon.com/2024-report" target="_blank" rel="noopener noreferrer">Amazon Sustainability Report 2024</a></td>
+            <td class="num">22,490.83 MW in the United States from Amazon's live 2026 carbon-free energy CSV, counting named US wind and solar records. The same CSV lists 3,120 MW of US nuclear, excluded here because nuclear is zero-carbon but not zero-water. An additional 21.33 MW of unlabeled / Whole Foods on-site records is conservatively excluded from the strict named wind/solar count.</td>
+            <td>Included in the contracted full-build scenario. Extraction method: download Amazon's current CSV, filter Country = United States, include rows whose site names identify wind or solar, sum System Size (MW), and exclude nuclear/hydro/unknown records. This keeps on-site solar when it is identifiable as solar; the current strict default excludes unlabeled rows rather than impute technology. Parsed operational dates give named US wind/solar online capacity of 6,225.69 MW at end-2023, 12,129.23 MW at end-2024, 15,420.63 MW at end-2025, and 16,160.63 MW as of June 30, 2026.</td>
+            <td><a href="https://sustainability.aboutamazon.com/climate-solutions/carbon-free-energy" target="_blank" rel="noopener noreferrer">Amazon carbon-free energy project list</a>; <a href="https://sustainability.aboutamazon.com/content/dam/sustainability-marketing-site/05-carbon-free-energy/amazon-carbon-free-energy-projects.csv" target="_blank" rel="noopener noreferrer">Amazon carbon-free energy projects CSV</a></td>
           </tr>
-          <tr>
+          <tr id="source-ppa-meta">
             <td>Meta renewable contract portfolio</td>
-            <td class="num">&gt;11,700 MW contracted renewables globally; 9,800 MW from 86 US wind/solar projects in study covering contracts entered through end-2022</td>
-            <td>US wind/solar contract-backed 9.8 GW used in strict default tracked signed PPA capacity baseline</td>
-            <td><a href="https://sustainability.fb.com/wp-content/uploads/2024/08/Meta-2024-Sustainability-Report.pdf" target="_blank" rel="noopener noreferrer">Meta Sustainability Report 2024 (PDF)</a></td>
+            <td class="num">19,558 MW from Meta's live energy-page map: 134 US wind/solar records, 129 numeric-capacity records, and five blank-capacity records excluded. Numeric split: 16,747 MW solar + 2,811 MW wind. Current page context: more than 30 GW contracted globally and 89 of 128 portfolio projects online end-2024.</td>
+            <td>Included in the contracted full-build scenario. Extraction method: parse the current energy-page marker array, filter to US wind and solar records, include only records with numeric capacity fields, and exclude blank-capacity records rather than impute them. Meta's nuclear deals are excluded: zero-carbon, not zero-water.</td>
+            <td><a href="https://sustainability.atmeta.com/wp-content/uploads/2025/10/Meta_2025-Environmental-Data-Index.pdf" target="_blank" rel="noopener noreferrer">Meta 2025 Environmental Data Index</a>; <a href="https://sustainability.atmeta.com/energy/" target="_blank" rel="noopener noreferrer">Meta Energy page</a>; <a href="https://about.bnef.com/insights/clean-energy/corporate-clean-energy-buying-fell-in-2025-after-nearly-a-decade-of-growth/" target="_blank" rel="noopener noreferrer">BNEF Feb 2026</a>; <a href="https://cleanpower.org/clean-energy-powers-american-business/" target="_blank" rel="noopener noreferrer">ACP</a></td>
           </tr>
-          <tr>
+          <tr id="source-ppa-microsoft-global">
             <td>Microsoft contracted clean-energy portfolio (global)</td>
             <td class="num">40 GW contracted renewable globally; 19 GW active (as of Dec 31, 2025)</td>
-            <td>Context anchor for Microsoft procurement scale and proxy basis for the strict default inclusion</td>
+            <td>Context anchor for Microsoft procurement scale and proxy basis for the default inclusion</td>
             <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog (Feb 18, 2026)</a>; <a href="https://aka.ms/SustainabilityReport2025" target="_blank" rel="noopener noreferrer">Microsoft 2025 sustainability report</a></td>
           </tr>
-          <tr>
+          <tr id="source-ppa-microsoft-us">
             <td>Microsoft US-contracted renewable estimate (map-derived)</td>
-            <td class="num">26,252 MW contracted; 11,484 MW active (US ISO/RTO sum from Dec 31, 2025 map: 7,897 MISO + 8,089 PJM + 4,696 ERCOT + 3,431 WECC non-CAISO + 1,054 SERC + 907 CAISO + 178 SPP)</td>
-            <td>Included via 90% renewables-PPA proxy in strict default pending explicit US resource-level renewable PPA-only split</td>
-            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog (Dec 31, 2025 map context)</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">Microsoft renewable map image</a></td>
+            <td class="num">26,252 MW contracted; 11,484 MW active (US ISO/RTO sum from Dec 31, 2025 map: 7,897 MISO + 8,089 PJM + 4,696 ERCOT + 3,431 WECC non-CAISO + 1,054 SERC + 907 CAISO + 178 SPP). Zero-water default subtracts 102 MW for identified Hawk's Nest hydropower, leaving 26,150 MW.</td>
+            <td>Included in the contracted full-build scenario after an explicit hydro subtraction. Extraction method: sum the map's contracted US ISO/RTO values, then subtract the full installed capacity of Hawk's Nest hydropower as an upper-bound known hydro exclusion. The 90% disclosure is retained for delivered-energy sensitivity logic because Microsoft frames it as the renewable-energy share applied to its 2025 target from PPAs or similar long-term contracts, not a contracted-capacity de-rate. Confidence is high for renewable capacity and medium-high for zero-water capacity because the public map still does not identify every project by technology.</td>
+            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog (Dec 31, 2025 map context)</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">Microsoft renewable map image</a>; <a href="https://news.microsoft.com/source/features/sustainability/6-projects-that-helped-microsoft-meet-its-renewable-energy-goal/" target="_blank" rel="noopener noreferrer">Microsoft project examples including Hawk's Nest hydro</a>; <a href="https://lowimpacthydro.org/hawks-nest-project-wv/" target="_blank" rel="noopener noreferrer">LIHI Hawk's Nest capacity</a></td>
           </tr>
-          <tr>
-            <td>Default tracked signed PPA baseline used here</td>
-            <td class="num">6.485 + 20.043 + 9.800 + (26.252 x 0.90) = 59.955 GW</td>
-            <td>Default value prefilled in Advanced Settings for <code>Tracked signed PPA capacity (GW)</code></td>
-            <td>Calculated from strict US renewables PPA-focused components (Google, Amazon, Meta) plus Microsoft 90% proxy inclusion</td>
+          <tr id="source-ppa-default">
+            <td>Contracted full-build scenario capacity</td>
+            <td class="num">16.700 (Google NA zero-water floor) + 22.491 (Amazon current US named wind/solar) + 19.558 (Meta current US numeric wind/solar map) + 26.150 (Microsoft US map minus identified hydro) = 84.899 GW</td>
+            <td>Used only when the procurement credit basis is set to &ldquo;Contracted full-build.&rdquo; This is signed capacity including projects not yet built &mdash; it answers &ldquo;what happens when everything contracted comes online,&rdquo; not &ldquo;what was displaced this year.&rdquo; This June 30 deep pass keeps the strict lower-bound default because Amazon and Meta have project-level data, Microsoft now has one identified hydro subtraction but not a complete project-level resource table, and Google lacks a public regional wind/solar table. A Google aggregate-adjusted sensitivity implies about 95.0-97.3 GW Big-4 zero-water procurement, but it remains outside the default.</td>
+            <td>Component rows above: <a href="#source-ppa-google">Google</a>; <a href="#source-ppa-amazon">Amazon</a>; <a href="#source-ppa-meta">Meta</a>; <a href="#source-ppa-microsoft-us">Microsoft</a></td>
           </tr>
-          <tr>
-            <td>PPA thermal-displacement assumptions</td>
+          <tr id="source-ppa-solar-wind-split">
+            <td>Contracted full-build solar/wind split diagnostic</td>
+            <td class="num">Default split estimate: 67.287 GW solar + 17.611 GW wind = 84.899 GW, or about 79.3% solar / 20.7% wind. Exact component: Amazon 18.112 solar + 4.378 wind; Meta 16.747 solar + 2.811 wind. Inferred component: Google 13.113 solar + 3.587 wind; Microsoft 19.315 solar + 6.835 wind.</td>
+            <td>Diagnostic only. Amazon and Meta are source-derived splits from the live CSV / live map. Google applies the BNEF/BCSE chart-derived Google 2025 US offsite zero-water split, 2.091 GW solar / 0.572 GW wind, to the 16.700 GW floor. Microsoft applies the BNEF/BCSE chart-derived Microsoft 2025 US offsite split, 0.919 GW solar / 0.325 GW wind, to the 26.150 GW zero-water adjusted map total. This split is used for capacity-factor sanity checks, not to change default PPA capacity.</td>
+            <td><a href="https://sustainability.aboutamazon.com/content/dam/sustainability-marketing-site/05-carbon-free-energy/amazon-carbon-free-energy-projects.csv" target="_blank" rel="noopener noreferrer">Amazon projects CSV</a>; <a href="https://sustainability.atmeta.com/energy/" target="_blank" rel="noopener noreferrer">Meta Energy page</a>; <a href="https://bcse.org/wp-content/uploads/2026/02/2026-Sustainable-Energy-in-America-Factbook.pdf" target="_blank" rel="noopener noreferrer">BCSE/BNEF 2026 Factbook</a></td>
+          </tr>
+          <tr id="source-ppa-delivered">
+            <td>Delivered-energy scenarios (default basis)</td>
+            <td class="num">CY2023 conservative 41.8 TWh / central 46.7 TWh; CY2024-FY24 73.6 TWh. Components (CY2023 central): Google 11.5 (NA renewable allocated 11.875 TWh, EY-reviewed, trimmed to US) + Amazon 13.3 (per-project CSV CODs &times; EIA capacity factors; 6.226 GW strict named US wind/solar operating end-2023) + Meta 12.4 (assured 13.50 TWh US matched &times; ~82% bundled-PPA) + Microsoft 9.5 (Deloitte-reviewed NA matched &times; 59&ndash;78% direct-PPA share)</td>
+            <td>Default credit basis. Uses wind/solar energy actually generated under each company's US PPAs in the credit year &mdash; the physically meaningful displacement quantity &mdash; rather than signed capacity. CY2023 matches the LBNL footprint year; 46.7 TWh is 27% of the 176 TWh 2023 US data-center load. Unbundled RECs are excluded where company disclosures permit (Amazon 52% / Microsoft 51% / Meta 18% / Google ~0% of 2022 renewable volumes were unbundled, per Bloomberg). Nuclear and hydro procurement excluded throughout: zero-carbon, not zero-water. Independent cross-checks: EPA Green Power Partnership (Microsoft 13.38 TWh #1, Google 10.11 TWh #2 US delivered; Amazon and Meta do not participate), CEBA (71 GW of 143.8 GW US corporate contracted is operating), ACP, EIA capacity factors. Full audit trail: <a href="ppa_big4_us_dataset.csv" download>downloadable per-claim dataset (CSV)</a>.</td>
+            <td><a href="https://www.epa.gov/greenpower/green-power-partnership-national-top-100" target="_blank" rel="noopener noreferrer">EPA GPP Top 100</a>; <a href="https://sustainability.aboutamazon.com/climate-solutions/carbon-free-energy" target="_blank" rel="noopener noreferrer">Amazon project CSV</a>; <a href="https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/msc/documents/presentations/CSR/2025-Microsoft-Environmental-Data-Fact-Sheet-PDF.pdf" target="_blank" rel="noopener noreferrer">Microsoft FY24 Data Fact Sheet</a>; <a href="https://www.gstatic.com/gumdrop/sustainability/google-2025-environmental-report.pdf" target="_blank" rel="noopener noreferrer">Google 2025 Environmental Report</a>; <a href="https://sustainability.atmeta.com/wp-content/uploads/2025/10/Meta_2025-Environmental-Data-Index.pdf" target="_blank" rel="noopener noreferrer">Meta 2025 Data Index</a>; <a href="https://ceba.org/programs/deal-tracker/" target="_blank" rel="noopener noreferrer">CEBA Deal Tracker</a>; <a href="https://www.eia.gov/electricity/monthly/epm_table_grapher.php?t=epmt_6_07_b" target="_blank" rel="noopener noreferrer">EIA capacity factors</a></td>
+          </tr>
+          <tr id="source-ppa-method">
+            <td>Zero-water procurement thermal-displacement assumptions</td>
             <td class="num">Capacity factor and assumed displaced thermal intensity are user-set</td>
-            <td>Converts signed GW into modeled avoided thermal off-site AF/year under a full-displacement assumption for delivered renewables; PPAs are treated as renewables with near-zero operational water</td>
+            <td>Converts procurement GW into modeled avoided thermal off-site AF/year under a full-displacement assumption for delivered renewables; wind/solar procurement is treated as near-zero operational water</td>
             <td>Explicit model assumptions in this worksheet</td>
           </tr>
           <tr>
             <td>LBNL thermoelectric water consumption intensity</td>
             <td class="num">0.47 gal/kWh = 1.78 L/kWh (default)</td>
-            <td>Default value for <code>Assumed displaced thermal intensity (L/kWh)</code>, user-editable. Same rate used to derive the no-hydro boundary (275 Mgd), ensuring consistency between the baseline and PPA displacement calculations.</td>
+            <td>Default value for <code>Assumed displaced thermal intensity (L/kWh)</code>, user-editable. Same rate used to derive the no-hydro boundary (275 Mgd), ensuring consistency between the baseline and zero-water procurement displacement calculations.</td>
             <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL 2024 report (pp. 55–57)</a></td>
           </tr>
           <tr>
@@ -1242,13 +1899,13 @@
             <td>Component of denominator</td>
             <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS Professional Paper 1894-D</a></td>
           </tr>
-          <tr>
+          <tr id="source-usgs-denominator">
             <td>USGS denominator used here</td>
             <td class="num">95,143,774.9 AF/year</td>
             <td>Sum of the three 2020 modeled values above</td>
             <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS Professional Paper 1894-D</a></td>
           </tr>
-          <tr>
+          <tr id="source-usgs-withdrawals">
             <td>USGS total freshwater withdrawals (scale context)</td>
             <td class="num">~281,000 Mgal/d = ~314,920 kAF/year</td>
             <td>Denominator for &ldquo;vs withdrawn&rdquo; scale card. All US freshwater withdrawals (public supply, irrigation, thermoelectric, industrial, mining, domestic, livestock, aquaculture).</td>
@@ -1272,7 +1929,7 @@
             <td>Helpful overview and starting point for framing and identifying sources. Numeric claims were verified by primary sources.</td>
             <td><a href="https://www.construction-physics.com/" target="_blank" rel="noopener noreferrer">Construction Physics</a>; <a href="https://www.construction-physics.com/p/how-does-the-us-use-water" target="_blank" rel="noopener noreferrer">How Does the US Use Water?</a>; <a href="https://www.construction-physics.com/p/i-was-wrong-about-data-center-water" target="_blank" rel="noopener noreferrer">I Was Wrong About Data Center Water Use</a></td>
           </tr>
-          <tr>
+          <tr id="source-conus-precip">
             <td>CONUS annual precipitation volume</td>
             <td class="num">~4 mi&sup3;/day &asymp; 4,933,632 kAF/year</td>
             <td>Denominator for rainfall comparison context</td>
@@ -1287,7 +1944,7 @@
           <tr>
             <td>RFS ethanol mandate &mdash; marginal irrigation</td>
             <td class="num">+729 billion liters/year net irrigation (Mandate vs. no-biofuels BAU) = 192 Bgal/year</td>
-            <td>Used as industry-chart comparison bar. This is the NET marginal increase: only the additional irrigation that would not exist without the RFS mandate. Conversion: 729e9 L &divide; 3.785 L/gal = 192.5e9 gal &asymp; 192 Bgal/yr (conservative rounding).</td>
+            <td>Used in the separate RFS ethanol policy module. This is the NET marginal increase: only the additional irrigation that would not exist without the RFS mandate. Conversion: 729e9 L &divide; 3.785 L/gal = 192.5e9 gal &asymp; 192 Bgal/yr (conservative rounding).</td>
             <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018) &ldquo;Water impacts of U.S. biofuels&rdquo;, PLoS ONE 13(9): e0204298, Table 2</a></td>
           </tr>
           <tr>
@@ -1349,7 +2006,7 @@
         <thead>
           <tr>
             <th>Claim used in model</th>
-            <th>Excerpt</th>
+            <th>Evidence / extraction note</th>
             <th>Source link(s)</th>
           </tr>
         </thead>
@@ -1371,12 +2028,44 @@
             <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record</a></td>
           </tr>
           <tr>
-            <td>PPA caveat for indirect-water method</td>
+            <td>Clean-energy procurement caveat for indirect-water method</td>
             <td>
               <p class="evidence-quote">“... does not incorporate any power purchase agreements ... which could significantly affect water consumption ...”</p>
               <div class="evidence-meta">LBNL 2024 report, indirect impacts methodology note (p. 57 context).</div>
             </td>
             <td><a href="https://escholarship.org/uc/item/32d6m0d1" target="_blank" rel="noopener noreferrer">LBNL report record</a></td>
+          </tr>
+          <tr id="evidence-ppa-google">
+            <td>Google zero-water procurement floor</td>
+            <td>
+              <p class="evidence-quote">Google reports more than 29 GW of North America clean-energy agreements through 2025, but it does not publish a US/NA wind-solar-only split.</p>
+              <div class="evidence-meta">Extraction: keep 16.7 GW as the strict model default. Deep-pass cross-check: 29+ GW North America aggregate + 1.17 GW Clearway 2026 PPAs + 1.0 GW TotalEnergies 2026 solar PPAs - known non-zero-water CFE (670 MW signed hydro, up to 3,000 MW hydro framework, 600 MW Duane Arnold nuclear, up to 500 MW Kairos nuclear, 115 MW enhanced geothermal, 200 MW fusion) implies ~26.8-29.1 GW Google zero-water capacity. This remains a sensitivity because Google's reported GW total also includes storage agreements and EAC agreements. Image/report cross-check: BNEF/BCSE 2026 Factbook page 44 reports Google 4,181 MW of US offsite corporate PPAs in 2025; pixel digitization of the stacked bar gives solar 106 px, wind 29 px, nuclear 44 px, hydropower 33 px over a 212 px bar, implying ~2.091 GW solar, ~0.572 GW wind, and ~1.519 GW hydro/nuclear.</div>
+            </td>
+            <td><a href="https://sustainability.google/reports/google-2026-environmental-report/" target="_blank" rel="noopener noreferrer">Google 2026 Environmental Report</a>; <a href="https://sustainability.google/operations/" target="_blank" rel="noopener noreferrer">Google Operations page</a>; <a href="https://bcse.org/wp-content/uploads/2026/02/2026-Sustainable-Energy-in-America-Factbook.pdf" target="_blank" rel="noopener noreferrer">BCSE/BNEF 2026 Factbook</a>; <a href="https://www.clearwayenergygroup.com/press-releases/clearway-signs-portfolio-of-power-purchase-agreements-with-google-totaling-nearly-1-2-gw-across-three-states/" target="_blank" rel="noopener noreferrer">Clearway PPAs</a>; <a href="https://totalenergies.com/news/press-releases/united-states-totalenergies-provide-1-gw-solar-capacity-power-googles-data" target="_blank" rel="noopener noreferrer">TotalEnergies PPAs</a>; <a href="https://bam.brookfield.com/press-releases/brookfield-and-google-sign-hydro-framework-agreement-deliver-3000-mw-homegrown" target="_blank" rel="noopener noreferrer">Brookfield hydro framework</a>; <a href="https://blog.google/feed/infrastructureduane-arnold-nuclear-plant-iowa/" target="_blank" rel="noopener noreferrer">Duane Arnold nuclear</a>; <a href="https://blog.google/company-news/outreach-and-initiatives/sustainability/google-kairos-power-nuclear-energy-agreement/" target="_blank" rel="noopener noreferrer">Kairos nuclear agreement</a>; <a href="https://blog.google/feed/nevada-clean-energy/" target="_blank" rel="noopener noreferrer">Fervo geothermal</a>; <a href="https://cfs.energy/news-and-media/google-and-commonwealth-fusion-systems-sign-strategic-partnership/" target="_blank" rel="noopener noreferrer">CFS fusion</a></td>
+          </tr>
+          <tr id="evidence-ppa-amazon">
+            <td>Amazon zero-water procurement component</td>
+            <td>
+              <p class="evidence-quote">Amazon's current US project list is filtered to named wind and solar records for the zero-water contracted-capacity count.</p>
+              <div class="evidence-meta">Extraction: live CSV has 710 rows. United States named wind records total 4,378.42 MW; named solar records total 18,112.41 MW; strict named wind/solar total = 22,490.83 MW = 22.491 GW. Exclude 3,120 MW US nuclear and 21.33 MW unlabeled / Whole Foods on-site records from the strict default. Date parsing from the same CSV yields 6,225.69 MW online end-2023, 12,129.23 MW online end-2024, 15,420.63 MW online end-2025, and 16,160.63 MW online as of June 30, 2026.</div>
+            </td>
+            <td><a href="https://sustainability.aboutamazon.com/climate-solutions/carbon-free-energy" target="_blank" rel="noopener noreferrer">Amazon carbon-free energy project list</a>; <a href="https://sustainability.aboutamazon.com/content/dam/sustainability-marketing-site/05-carbon-free-energy/amazon-carbon-free-energy-projects.csv" target="_blank" rel="noopener noreferrer">Amazon projects CSV</a></td>
+          </tr>
+          <tr id="evidence-ppa-meta">
+            <td>Meta US map-derived wind/solar total</td>
+            <td>
+              <p class="evidence-quote">Meta's global contracted renewable total is context; the calculator uses the US map-derived numeric wind/solar total.</p>
+              <div class="evidence-meta">Extraction: parse the live energy-page marker array; filter to US wind/solar records. Result: 134 US wind/solar records; 129 numeric records totaling 19,558 MW, split into 16,747 MW solar and 2,811 MW wind; five blank-capacity records excluded.</div>
+            </td>
+            <td><a href="https://sustainability.atmeta.com/energy/" target="_blank" rel="noopener noreferrer">Meta Energy page and sustainability impact map</a>; <a href="https://sustainability.atmeta.com/2025-sustainability-report/" target="_blank" rel="noopener noreferrer">Meta 2025 Sustainability Report</a></td>
+          </tr>
+          <tr id="evidence-ppa-solar-wind-split">
+            <td>PPA solar/wind split diagnostic</td>
+            <td>
+              <p class="evidence-quote">The mixed split estimate is exact where company project data allow it and chart-derived where public project-level tables are missing.</p>
+              <div class="evidence-meta">Extraction: Amazon exact from live CSV site-name technology parsing: 18.112 GW solar and 4.378 GW wind. Meta exact from live map marker parsing: 16.747 GW solar and 2.811 GW wind. Google chart estimate from BNEF/BCSE page 44: 4.181 GW total; digitized Google bar solar 106 px and wind 29 px over 212 px total, giving 2.091 GW solar and 0.572 GW wind; apply that zero-water ratio to the 16.700 GW floor. Microsoft chart estimate from BNEF/BCSE page 44: 1.244 GW total; digitized Microsoft bar solar/wind areas 2,470 / 874 over 3,344, giving 0.919 GW solar and 0.325 GW wind; apply that ratio to the 26.150 GW zero-water adjusted map total. Result: 67.287 GW solar + 17.611 GW wind = 84.899 GW, or about 79.3% solar / 20.7% wind.</div>
+            </td>
+            <td><a href="https://sustainability.aboutamazon.com/content/dam/sustainability-marketing-site/05-carbon-free-energy/amazon-carbon-free-energy-projects.csv" target="_blank" rel="noopener noreferrer">Amazon projects CSV</a>; <a href="https://sustainability.atmeta.com/energy/" target="_blank" rel="noopener noreferrer">Meta Energy page</a>; <a href="https://bcse.org/wp-content/uploads/2026/02/2026-Sustainable-Energy-in-America-Factbook.pdf" target="_blank" rel="noopener noreferrer">BCSE/BNEF 2026 Factbook</a></td>
           </tr>
           <tr>
             <td>2025 buildout calibration context</td>
@@ -1386,13 +2075,13 @@
             </td>
             <td><a href="https://www.cbre.com/insights/reports/17887575722" target="_blank" rel="noopener noreferrer">CBRE H1 2025 report</a></td>
           </tr>
-          <tr>
-            <td>Microsoft strict-renewables PPA caveat</td>
+          <tr id="evidence-ppa-microsoft">
+            <td>Microsoft clean-energy procurement caveat</td>
             <td>
-              <p class="evidence-quote">“... more than 90% ... under PPAs or similar long-term contracting mechanisms ...” while Microsoft CFE definitions include hydropower and sustainable biomass.</p>
-              <div class="evidence-meta">Because the US map is not published with an explicit resource-level PPA-only split, the strict default includes Microsoft using a 90% renewables-PPA proxy on the US map-derived contracted value; keep user-editable for sensitivity.</div>
+              <p class="evidence-quote">“... more than 90% ... under PPAs or similar long-term contracting mechanisms ...” while the map separately reports contracted and active regional capacity.</p>
+              <div class="evidence-meta">Extraction: sum Dec. 31, 2025 US map contracted values by ISO/RTO (7.897 MISO + 8.089 PJM + 4.696 ERCOT + 3.431 WECC non-CAISO + 1.054 SERC + 0.907 CAISO + 0.178 SPP = 26.252 GW). Do not apply the 90% factor to contracted capacity; retain it only for delivered-energy sensitivity logic. Microsoft's own project examples identify Hawk's Nest hydropower in the Brookfield partnership; LIHI lists Hawk's Nest at 102 MW. Subtracting the full 102 MW as an upper-bound hydro exclusion gives 26.150 GW for the zero-water default. Residual uncertainty: Microsoft does not publish project-level US resource mix in the map, so any additional undisclosed hydropower would need to be removed if later identified.</div>
             </td>
-            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog</a>; <a href="https://aka.ms/SustainabilityReport2025" target="_blank" rel="noopener noreferrer">Microsoft 2025 sustainability report</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">Microsoft renewable map image</a></td>
+            <td><a href="https://blogs.microsoft.com/blog/2026/02/18/a-milestone-achievement-in-our-journey-to-carbon-negative/" target="_blank" rel="noopener noreferrer">Microsoft blog</a>; <a href="https://aka.ms/SustainabilityReport2025" target="_blank" rel="noopener noreferrer">Microsoft 2025 sustainability report</a>; <a href="https://blogs.microsoft.com/wp-content/uploads/2026/02/renewable-energy-map-miller-light.png" target="_blank" rel="noopener noreferrer">Microsoft renewable map image</a>; <a href="https://news.microsoft.com/source/features/sustainability/6-projects-that-helped-microsoft-meet-its-renewable-energy-goal/" target="_blank" rel="noopener noreferrer">Microsoft project examples</a>; <a href="https://lowimpacthydro.org/hawks-nest-project-wv/" target="_blank" rel="noopener noreferrer">LIHI Hawk's Nest capacity</a></td>
           </tr>
           <tr>
             <td>Agriculture blue-water comparison anchors</td>
@@ -1419,56 +2108,64 @@
             <td><a href="https://www.ncasi.org/wp-content/uploads/2019/02/tb960.pdf" target="_blank" rel="noopener noreferrer">NCASI TB960</a>; <a href="https://www.afandpa.org/sites/default/files/2025-07/2025AF%26PASustainabilityReport_FinalWeb.pdf" target="_blank" rel="noopener noreferrer">AF&amp;PA 2025 Sustainability Report</a>; <a href="https://www.afandpa.org/news/2025/afpa-details-us-paper-production-and-capacity-trends" target="_blank" rel="noopener noreferrer">AF&amp;PA production/capacity release</a></td>
           </tr>
           <tr>
+            <td>US food waste &mdash; embedded blue water</td>
+            <td>
+              <p class="evidence-quote">&ldquo;An estimated 4.2 (95% CI: 4.1 to 4.3) trillion gallons of water [were] used annually to produce food that was wasted by US consumers from 2007 to 2014 ... the majority of wasted irrigation water was applied to cropland used to produce fruits (1.3 trillion gallons), vegetables (1.05 trillion gallons), and hay (1.01 trillion gallons).&rdquo;</p>
+              <div class="evidence-meta">Conrad et al. (2018) PLoS ONE 13(4): e0195405. The figure is irrigation water from surface and groundwater, i.e. blue water under the Hoekstra/Mekonnen water-footprint definition (green water from rainfall and grey water from pollution dilution are not included). Derivation: per-capita food waste from NHANES 2007&ndash;2014 dietary intake &rarr; ingredient-level cropland demand via the US Foodprint Model &rarr; multiplied by USDA-NASS irrigation rates by crop. Convergent support: Birney et al. (2017) ERL 12:105008 explicitly reports 54,000 L/person/year <em>blue water</em> in US food waste (= ~13.9 km&sup3;/year &asymp; 3,680 Bgal/year national, same order of magnitude). ReFED (2025) reports 16.2 trillion gallons of <em>total</em> fresh water (blue + green) for 2023 surplus food, a much larger figure that includes rainfall on rainfed crops and is not the same metric as the blue-water figure used here.</div>
+            </td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0195405" target="_blank" rel="noopener noreferrer">Conrad et al. (2018), PLoS ONE 13(4): e0195405</a>; <a href="https://doi.org/10.1088/1748-9326/aa8494" target="_blank" rel="noopener noreferrer">Birney et al. (2017), ERL 12:105008</a>; <a href="https://refed.org/articles/refed-s-new-estimates-on-food-waste-in-the-united-states-2020-2021-trends-and-covid-19-impact/" target="_blank" rel="noopener noreferrer">ReFED 2025 food waste report</a></td>
+          </tr>
+          <tr>
             <td>USGS denominator component values</td>
             <td>
-              <p class=”evidence-quote”>”Model estimates for ... consumptive use for public supply for the CONUS in water year 2020 were ... 4,157 Mgal/d ... crop irrigation ... 78,400 Mgal/d ... thermoelectric power ... 2,382 Mgal/d”</p>
-              <div class=”evidence-meta”>USGS PP 1894-D body text (CONUS, water year 2020 modeled values). Note: the abstract reports 2010-20 period averages (4,219 / 75,698 / 2,904 Mgal/d), which differ from the 2020-specific values used here.</div>
+              <p class="evidence-quote">"Model estimates for ... consumptive use for public supply for the CONUS in water year 2020 were ... 4,157 Mgal/d ... crop irrigation ... 78,400 Mgal/d ... thermoelectric power ... 2,382 Mgal/d"</p>
+              <div class="evidence-meta">USGS PP 1894-D body text (CONUS, water year 2020 modeled values). Note: the abstract reports 2010-20 period averages (4,219 / 75,698 / 2,904 Mgal/d), which differ from the 2020-specific values used here.</div>
             </td>
-            <td><a href=”https://pubs.usgs.gov/publication/pp1894D” target=”_blank” rel=”noopener noreferrer”>USGS PP 1894-D</a></td>
+            <td><a href="https://pubs.usgs.gov/publication/pp1894D" target="_blank" rel="noopener noreferrer">USGS PP 1894-D</a></td>
           </tr>
           <tr>
             <td>RFS ethanol &mdash; marginal irrigation from Mandate scenario (Table 2)</td>
             <td>
-              <p class=”evidence-quote”>”Net irrigation requirements increase 0.7% in Mandate and decrease 3.8% in CFS, but in both scenarios increases are concentrated in regions of Kansas and Nebraska that rely upon the Ogallala aquifer for irrigation water.”</p>
-              <div class=”evidence-meta”>Teter et al. (2018) Table 2: BAU baseline irrigation = 109,100 billion L/yr; Mandate change = +729 billion L/yr (+0.7%). Groundwater infiltration change = &minus;587 billion L/yr (&minus;0.5%). Both impacts compound aquifer stress.</div>
+              <p class="evidence-quote">"Net irrigation requirements increase 0.7% in Mandate and decrease 3.8% in CFS, but in both scenarios increases are concentrated in regions of Kansas and Nebraska that rely upon the Ogallala aquifer for irrigation water."</p>
+              <div class="evidence-meta">Teter et al. (2018) Table 2: BAU baseline irrigation = 109,100 billion L/yr; Mandate change = +729 billion L/yr (+0.7%). Groundwater infiltration change = &minus;587 billion L/yr (&minus;0.5%). Both impacts compound aquifer stress.</div>
             </td>
-            <td><a href=”https://doi.org/10.1371/journal.pone.0204298” target=”_blank” rel=”noopener noreferrer”>Teter et al. (2018), PLoS ONE 13(9): e0204298, Table 2 and p. 11</a></td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018), PLoS ONE 13(9): e0204298, Table 2 and p. 11</a></td>
           </tr>
           <tr>
             <td>RFS ethanol &mdash; Ogallala aquifer concentration</td>
             <td>
-              <p class=”evidence-quote”>”net increases in irrigation water requirements occur in regions of Texas, Oklahoma, and Kansas that source the vast majority (&gt;90%) of their irrigation from the Ogallala Aquifer, a resource from which water is currently being drawn at unsustainable rates”</p>
-              <div class=”evidence-meta”>Teter et al. (2018) p. 12. The Mandate scenario shifts irrigation demand to the Great Plains (Ogallala region) even as it reduces irrigated acreage nationally by 2%, because increased corn in Kansas/Nebraska/Oklahoma requires more water per acre than the crops it displaces.</div>
+              <p class="evidence-quote">"net increases in irrigation water requirements occur in regions of Texas, Oklahoma, and Kansas that source the vast majority (&gt;90%) of their irrigation from the Ogallala Aquifer, a resource from which water is currently being drawn at unsustainable rates"</p>
+              <div class="evidence-meta">Teter et al. (2018) p. 12. The Mandate scenario shifts irrigation demand to the Great Plains (Ogallala region) even as it reduces irrigated acreage nationally by 2%, because increased corn in Kansas/Nebraska/Oklahoma requires more water per acre than the crops it displaces.</div>
             </td>
-            <td><a href=”https://doi.org/10.1371/journal.pone.0204298” target=”_blank” rel=”noopener noreferrer”>Teter et al. (2018), p. 12</a></td>
+            <td><a href="https://doi.org/10.1371/journal.pone.0204298" target="_blank" rel="noopener noreferrer">Teter et al. (2018), p. 12</a></td>
           </tr>
           <tr>
             <td>RFS land-use change &mdash; corn expansion and price impacts</td>
             <td>
-              <p class=”evidence-quote”>”the RFS increased corn prices by 30% and the prices of other crops by 20%, which, in turn, expanded US corn cultivation by 2.8 Mha (8.7%) and total cropland by 2.1 Mha (2.4%)”</p>
-              <div class=”evidence-meta”>Lark et al. (2022) abstract. The 2.8 Mha of additional corn (95% CI: 2.4&ndash;3.1 Mha) includes 2.1 Mha increase in continuous corn and 1.4 Mha additional corn in rotation. Expansion concentrated in North/South Dakota, western Minnesota, Mississippi Alluvial Plain, and High Plains (KS, OK, TX).</div>
+              <p class="evidence-quote">"the RFS increased corn prices by 30% and the prices of other crops by 20%, which, in turn, expanded US corn cultivation by 2.8 Mha (8.7%) and total cropland by 2.1 Mha (2.4%)"</p>
+              <div class="evidence-meta">Lark et al. (2022) abstract. The 2.8 Mha of additional corn (95% CI: 2.4&ndash;3.1 Mha) includes 2.1 Mha increase in continuous corn and 1.4 Mha additional corn in rotation. Expansion concentrated in North/South Dakota, western Minnesota, Mississippi Alluvial Plain, and High Plains (KS, OK, TX).</div>
             </td>
-            <td><a href=”https://doi.org/10.1073/pnas.2101084119” target=”_blank” rel=”noopener noreferrer”>Lark et al. (2022), PNAS 119(9): e2101084119</a></td>
+            <td><a href="https://doi.org/10.1073/pnas.2101084119" target="_blank" rel="noopener noreferrer">Lark et al. (2022), PNAS 119(9): e2101084119</a></td>
           </tr>
           <tr>
             <td>RFS ethanol &mdash; per-BGY scaling relationship</td>
             <td>
-              <p class=”evidence-quote”>”for every billion gallons per year (BGY) expansion of ethanol demand, we would expect a 5.6% increase in corn prices; 1.6 and 0.4% increases in the areas of US corn and cropland, respectively”</p>
-              <div class=”evidence-meta”>Lark et al. (2022) Table 1 footnote. The RFS stimulated 5.5 Bgal/yr of additional ethanol beyond what the pre-2005 policy baseline would have produced.</div>
+              <p class="evidence-quote">"for every billion gallons per year (BGY) expansion of ethanol demand, we would expect a 5.6% increase in corn prices; 1.6 and 0.4% increases in the areas of US corn and cropland, respectively"</p>
+              <div class="evidence-meta">Lark et al. (2022) Table 1 footnote. The RFS stimulated 5.5 Bgal/yr of additional ethanol beyond what the pre-2005 policy baseline would have produced.</div>
             </td>
-            <td><a href=”https://doi.org/10.1073/pnas.2101084119” target=”_blank” rel=”noopener noreferrer”>Lark et al. (2022), Table 1</a></td>
+            <td><a href="https://doi.org/10.1073/pnas.2101084119" target="_blank" rel="noopener noreferrer">Lark et al. (2022), Table 1</a></td>
           </tr>
           <tr>
             <td>RFS ethanol &mdash; field-level Kansas irrigation response</td>
             <td>
-              <p class=”evidence-quote”>A 10% increase in ethanol plant capacity within 50 km leads to a +0.22% increase in annual water use per field. By 2017, ethanol markets accounted for approximately 4% of total irrigated water use in Kansas.</p>
-              <div class=”evidence-meta”>Sampson et al. (2021), 23,000 Kansas fields (2003&ndash;2017). Kansas holds ~25% of Ogallala irrigated acreage; scaling the 4% share across all Ogallala states yields ~500,000 AF/yr, consistent with Teter&rsquo;s 590,000 AF/yr (+729B L) national estimate.</div>
+              <p class="evidence-quote">A 10% increase in ethanol plant capacity within 50 km leads to a +0.22% increase in annual water use per field. By 2017, ethanol markets accounted for approximately 4% of total irrigated water use in Kansas.</p>
+              <div class="evidence-meta">Sampson et al. (2021), 23,000 Kansas fields (2003&ndash;2017). Kansas holds ~25% of Ogallala irrigated acreage; scaling the 4% share across all Ogallala states yields ~500,000 AF/yr, consistent with Teter&rsquo;s 590,000 AF/yr (+729B L) national estimate.</div>
             </td>
-            <td><a href=”https://doi.org/10.1016/j.reseneeco.2021.101249” target=”_blank” rel=”noopener noreferrer”>Sampson, Al-Sudani &amp; Bergtold (2021), Resource and Energy Economics 66: 101249</a></td>
+            <td><a href="https://doi.org/10.1016/j.reseneeco.2021.101249" target="_blank" rel="noopener noreferrer">Sampson, Al-Sudani &amp; Bergtold (2021), Resource and Energy Economics 66: 101249</a></td>
           </tr>
         </tbody>
       </table>
-      <p class=”note”>All links above are external primary or publisher-hosted sources for public traceability.</p>
+      <p class="note">All links above are external primary or publisher-hosted sources for public traceability.</p>
     </div>
 
     <div class="card" id="formulaTraceSection">
@@ -1524,20 +2221,118 @@
       noHydroSensitivityTotalMgd: 275
     };
 
-    const GOOGLE_US_RENEWABLE_PPA_GW = 6.485;
-    const AMAZON_US_RENEWABLE_PPA_GW = 20.043;
-    const META_US_RENEWABLE_PPA_GW = 9.8;
-    const MICROSOFT_US_CONTRACTED_GW_CONTEXT = 26.252;
-    const MICROSOFT_US_ACTIVE_GW_CONTEXT = 11.484;
-    const MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR = 0.9;
-    const MICROSOFT_US_RENEWABLE_PPA_GW = MICROSOFT_US_CONTRACTED_GW_CONTEXT * MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR;
+    // Big-4 US clean-energy procurement, per-company audit June 30, 2026.
+    // Three distinct bases — do not mix: contracted GW (signed, incl. unbuilt),
+    // operating GW, delivered TWh (what physically displaced grid generation in-year).
+    // Wind/solar only: nuclear/hydro deals excluded (zero-carbon, not zero-water).
+    // Full trace: ppa_big4_us_dataset.csv (served alongside this page) and Source Mapping.
+    const MICROSOFT_US_RENEWABLE_MAP_GW = 26.252;
+    const MICROSOFT_IDENTIFIED_HYDRO_GW = 0.102;
+    const MICROSOFT_ZERO_WATER_ADJUSTED_GW =
+      MICROSOFT_US_RENEWABLE_MAP_GW - MICROSOFT_IDENTIFIED_HYDRO_GW;
+    const GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_GW = 4.181;
+    const GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_PIXELS = 106;
+    const GOOGLE_BNEF_2025_US_OFFSITE_WIND_PIXELS = 29;
+    const GOOGLE_BNEF_2025_US_OFFSITE_NUCLEAR_PIXELS = 44;
+    const GOOGLE_BNEF_2025_US_OFFSITE_HYDRO_PIXELS = 33;
+    const GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_PIXELS =
+      GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_PIXELS + GOOGLE_BNEF_2025_US_OFFSITE_WIND_PIXELS +
+      GOOGLE_BNEF_2025_US_OFFSITE_NUCLEAR_PIXELS + GOOGLE_BNEF_2025_US_OFFSITE_HYDRO_PIXELS;
+    const GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_GW =
+      GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_GW * GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_PIXELS / GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_PIXELS;
+    const GOOGLE_BNEF_2025_US_OFFSITE_WIND_GW =
+      GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_GW * GOOGLE_BNEF_2025_US_OFFSITE_WIND_PIXELS / GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_PIXELS;
+    const GOOGLE_BNEF_2025_US_OFFSITE_ZERO_WATER_GW =
+      GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_GW + GOOGLE_BNEF_2025_US_OFFSITE_WIND_GW;
+    const GOOGLE_BNEF_2025_US_OFFSITE_HYDRO_NUCLEAR_GW =
+      GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_GW - GOOGLE_BNEF_2025_US_OFFSITE_ZERO_WATER_GW;
+    const MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_GW = 1.244;
+    const MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_PIXELS = 2470;
+    const MICROSOFT_BNEF_2025_US_OFFSITE_WIND_PIXELS = 874;
+    const MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_PIXELS =
+      MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_PIXELS + MICROSOFT_BNEF_2025_US_OFFSITE_WIND_PIXELS;
+    const MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_GW =
+      MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_GW * MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_PIXELS / MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_PIXELS;
+    const MICROSOFT_BNEF_2025_US_OFFSITE_WIND_GW =
+      MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_GW * MICROSOFT_BNEF_2025_US_OFFSITE_WIND_PIXELS / MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_PIXELS;
+    const AMAZON_CONTRACTED_SOLAR_GW = 18.11241;
+    const AMAZON_CONTRACTED_WIND_GW = 4.37842;
+    const META_CONTRACTED_SOLAR_GW = 16.747;
+    const META_CONTRACTED_WIND_GW = 2.811;
+    const PPA_COMPANY_DATA = {
+      google: { contractedGW: 16.7, contractedVintage: "NA zero-water floor; 2025 report gives 29+ GW all CFE", operatingGW: null,
+        delivered2023TWhLow: 11.0, delivered2023TWh: 11.5, deliveredRecentTWh: 18.0,
+        delivered2025TWhLow: 18.4, delivered2025TWh: 20.1, recPct2022: 0 },
+      amazon: { contractedGW: 22.491, contractedVintage: "live 2026 CSV; named US wind/solar", operatingGW: 12.129,
+        delivered2023TWhLow: 11.7, delivered2023TWh: 13.3, deliveredRecentTWh: 23.5,
+        delivered2025TWhLow: 28.9, delivered2025TWh: 33.7, recPct2022: 52 },
+      meta: { contractedGW: 19.558, contractedVintage: "live map; 129 numeric US wind/solar records", operatingGW: 7.0,
+        delivered2023TWhLow: 11.1, delivered2023TWh: 12.4, deliveredRecentTWh: 16.3,
+        delivered2025TWhLow: 13.4, delivered2025TWh: 16.1, recPct2022: 18 },
+      microsoft: { contractedGW: MICROSOFT_ZERO_WATER_ADJUSTED_GW, contractedVintage: "Dec 31, 2025 official map minus identified hydro", operatingGW: 11.484,
+        delivered2023TWhLow: 8.0, delivered2023TWh: 9.5, deliveredRecentTWh: 15.8,
+        delivered2025TWhLow: 16.3, delivered2025TWh: 18.6, recPct2022: 51 }
+    };
+    const GOOGLE_AGGREGATE_ZERO_WATER_LOW_GW = 26.8;
+    const GOOGLE_AGGREGATE_ZERO_WATER_HIGH_GW = 29.1;
+    const ppaSum = (key) => Object.values(PPA_COMPANY_DATA)
+      .reduce((acc, c) => acc + (c[key] || 0), 0);
+    const BIG4_AGGREGATE_ZERO_WATER_LOW_GW =
+      GOOGLE_AGGREGATE_ZERO_WATER_LOW_GW + PPA_COMPANY_DATA.amazon.contractedGW + PPA_COMPANY_DATA.meta.contractedGW + PPA_COMPANY_DATA.microsoft.contractedGW;
+    const BIG4_AGGREGATE_ZERO_WATER_HIGH_GW =
+      GOOGLE_AGGREGATE_ZERO_WATER_HIGH_GW + PPA_COMPANY_DATA.amazon.contractedGW + PPA_COMPANY_DATA.meta.contractedGW + PPA_COMPANY_DATA.microsoft.contractedGW;
+    const PPA_SCENARIOS = {
+      delivered2023_conservative: {
+        label: "Delivered PPA energy, CY2023 — conservative",
+        twh: ppaSum("delivered2023TWhLow"),
+        note: "low end of each company's US wind/solar PPA generation delivered in 2023"
+      },
+      delivered2023_central: {
+        label: "Delivered PPA energy, CY2023 — central",
+        twh: ppaSum("delivered2023TWh"),
+        note: "central estimate of US wind/solar PPA generation delivered in 2023 (LBNL footprint year)"
+      },
+      delivered2025_conservative: {
+        label: "Delivered PPA energy, CY2025 — conservative",
+        twh: ppaSum("delivered2025TWhLow"),
+        vintage2025: true,
+        note: "conservative CY2025 floors (Amazon: operating fleet only, no 2025-COD credit; Google: CY2024 verified floor; Meta: zero-growth assured load x bundled-PPA share; Microsoft: FY24 anchor x 0.90 PPA floor); vintage-aligned to the 2025 modeled footprint"
+      },
+      delivered2025_central: {
+        label: "Delivered PPA energy, CY2025 — central",
+        twh: ppaSum("delivered2025TWh"),
+        vintage2025: true,
+        note: "central CY2025 estimates (Google 2025 clean-energy report published but lacks US/NA wind-solar-only delivered split; Microsoft/Meta CY2025 indexes pending); vintage-aligned to the 2025 modeled footprint"
+      },
+      contracted: {
+        label: "Contracted full-build",
+        twh: null, // computed from GW x CF
+        note: "all signed capacity at expected generation, incl. projects not yet built"
+      },
+      customTWh: { label: "Custom TWh", twh: null, note: "user-set delivered energy" }
+    };
     const LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH = 0.47;
     const DEFAULT_DISPLACED_THERMAL_LKWH = LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH * INPUT.litersPerGallon;
-    const DEFAULT_TRACKED_SIGNED_PPA_GW =
-      GOOGLE_US_RENEWABLE_PPA_GW +
-      AMAZON_US_RENEWABLE_PPA_GW +
-      META_US_RENEWABLE_PPA_GW +
-      MICROSOFT_US_RENEWABLE_PPA_GW;
+    const DEFAULT_TRACKED_SIGNED_PPA_GW = ppaSum("contractedGW");
+    const GOOGLE_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW =
+      PPA_COMPANY_DATA.google.contractedGW * GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_GW / GOOGLE_BNEF_2025_US_OFFSITE_ZERO_WATER_GW;
+    const GOOGLE_DEFAULT_WIND_SPLIT_ESTIMATE_GW =
+      PPA_COMPANY_DATA.google.contractedGW * GOOGLE_BNEF_2025_US_OFFSITE_WIND_GW / GOOGLE_BNEF_2025_US_OFFSITE_ZERO_WATER_GW;
+    const MICROSOFT_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW =
+      PPA_COMPANY_DATA.microsoft.contractedGW * MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_GW / MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_GW;
+    const MICROSOFT_DEFAULT_WIND_SPLIT_ESTIMATE_GW =
+      PPA_COMPANY_DATA.microsoft.contractedGW * MICROSOFT_BNEF_2025_US_OFFSITE_WIND_GW / MICROSOFT_BNEF_2025_US_OFFSITE_TOTAL_GW;
+    const PPA_EXACT_SPLIT_SOLAR_GW = AMAZON_CONTRACTED_SOLAR_GW + META_CONTRACTED_SOLAR_GW;
+    const PPA_EXACT_SPLIT_WIND_GW = AMAZON_CONTRACTED_WIND_GW + META_CONTRACTED_WIND_GW;
+    const PPA_INFERRED_SPLIT_SOLAR_GW = GOOGLE_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW + MICROSOFT_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW;
+    const PPA_INFERRED_SPLIT_WIND_GW = GOOGLE_DEFAULT_WIND_SPLIT_ESTIMATE_GW + MICROSOFT_DEFAULT_WIND_SPLIT_ESTIMATE_GW;
+    const PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW = PPA_EXACT_SPLIT_SOLAR_GW + PPA_INFERRED_SPLIT_SOLAR_GW;
+    const PPA_DEFAULT_WIND_SPLIT_ESTIMATE_GW = PPA_EXACT_SPLIT_WIND_GW + PPA_INFERRED_SPLIT_WIND_GW;
+    const PPA_DEFAULT_SPLIT_ESTIMATE_TOTAL_GW = PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW + PPA_DEFAULT_WIND_SPLIT_ESTIMATE_GW;
+    const PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_PCT =
+      PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW / PPA_DEFAULT_SPLIT_ESTIMATE_TOTAL_GW * 100;
+    const PPA_DEFAULT_WIND_SPLIT_ESTIMATE_PCT =
+      PPA_DEFAULT_WIND_SPLIT_ESTIMATE_GW / PPA_DEFAULT_SPLIT_ESTIMATE_TOTAL_GW * 100;
 
     const litersPerAF = INPUT.litersPerGallon * INPUT.gallonsPerAF;
     const afPerMgal = 1000000 / INPUT.gallonsPerAF;
@@ -1610,16 +2405,7 @@
         annualBgal: 56,
         sourceLabel: "7.5M pools (CAPE Analytics satellite) × 7,500 gal/yr size- & climate-weighted evap (EPA WaterSense)",
         sourceUrl: "https://www.epa.gov/watersense/swimming-pools-and-spas"
-      },
-      {
-        id: "rfs_ethanol",
-        label: "RFS ethanol mandate (marginal blue water, Ogallala-concentrated)",
-        annualBgal: 192,
-        isPolicy: true,
-        sourceLabel: "Teter et al. (2018) Table 2: +729B L/yr net irrigation, Mandate vs. no-biofuels (PLoS ONE 13(9): e0204298)",
-        sourceUrl: "https://doi.org/10.1371/journal.pone.0204298",
-        rfsMode: "marginal"
-      },
+      }
     ];
     const RFS_MODES = {
       marginal: {
@@ -1647,11 +2433,6 @@
     function updateRfsMode(mode) {
       currentRfsMode = mode;
       const cfg = RFS_MODES[mode];
-      const rfs = industryAnnualBgal.find(i => i.id === "rfs_ethanol");
-      rfs.annualBgal = cfg.annualBgal;
-      rfs.label = cfg.label;
-      rfs.sourceLabel = cfg.sourceLabel;
-      rfs.rfsMode = mode;
       document.querySelectorAll(".rfs-mode-btn").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.mode === mode);
       });
@@ -1664,6 +2445,7 @@
       { id: "other_hay", label: "Other hay/grass", bgalDay: 9.0 },
       { id: "orchards", label: "Orchards (almonds, etc.)", bgalDay: 7.9 },
       { id: "cotton", label: "Cotton irrigation", bgalDay: 8.7 },
+      { id: "food_waste", label: "US food waste (blue water embedded in wasted food)", bgalDay: 4200 / 365 },
       { id: "alfalfa_china", label: "Alfalfa exported to China (embedded water)", bgalDay: 0.40 },
       { id: "all_irrigation", label: "All US irrigation (aggregate)", bgalDay: 26700 / 365 }
     ];
@@ -1757,49 +2539,6 @@
       ].some((token) => text.includes(token));
     }
 
-    function updateTraceabilityStatus(state) {
-      const statusEl = document.getElementById("traceabilityStatus");
-      if (!statusEl) return;
-
-      const assumptionRows = state ? buildAssumptionRows(state).slice(1) : [];
-      const assumptionMissingSource = assumptionRows.filter((row) => !normalizeText(row[4]));
-
-      const sourceRows = Array.from(document.querySelectorAll("#sourceMappingTable tbody tr"));
-      const sourceRowsMissingTrace = sourceRows.filter((tr) => !hasTraceableSourceCell(tr.cells[3]));
-
-      const evidenceRows = Array.from(document.querySelectorAll("#evidenceTable tbody tr"));
-      const evidenceRowsMissingLinks = evidenceRows.filter((tr) => !tr.querySelector("a[href]"));
-
-      const uniqueLinks = new Set(
-        Array.from(document.querySelectorAll("#sourceMappingTable a[href], #evidenceTable a[href]"))
-          .map((a) => (a.href || "").trim())
-          .filter(Boolean)
-      ).size;
-
-      const issueCount =
-        assumptionMissingSource.length +
-        sourceRowsMissingTrace.length +
-        evidenceRowsMissingLinks.length;
-
-      const summary =
-        `Assumptions ${assumptionRows.length}; source rows ${sourceRows.length}; ` +
-        `evidence rows ${evidenceRows.length}; unique links ${uniqueLinks}.`;
-
-      if (issueCount > 0) {
-        const detail = [
-          assumptionMissingSource.length ? `${assumptionMissingSource.length} assumption rows missing source labels` : null,
-          sourceRowsMissingTrace.length ? `${sourceRowsMissingTrace.length} source-mapping rows without traceable source cells` : null,
-          evidenceRowsMissingLinks.length ? `${evidenceRowsMissingLinks.length} evidence rows without links` : null
-        ].filter(Boolean).join("; ");
-        statusEl.className = "trace-status warn";
-        statusEl.textContent = `Traceability warning: ${summary} Issues: ${detail}.`;
-        return;
-      }
-
-      statusEl.className = "trace-status good";
-      statusEl.textContent = `Traceability check passed: ${summary}`;
-    }
-
     function annualBgalToMgd(annualBgal) {
       return (annualBgal * 1000) / 365;
     }
@@ -1823,12 +2562,14 @@
     function getAgricultureRows(buildoutTotalAFYear) {
       return agricultureBgalDay.map((item) => {
         const cropAFYear = bgalDayToAFYear(item.bgalDay);
+        const relDC = buildoutTotalAFYear > 0 ? cropAFYear / buildoutTotalAFYear : 0;
         return {
           ...item,
           cropAFYear,
-          dcSharePct: sharePct(buildoutTotalAFYear, cropAFYear)
+          dcSharePct: sharePct(buildoutTotalAFYear, cropAFYear),
+          relDC
         };
-      }).sort((a, b) => b.dcSharePct - a.dcSharePct);
+      }).sort((a, b) => b.cropAFYear - a.cropAFYear);
     }
 
     function renderIndustryChart(buildoutDirectAFYear, buildoutTotalAFYear) {
@@ -1888,20 +2629,157 @@
       document.getElementById("industryChart").innerHTML = rowHtml;
     }
 
+    function renderRfsEthanolChart(buildoutDirectAFYear, buildoutTotalAFYear) {
+      const dcIndirectAFYear = Math.max(buildoutTotalAFYear - buildoutDirectAFYear, 0);
+      const cfg = RFS_MODES[currentRfsMode];
+      const rfsAFYear = annualBgalToAFYear(cfg.annualBgal);
+      const rows = [
+        {
+          id: "data_centers_modeled",
+          label: "Data centers (US, 2025 modeled; current settings)",
+          directAFYear: buildoutDirectAFYear,
+          indirectAFYear: dcIndirectAFYear,
+          totalAFYear: buildoutTotalAFYear,
+          sourceLabel: "This worksheet (LBNL baseline + IEA/CBRE buildout)",
+          sourceUrl: "https://escholarship.org/uc/item/32d6m0d1"
+        },
+        {
+          id: "rfs_ethanol",
+          label: cfg.label,
+          directAFYear: 0,
+          indirectAFYear: 0,
+          totalAFYear: rfsAFYear,
+          isPolicy: true,
+          sourceLabel: cfg.sourceLabel,
+          sourceUrl: "https://doi.org/10.1371/journal.pone.0204298"
+        }
+      ];
+
+      const maxAFYear = Math.max(...rows.map((r) => r.totalAFYear), 1);
+      const scale = (v) => (v / maxAFYear) * 100;
+
+      const rowHtml = rows.map((row) => {
+        const total = row.totalAFYear;
+        const totalWidth = clamp(scale(total), 0, 100);
+        const directWidth = total > 0 ? totalWidth * (row.directAFYear / total) : 0;
+        const indirectWidth = total > 0 ? totalWidth * (row.indirectAFYear / total) : 0;
+        const rel = buildoutTotalAFYear > 0 ? (total / buildoutTotalAFYear) : 0;
+        const relLabel = row.id === "data_centers_modeled"
+          ? "1.0x"
+          : `${rel >= 10 ? rel.toFixed(0) : rel.toFixed(1)}x`;
+
+        return `<div class="hrow">
+          <div class="hlabel">
+            ${row.label}<span class="src-wrap"><span class="src-icon">i</span><span class="src-tip">${row.sourceLabel} <a href="${row.sourceUrl}" target="_blank" rel="noopener noreferrer">↗&nbsp;source</a></span></span>
+          </div>
+          <div class="cmp-track">
+            ${row.id === "data_centers_modeled"
+              ? `<div class="cmp-fill direct" style="width:${directWidth.toFixed(2)}%"></div>
+                 <div class="cmp-fill indirect" style="width:${indirectWidth.toFixed(2)}%"></div>`
+              : `<div class="cmp-fill policy" style="width:${totalWidth.toFixed(2)}%"></div>`}
+          </div>
+          <div class="num">${fmtKaf(total, 1)}</div>
+          <div class="num">${relLabel}</div>
+        </div>`;
+      }).join("");
+
+      document.getElementById("rfsEthanolChart").innerHTML = rowHtml;
+    }
+
     function renderAgricultureChart(buildoutTotalAFYear) {
       const rows = getAgricultureRows(buildoutTotalAFYear);
-      const rowHtml = rows.map((row) => {
-        const widthPct = clamp(row.dcSharePct, 0, 100);
+      const allRows = [
+        {
+          id: "data_centers_modeled",
+          label: "Data centers (US, 2025 modeled; current settings)",
+          cropAFYear: buildoutTotalAFYear,
+          relDC: 1,
+          isDC: true
+        },
+        ...rows
+      ];
+      const maxAFYear = Math.max(...allRows.map((r) => r.cropAFYear), 1);
+      const scale = (v) => (v / maxAFYear) * 100;
+
+      const rowHtml = allRows.map((row) => {
+        const widthPct = clamp(scale(row.cropAFYear), 0, 100);
+        const fillClass = row.isDC ? "direct" : "ag";
+        const relLabel = row.isDC
+          ? "1.0x"
+          : `${row.relDC >= 10 ? row.relDC.toFixed(0) : row.relDC.toFixed(1)}x`;
         return `<div class="hrow">
           <div class="hlabel">${row.label}</div>
           <div class="cmp-track">
-            <div class="cmp-fill ag" style="width:${widthPct.toFixed(2)}%"></div>
+            <div class="cmp-fill ${fillClass}" style="width:${widthPct.toFixed(2)}%"></div>
           </div>
-          <div class="num">${row.dcSharePct.toFixed(2)}%</div>
           <div class="num">${fmtKaf(row.cropAFYear, 1)}</div>
+          <div class="num">${relLabel}</div>
         </div>`;
       }).join("");
       document.getElementById("agChart").innerHTML = rowHtml;
+
+      renderAgricultureScaleBoxes(allRows);
+    }
+
+    function renderAgricultureScaleBoxes(rows) {
+      const container = document.getElementById("agScaleBoxes");
+      if (!container) return;
+
+      // "One square = all US data centers." Each crop is a field of N such
+      // squares (N = its multiple of DC water). A hero spotlights the biggest
+      // crop as a 1-in-N field; waffle small multiples show every crop.
+      // Skip the DC self-row and the all-US-irrigation aggregate (1,000+×).
+      const comparisons = rows
+        .filter((r) => !r.isDC && r.id !== "all_irrigation" && r.relDC > 0)
+        .sort((a, b) => b.relDC - a.relDC);
+
+      if (!comparisons.length) { container.innerHTML = ""; return; }
+
+      const cleanLabel = (label) =>
+        label.replace(/\s*\([^)]*\)\s*$/, "").trim(); // strip trailing parenthetical
+      const fmtMult = (v) =>
+        v >= 10 ? Math.round(v).toLocaleString() : v.toFixed(1);
+
+      // --- Hero: the single biggest crop, drawn as a 1-in-N field ---
+      const top = comparisons[0];
+      const topN = Math.max(1, Math.round(top.relDC));
+      const topLabel = cleanLabel(top.label);
+      const heroCols = Math.ceil(Math.sqrt(topN));
+      const heroRows = Math.ceil(topN / heroCols);
+      let heroCells = "";
+      for (let i = 0; i < heroCols * heroRows; i += 1) {
+        const klass = i === 0 ? "ag-hero-cell dc" : "ag-hero-cell";
+        const hidden = i >= topN ? ' style="visibility:hidden"' : "";
+        heroCells += `<div class="${klass}"${hidden}></div>`;
+      }
+      const heroHtml = `<div class="ag-hero">
+          <div class="ag-hero-fig">
+            <div class="ag-hero-grid" style="grid-template-columns:repeat(${heroCols},1fr);grid-template-rows:repeat(${heroRows},1fr)" title="${topLabel}: ${fmtMult(top.relDC)}× all US data centers" aria-hidden="true">${heroCells}</div>
+          </div>
+          <div class="ag-hero-txt">
+            <span class="big">1 in ${fmtMult(top.relDC)}</span>
+            <p>Every <span class="dcword">data center in America</span>&mdash;combined&mdash;uses the blue water in <strong>one</strong> of these squares. <span class="cropword">${topLabel}</span> alone uses all ${fmtMult(top.relDC)}.</p>
+          </div>
+        </div>`;
+
+      // --- Waffle small multiples: one field per crop ---
+      const wafflesHtml = comparisons.map((row) => {
+        const n = Math.max(1, Math.round(row.relDC));
+        const cols = Math.ceil(Math.sqrt(n));
+        const label = cleanLabel(row.label);
+        let cells = "";
+        for (let i = 0; i < n; i += 1) {
+          cells += `<div class="ag-wf-cell${i === 0 ? " dc" : ""}"></div>`;
+        }
+        const width = (cols * 7.5).toFixed(1); // 6px cell + 1.5px gap
+        return `<div class="ag-wf">
+            <div class="ag-wf-head"><span class="ag-wf-name">${label}</span><span class="ag-wf-mult">${fmtMult(row.relDC)}×</span></div>
+            <div class="ag-wf-cells" style="width:${width}px" title="${label}: ${fmtKaf(row.cropAFYear, 1)} kAF/year" aria-hidden="true">${cells}</div>
+            <div class="ag-wf-foot">${n.toLocaleString()} squares &middot; 1 blue = data centers</div>
+          </div>`;
+      }).join("");
+
+      container.innerHTML = heroHtml + `<div class="ag-waffle-grid">${wafflesHtml}</div>`;
     }
 
     const USGS_IRR_AF = 87819163.7;
@@ -1913,6 +2791,76 @@
     // USGS: CONUS receives ~4 mi³ precipitation/day; 1 mi³ = 3,379,200 AF
     const US_ANNUAL_PRECIP_AF = 4 * 3379200 * 365;
 
+    // Telescoping scale funnel: each panel shows a "parent" water volume with its
+    // immediate "child" nested true-to-area; the child of one panel is the parent
+    // of the next, so the boxes chain rainfall -> withdrawals -> consumption -> DC.
+    let cascadeBuilt = false;
+    function renderWaterCascade(dcAFYear) {
+      const grid = document.getElementById("cascadeGrid");
+      if (!grid) return;
+      const RAINFALL = US_ANNUAL_PRECIP_AF;
+      const WITHDRAWALS = USGS_WITHDRAWAL_AF_YEAR;
+      const CONSUMPTION = USGS_IRR_AF + USGS_PUB_AF + USGS_THM_AF;
+
+      // Fixed field = total US rainfall. The unit is chosen so one square is
+      // ~the annual water of all US data centers at baseline settings (~316 kAF).
+      const TOTAL_CELLS = 15600;
+      const cellUnit = RAINFALL / TOTAL_CELLS;
+
+      const withCells = Math.min(Math.round(WITHDRAWALS / cellUnit), TOTAL_CELLS);
+      const consCells = Math.min(Math.round(CONSUMPTION / cellUnit), withCells);
+      const dcCells = Math.min(Math.max(dcAFYear > 0 ? Math.round(dcAFYear / cellUnit) : 0, 1), consCells);
+
+      // Build the static field once (heavy DOM); recolour only the corner on toggles/resize.
+      if (!cascadeBuilt) {
+        const cells = new Array(TOTAL_CELLS);
+        for (let i = 0; i < TOTAL_CELLS; i++) cells[i] = '<div class="casc-cell rain"></div>';
+        grid.innerHTML = cells.join("");
+        cascadeBuilt = true;
+      }
+      const nodes = grid.children;
+      const recolorTo = Math.min(withCells, nodes.length);
+      for (let i = 0; i < recolorTo; i++) {
+        let cls;
+        if (i < dcCells) cls = "casc-cell dc";
+        else if (i < consCells) cls = "casc-cell consume";
+        else cls = "casc-cell withdraw";
+        nodes[i].className = cls;
+      }
+
+      const compactKaf = (af) => {
+        const k = af / 1000;
+        if (k >= 1e6) return (k / 1e6).toFixed(2).replace(/\.?0+$/, "") + "M kAF/yr";
+        return Math.round(k).toLocaleString() + " kAF/yr";
+      };
+      const sq = (n) => n.toLocaleString() + (n === 1 ? " square" : " squares");
+      const legItem = (swCls, nm, count, af) =>
+        '<span class="casc-leg"><span class="casc-leg-sw ' + swCls + '"></span>' +
+        '<span class="casc-leg-nm">' + nm + '</span>' +
+        '<span class="casc-leg-meta">' + sq(count) + ' · ' + compactKaf(af) + '</span></span>';
+
+      document.getElementById("cascadeLegend").innerHTML =
+        legItem("sw-rain", "CONUS rainfall", TOTAL_CELLS, RAINFALL) +
+        legItem("sw-withdraw", "Water withdrawn", withCells, WITHDRAWALS) +
+        legItem("sw-consume", "Water consumed", consCells, CONSUMPTION) +
+        legItem("sw-dc", "Data centers", dcCells, dcAFYear);
+
+      const rainFrac = dcAFYear > 0 ? Math.round(RAINFALL / dcAFYear) : 0;
+      document.getElementById("cascadeHero").innerHTML =
+        "Every US data center combined is about <b>" + sq(dcCells) +
+        "</b> in this grid of <b>" + TOTAL_CELLS.toLocaleString() +
+        "</b> &mdash; and the whole grid is only the rain that falls on the Lower 48.";
+      document.getElementById("cascadeSub").textContent =
+        "Count down the scale: all " + TOTAL_CELLS.toLocaleString() + " squares are US rainfall; " +
+        sq(withCells) + " are everything the US withdraws; " + sq(consCells) +
+        " are everything it actually consumes; and data centers are the ringed square in the top-left corner.";
+      document.getElementById("cascadeKey").innerHTML =
+        "<b>1 square ≈ " + Math.round(cellUnit / 1000).toLocaleString() +
+        " kAF/yr</b> — about the water all US data centers consume in a year (~" +
+        compactKaf(dcAFYear) + "). Data centers are roughly <b>1 part in " + rainFrac.toLocaleString() +
+        "</b> of total US rainfall.";
+    }
+
     function buildAssumptionRows(state) {
       return [
         ["assumption", "value", "units", "how_used", "source"],
@@ -1920,22 +2868,62 @@
         ["lbnl_indirect_liters_per_year", INPUT.lbnlIndirectLitersPerYear, "L/year", "2023 off-site numerator (include hydro)", "LBNL"],
         ["no_hydro_sensitivity_total_af_year", INPUT.noHydroSensitivityTotalMgd * afPerMgal * daysPerYear, "AF/year", "no-hydro boundary (LBNL thermoelectric upper bound)", "derived: 176 TWh x 0.47 gal/kWh (LBNL pp. 55–57) + 66B L/yr direct"],
         ["usgs_denominator_af_year", usgsAFYear, "AF/year", "national denominator", "USGS PP1894-D"],
-        ["google_us_strict_renewable_ppa_gw", GOOGLE_US_RENEWABLE_PPA_GW, "GW", "strict US renewable PPA component", "Google curated US renewable deal extraction (conservative set)"],
-        ["amazon_us_strict_renewable_ppa_floor_gw", AMAZON_US_RENEWABLE_PPA_GW, "GW", "strict US renewable PPA floor (off-site wind/solar)", "Amazon 2024 report table + on-site subtraction"],
-        ["meta_us_strict_renewable_contract_gw", META_US_RENEWABLE_PPA_GW, "GW", "strict US renewable contract-backed wind/solar component", "Meta 2024 report US study reference"],
-        ["microsoft_us_strict_renewable_ppa_gw", MICROSOFT_US_RENEWABLE_PPA_GW, "GW", "strict component included in default using proxy factor", "90% proxy of Microsoft US map-derived contracted renewable total"],
-        ["microsoft_us_renewable_ppa_proxy_factor_pct", MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR * 100, "%", "applied to Microsoft US map-derived contracted total", "model assumption based on Microsoft statement that >90% is under PPAs or similar long-term contracts"],
-        ["microsoft_us_map_contracted_gw_context", MICROSOFT_US_CONTRACTED_GW_CONTEXT, "GW", "reference input for Microsoft proxy component", "Microsoft 2026 blog map-derived US ISO/RTO sum"],
-        ["microsoft_us_map_active_gw_context", MICROSOFT_US_ACTIVE_GW_CONTEXT, "GW", "context only", "Microsoft 2026 blog map-derived US ISO/RTO sum"],
-        ["default_tracked_signed_ppa_gw", DEFAULT_TRACKED_SIGNED_PPA_GW, "GW", "default value used for PPA toggle calculations", "calculated = Google strict + Amazon strict + Meta strict + Microsoft proxy-adjusted strict"],
-        ["signed_ppa_capacity_gw", state.assumptions.ppaCapacityGW, "GW", "current signed capacity input for PPA toggle (user-editable)", "default is strict US renewables PPA-focused baseline including Microsoft proxy"],
-        ["ppa_capacity_factor_pct", state.assumptions.ppaCapacityFactorPct, "%", "GW to TWh conversion", "model assumption"],
-        ["thermal_displacement_scope_pct", 100, "%", "thermal displacement scope applied in PPA reduction path", "model assumption"],
+        ["ppa_credit_basis", state.assumptions.ppaBasis, "scenario", "selects how procurement credit energy is derived (delivered TWh vs contracted GW x CF)", "user-selected; per-company audit trail in ppa_big4_us_dataset.csv (June 2026)"],
+        ["ppa_traceability_surfaces", "on-page ledger | Source Mapping | Evidence Snippets | downloadable CSV | export trace", "audit surfaces", "requires every PPA component to have a visible source, extraction method, exclusion rule, confidence label, and known limitation", "traceability hardening pass 2026-07-01"],
+        ["ppa_default_confidence_label", "medium-high", "label", "confidence label for strict lower-bound contracted full-build zero-water capacity", "Amazon and Meta are project/map derived; Microsoft has an official regional map with one identified hydro subtraction; Google remains a conservative floor because no public regional wind/solar table exists"],
+        ["ppa_default_known_limitations", "Google no public US/NA wind-solar table; Meta five blank-capacity records; Microsoft regional map may hide additional hydro; Amazon CSV/COD fields can change", "text", "known failure modes for the PPA default and sensitivity range", "same caveats shown in the on-page PPA traceability ledger"],
+        ["ppa_split_diagnostic_scope", "exact for Amazon/Meta; chart-derived for Google/Microsoft", "scope", "solar/wind split is a diagnostic for capacity-factor sanity checks, not a change to default capacity", "2026-07-03 split pass; Amazon CSV + Meta map + BNEF/BCSE page 44 chart digitization"],
+        ["google_na_zero_water_floor_gw", PPA_COMPANY_DATA.google.contractedGW, "GW", "Google North America zero-water contracted-capacity floor; used in contracted full-build scenario", "Google 2026 Environmental Report reports >29 GW North America clean-energy through 2025, but no wind/solar-only split; default keeps conservative zero-water floor pending resource breakout"],
+        ["google_na_zero_water_aggregate_adjusted_low_gw", GOOGLE_AGGREGATE_ZERO_WATER_LOW_GW, "GW", "Google aggregate-adjusted zero-water lower cross-check; not used in default", "29+ GW North America aggregate + 2.17 GW 2026 solar/wind PPAs - up to 4.415 GW known non-zero-water CFE; still excludes from default because Google aggregate includes storage/EAC/resource ambiguity"],
+        ["google_na_zero_water_aggregate_adjusted_high_gw", GOOGLE_AGGREGATE_ZERO_WATER_HIGH_GW, "GW", "Google aggregate-adjusted zero-water upper cross-check; not used in default", "29+ GW North America aggregate + 2.17 GW 2026 solar/wind PPAs - 2.085 GW known signed non-zero-water CFE; approximate because the 29+ GW source is rounded and not resource-specific"],
+        ["google_bnef_2025_us_offsite_ppa_total_gw", GOOGLE_BNEF_2025_US_OFFSITE_TOTAL_GW, "GW", "BNEF/BCSE 2026 Factbook Google US offsite corporate PPAs in 2025; corroborating chart/source, not additive to cumulative default", "Factbook page 44: Google 4,181 MW; charts show offsite corporate PPAs only"],
+        ["google_bnef_2025_us_offsite_solar_chart_gw", GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_GW, "GW", "chart-digitized Google 2025 US offsite solar component; diagnostic only", "Pixel extraction from BNEF/BCSE stacked bar: solar 106 px over 212 px total bar x 4.181 GW = 2.091 GW"],
+        ["google_bnef_2025_us_offsite_wind_chart_gw", GOOGLE_BNEF_2025_US_OFFSITE_WIND_GW, "GW", "chart-digitized Google 2025 US offsite wind component; diagnostic only", "Pixel extraction from BNEF/BCSE stacked bar: wind 29 px over 212 px total bar x 4.181 GW = 0.572 GW"],
+        ["google_bnef_2025_us_offsite_zero_water_chart_gw", GOOGLE_BNEF_2025_US_OFFSITE_ZERO_WATER_GW, "GW", "chart-digitized Google 2025 US offsite solar/wind component", "Pixel extraction from BNEF/BCSE stacked bar: solar 106 px + wind 29 px over 212 px total bar x 4.181 GW = ~2.66 GW; hydro+nuclear ~1.52 GW"],
+        ["google_us_delivered_2023_twh", PPA_COMPANY_DATA.google.delivered2023TWh, "TWh/yr", "Google US wind/solar delivered CY2023 (central); used in delivered scenarios", "Google 2024 Environmental Report data table: NA renewable allocated 11.875 TWh, trimmed to US; ~0% unbundled RECs (Bloomberg 2024)"],
+        ["google_default_solar_split_estimate_gw", GOOGLE_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW, "GW", "estimated solar portion of Google's 16.700 GW default floor; diagnostic only", "Apply Google BNEF/BCSE 2025 US offsite zero-water chart ratio (2.091 solar / 0.572 wind) to the 16.700 GW floor"],
+        ["google_default_wind_split_estimate_gw", GOOGLE_DEFAULT_WIND_SPLIT_ESTIMATE_GW, "GW", "estimated wind portion of Google's 16.700 GW default floor; diagnostic only", "Apply Google BNEF/BCSE 2025 US offsite zero-water chart ratio (2.091 solar / 0.572 wind) to the 16.700 GW floor"],
+        ["amazon_us_contracted_gw", PPA_COMPANY_DATA.amazon.contractedGW, "GW", "Amazon current US named wind/solar capacity; contracted scenario", "Amazon live 2026 carbon-free energy project CSV: United States named wind 4,378.42 MW + named solar 18,112.41 MW = 22,490.83 MW; excludes 3,120 MW nuclear and 21.33 MW unlabeled/Whole Foods records"],
+        ["amazon_us_contracted_solar_gw", AMAZON_CONTRACTED_SOLAR_GW, "GW", "Amazon source-derived solar portion of contracted full-build zero-water capacity", "Amazon live 2026 carbon-free energy project CSV; Country = United States; named solar rows"],
+        ["amazon_us_contracted_wind_gw", AMAZON_CONTRACTED_WIND_GW, "GW", "Amazon source-derived wind portion of contracted full-build zero-water capacity", "Amazon live 2026 carbon-free energy project CSV; Country = United States; named wind rows"],
+        ["amazon_us_operating_gw_end2024", PPA_COMPANY_DATA.amazon.operatingGW, "GW", "Amazon US named wind/solar capacity online end-2024 (COD reconstruction from live CSV)", "Amazon carbon-free energy project CSV; strict named wind/solar operating end-2023 was 6.226 GW"],
+        ["amazon_us_delivered_2023_twh", PPA_COMPANY_DATA.amazon.delivered2023TWh, "TWh/yr", "Amazon US PPA fleet generation CY2023 (central); delivered scenarios", "derived: CSV capacity by COD cohort x EIA capacity factors; Amazon does not disclose consumption; 52% unbundled RECs in 2022 (Bloomberg)"],
+        ["meta_us_contracted_gw", PPA_COMPANY_DATA.meta.contractedGW, "GW", "Meta current US numeric wind/solar map total; contracted scenario", "Meta live energy-page marker array: 134 US wind/solar records; 129 numeric records total 19,558 MW; five blank-capacity records excluded"],
+        ["meta_us_contracted_solar_gw", META_CONTRACTED_SOLAR_GW, "GW", "Meta source-derived solar portion of contracted full-build zero-water capacity", "Meta live energy-page marker array: US solar numeric records total 16,747 MW; four blank solar records excluded"],
+        ["meta_us_contracted_wind_gw", META_CONTRACTED_WIND_GW, "GW", "Meta source-derived wind portion of contracted full-build zero-water capacity", "Meta live energy-page marker array: US wind numeric records total 2,811 MW; one blank wind record excluded"],
+        ["meta_us_delivered_2023_twh", PPA_COMPANY_DATA.meta.delivered2023TWh, "TWh/yr", "Meta US PPA-weighted matched load CY2023 (central); delivered scenarios", "Meta 2025 Environmental Data Index: 15.33 TWh global minus non-US owned DCs = 13.5 TWh US matched x ~82% bundled-PPA share (18% unbundled RECs, Bloomberg 2022)"],
+        ["microsoft_us_renewable_map_gw", MICROSOFT_US_RENEWABLE_MAP_GW, "GW", "Microsoft official US contracted renewable map sum before hydro exclusion", "Microsoft official procurement map Dec 31, 2025: PJM 8,089 + MISO 7,897 + ERCOT 4,696 + WECC 3,431 + SERC 1,054 + CAISO 907 + SPP 178 MW = 26.252 GW"],
+        ["microsoft_identified_hydro_exclusion_gw", MICROSOFT_IDENTIFIED_HYDRO_GW, "GW", "identified Microsoft US hydropower subtraction from zero-water default", "Hawk's Nest hydropower identified in Microsoft/Brookfield project materials; LIHI lists 102 MW project capacity; subtract full capacity as conservative upper-bound hydro exclusion"],
+        ["microsoft_us_contracted_zero_water_gw", PPA_COMPANY_DATA.microsoft.contractedGW, "GW", "Microsoft US contracted zero-water adjusted capacity; contracted scenario", "26.252 GW official renewable map - 0.102 GW identified Hawk's Nest hydropower = 26.150 GW"],
+        ["microsoft_bnef_2025_us_offsite_solar_chart_gw", MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_GW, "GW", "chart-digitized Microsoft 2025 US offsite solar component; diagnostic only", "Pixel/area extraction from BNEF/BCSE page 44 chart: solar 2,470 area units over 3,344 solar+wind units x 1.244 GW = 0.919 GW"],
+        ["microsoft_bnef_2025_us_offsite_wind_chart_gw", MICROSOFT_BNEF_2025_US_OFFSITE_WIND_GW, "GW", "chart-digitized Microsoft 2025 US offsite wind component; diagnostic only", "Pixel/area extraction from BNEF/BCSE page 44 chart: wind 874 area units over 3,344 solar+wind units x 1.244 GW = 0.325 GW"],
+        ["microsoft_default_solar_split_estimate_gw", MICROSOFT_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW, "GW", "estimated solar portion of Microsoft's 26.150 GW zero-water adjusted map total; diagnostic only", "Apply Microsoft BNEF/BCSE 2025 US offsite chart split (0.919 solar / 0.325 wind) to the 26.150 GW default"],
+        ["microsoft_default_wind_split_estimate_gw", MICROSOFT_DEFAULT_WIND_SPLIT_ESTIMATE_GW, "GW", "estimated wind portion of Microsoft's 26.150 GW zero-water adjusted map total; diagnostic only", "Apply Microsoft BNEF/BCSE 2025 US offsite chart split (0.919 solar / 0.325 wind) to the 26.150 GW default"],
+        ["microsoft_us_active_gw", PPA_COMPANY_DATA.microsoft.operatingGW, "GW", "Microsoft US operating renewable", "same map, active values"],
+        ["microsoft_us_delivered_2023_twh", PPA_COMPANY_DATA.microsoft.delivered2023TWh, "TWh/yr", "Microsoft US PPA-delivered CY2023 (central); delivered scenarios", "Deloitte-reviewed FY23/FY24 fact sheets: NA matched 13.8-16.6 TWh x US share x direct-PPA share 59-78%; EPA GPP corroborates 13.38 TWh US (incl. RECs)"],
+        ["big4_delivered_2023_conservative_twh", PPA_SCENARIOS.delivered2023_conservative.twh, "TWh/yr", "conservative delivered scenario total", "sum of per-company low estimates"],
+        ["big4_delivered_2023_central_twh", PPA_SCENARIOS.delivered2023_central.twh, "TWh/yr", "central delivered scenario total (default)", "sum of per-company central estimates; 24-31% of LBNL 176 TWh 2023 US DC load"],
+        ["big4_delivered_2025_conservative_twh", PPA_SCENARIOS.delivered2025_conservative.twh, "TWh/yr", "conservative CY2025 delivered scenario total (vintage-aligned to 2025 footprint)", "per-company floors: Amazon 28.9 (operating fleet, no 2025-COD credit, low EIA CFs), Google 18.4 (CY2024 verified floor), Meta 13.4 (zero-growth assured load x 0.82), Microsoft 16.3 (FY24 anchor x 1.15 x 0.95 US x 0.90 PPA floor)"],
+        ["big4_delivered_2025_central_twh", PPA_SCENARIOS.delivered2025_central.twh, "TWh/yr", "central CY2025 delivered scenario total (vintage-aligned)", "Amazon 33.7 + Google 20.1 + Meta 16.1 + Microsoft 18.6; Google 2025 clean-energy totals are now published but lack a US/NA wind-solar-only delivered split; Microsoft/Meta CY2025 indexes pending"],
+        ["big4_delivered_2024_reference_twh", ppaSum("deliveredRecentTWh"), "TWh/yr", "CY2024/FY24 delivered reference (shown in breakdown table; not a selectable scenario)", "mixed CY/FY vintages"],
+        ["default_contracted_full_build_gw", DEFAULT_TRACKED_SIGNED_PPA_GW, "GW", "contracted full-build scenario capacity (signed incl. unbuilt)", "Google 16.7 (NA zero-water floor) + Amazon 22.491 (live CSV named US wind/solar) + Meta 19.558 (live map numeric US wind/solar) + Microsoft 26.150 (26.252 map - 0.102 identified hydro) — nuclear/hydro excluded"],
+        ["ppa_default_exact_split_solar_gw", PPA_EXACT_SPLIT_SOLAR_GW, "GW", "exact solar subtotal from companies with source-level solar/wind splits", "Amazon exact solar 18.112 + Meta exact solar 16.747"],
+        ["ppa_default_exact_split_wind_gw", PPA_EXACT_SPLIT_WIND_GW, "GW", "exact wind subtotal from companies with source-level solar/wind splits", "Amazon exact wind 4.378 + Meta exact wind 2.811"],
+        ["ppa_default_inferred_split_solar_gw", PPA_INFERRED_SPLIT_SOLAR_GW, "GW", "chart-inferred solar subtotal for Google and Microsoft; diagnostic only", "Google default split estimate 13.113 + Microsoft default split estimate 19.315"],
+        ["ppa_default_inferred_split_wind_gw", PPA_INFERRED_SPLIT_WIND_GW, "GW", "chart-inferred wind subtotal for Google and Microsoft; diagnostic only", "Google default split estimate 3.587 + Microsoft default split estimate 6.835"],
+        ["ppa_default_solar_split_estimate_gw", PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW, "GW", "mixed exact/inferred solar estimate for full 84.899 GW default; diagnostic only", "Exact Amazon+Meta plus chart-inferred Google+Microsoft"],
+        ["ppa_default_wind_split_estimate_gw", PPA_DEFAULT_WIND_SPLIT_ESTIMATE_GW, "GW", "mixed exact/inferred wind estimate for full 84.899 GW default; diagnostic only", "Exact Amazon+Meta plus chart-inferred Google+Microsoft"],
+        ["ppa_default_solar_split_estimate_pct", PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_PCT, "%", "mixed exact/inferred solar share of full default; diagnostic only", "67.287 GW / 84.899 GW"],
+        ["ppa_default_wind_split_estimate_pct", PPA_DEFAULT_WIND_SPLIT_ESTIMATE_PCT, "%", "mixed exact/inferred wind share of full default; diagnostic only", "17.611 GW / 84.899 GW"],
+        ["big4_aggregate_adjusted_zero_water_range_gw", `${BIG4_AGGREGATE_ZERO_WATER_LOW_GW.toFixed(1)}-${BIG4_AGGREGATE_ZERO_WATER_HIGH_GW.toFixed(1)}`, "GW", "non-default cross-check range using Google aggregate-adjusted zero-water estimate", "Google 26.8-29.1 + Amazon 22.491 + Meta 19.558 + Microsoft 26.150; range excluded from default because Google and Microsoft lack full project-level resource tables"],
+        ["zero_water_procurement_capacity_gw", state.assumptions.ppaCapacityGW, "GW", "current contracted-capacity input (user-editable; used only in contracted scenario)", "default per component rows above"],
+        ["ppa_capacity_factor_pct", state.assumptions.ppaCapacityFactorPct, "%", "GW to TWh conversion (contracted scenario only)", "EIA fleet CFs: utility solar 23-24%, onshore wind 33-34%; ~70% solar portfolio blend ~27%"],
+        ["thermal_displacement_scope_pct", 100, "%", "thermal displacement scope applied in zero-water procurement reduction path", "model assumption"],
         ["lbnl_thermoelectric_consumption_gal_per_kwh", LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH, "gal/kWh", "reference for default displaced thermal intensity", "LBNL 2024 report pp. 55–57"],
         ["default_displaced_thermal_l_per_kwh", DEFAULT_DISPLACED_THERMAL_LKWH, "L/kWh", "default assumed displaced thermal intensity", "converted from LBNL thermoelectric average"],
-        ["assumed_displaced_thermal_l_per_kwh", state.assumptions.displacedThermalLkwh, "L/kWh", "converts PPA TWh to avoided no-hydro thermal water", "user-editable (defaults to LBNL thermoelectric average)"],
-        ["ppa_annual_twh", state.assumptions.ppaAnnualTWh, "TWh/year", "derived clean-energy supply", "calculated"],
-        ["ppa_coverage_pct", state.assumptions.ppaCoveragePct, "%", "share of 2023 load", "calculated"],
+        ["assumed_displaced_thermal_l_per_kwh", state.assumptions.displacedThermalLkwh, "L/kWh", "converts zero-water procurement TWh to avoided no-hydro thermal water", "user-editable (defaults to LBNL thermoelectric average)"],
+        ["zero_water_procurement_annual_twh", state.assumptions.ppaAnnualTWh, "TWh/year", "derived zero-water clean-energy supply", "calculated"],
+        ["zero_water_procurement_coverage_pct", state.assumptions.ppaCoveragePct, "%", "share of 2023 load", "calculated"],
         ["buildout_reference_2024_twh", INPUT.buildoutReference2024TWh, "TWh", "IEA-anchored 2024 activity value", "IEA"],
         ["buildout_2024_vs_2023_factor", buildout2024Factor, "x", "first scale step in default 2025 path", "calculated"],
         ["buildout_2025_vs_2024_factor", buildout2025From2024Factor, "x", "second scale step in default 2025 path", "CBRE"],
@@ -1947,10 +2935,11 @@
         ["industry_benchmark_golf_annual_bgal", 425, "Bgal/year", "industry chart benchmark", "GCSAA Phase IV: 1.63M AF applied (HortTechnology 35(5), 2025) x 80% ET consumptive"],
         ["industry_benchmark_pulp_paper_annual_bgal", Number(PULP_PAPER_CONSERVATIVE_LOW_BGAL.toFixed(1)), "Bgal/year", "industry chart benchmark", "lowest conservative estimate = 1459 x 0.07 x (1-0.085) x ((78.1 x 0.875)/93.7); sources: NCASI TB960 + AF&PA 2025 Sustainability Report + AF&PA 2025 production/capacity release"],
         ["industry_benchmark_swimming_pools_annual_bgal", 56, "Bgal/year", "industry chart benchmark", "Conservative estimate: 7.5M pools (CAPE Analytics satellite detection, lowest independent count) × 7,500 gal/pool/yr (EPA WaterSense 12K-31K range for 500 sq ft pool, climate-weighted to national avg ~11,700, then size-corrected ×0.74 for 41% above-ground pool mix at ~225 sq ft, cover-adjusted ×0.878 for 15% cover use rate). Range: 56-110 Bgal/yr. PHTA industry count (10.4M, unpublished methodology) would give 78-110 Bgal/yr."],
-        ["industry_benchmark_rfs_ethanol_annual_bgal", RFS_MODES[currentRfsMode].annualBgal, "Bgal/year", `industry chart benchmark (mode: ${currentRfsMode})`, RFS_MODES[currentRfsMode].sourceLabel],
+        ["rfs_ethanol_policy_module_annual_bgal", RFS_MODES[currentRfsMode].annualBgal, "Bgal/year", `separate RFS ethanol policy module (mode: ${currentRfsMode})`, RFS_MODES[currentRfsMode].sourceLabel],
         ["ag_benchmark_alfalfa_af_year", bgalDayToAFYear(18.0), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"],
         ["ag_benchmark_other_hay_grass_af_year", bgalDayToAFYear(9.0), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"],
         ["ag_benchmark_cotton_af_year", bgalDayToAFYear(8.7), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"],
+        ["ag_benchmark_orchards_af_year", bgalDayToAFYear(7.9), "AF/year", "ag chart denominator", "Synthesis benchmark (Construction Physics, from USDA/USGS irrigation data); not itemized in the Lamsal & Marston extract used for the other crop rows"],
         ["ag_benchmark_alfalfa_china_export_af_year", bgalDayToAFYear(0.40), "AF/year", "ag chart denominator", "Derived: 44% of export-embedded water (USDA FAS 2025; Lamsal & Marston 2025)"],
         ["ag_benchmark_all_irrigation_af_year", bgalDayToAFYear(26700 / 365), "AF/year", "ag chart denominator", "Lamsal & Marston 2025"]
       ];
@@ -1968,7 +2957,6 @@
       const scaleRainfall = normalizeText(document.getElementById("scaleRainfall").textContent);
       const boundaryNote = normalizeText(document.getElementById("boundaryNote").textContent);
       const methodsSummary = normalizeText(document.getElementById("methodsSummary").textContent);
-      const traceabilityStatus = normalizeText((document.getElementById("traceabilityStatus") || {}).textContent || "");
       const formulaTrace = document.getElementById("formulaBlock").textContent || "";
       const assumptionsCsv = toCsv(buildAssumptionRows(latestState));
       const sourceMappingTsv = tableToTraceTsv(document.getElementById("sourceMappingTable"));
@@ -1998,9 +2986,32 @@
         })
       ].join("\n");
 
+      const rfsCfg = RFS_MODES[currentRfsMode];
+      const rfsAFYear = annualBgalToAFYear(rfsCfg.annualBgal);
+      const rfsLines =
+        `${rfsCfg.label}: ${(rfsAFYear / 1000).toFixed(6)} kAF/year ` +
+        `(${(dcTotalAFYear > 0 ? rfsAFYear / dcTotalAFYear : 0).toFixed(6)}x data-center total); ` +
+        `mode=${currentRfsMode}; source=${rfsCfg.sourceLabel}`;
+
       const agricultureLines = getAgricultureRows(dcTotalAFYear).map((row) => {
         return `${row.label}: crop ${(row.cropAFYear / 1000).toFixed(6)} kAF/year; data-center share ${row.dcSharePct.toFixed(6)}%`;
       }).join("\n");
+
+      const ppaExtractionLines = [
+        `Procurement credit basis (selected): ${latestState.assumptions.ppaBasis} — ${PPA_SCENARIOS[latestState.assumptions.ppaBasis]?.note || "user-set"}.`,
+        `Delivered scenarios (US wind/solar PPA energy): CY2023 conservative ${PPA_SCENARIOS.delivered2023_conservative.twh.toFixed(1)} / central ${PPA_SCENARIOS.delivered2023_central.twh.toFixed(1)} TWh (LBNL footprint year); CY2025 conservative ${PPA_SCENARIOS.delivered2025_conservative.twh.toFixed(1)} / central ${PPA_SCENARIOS.delivered2025_central.twh.toFixed(1)} TWh (estimates pending company CY2025 reports; credits divided by the 2025 buildout factor before the footprint scales, so the headline math is vintage-exact).`,
+        `Strict contracted full-build scenario = ${PPA_COMPANY_DATA.google.contractedGW.toFixed(3)} Google NA zero-water floor + ${PPA_COMPANY_DATA.amazon.contractedGW.toFixed(3)} Amazon live CSV named US wind/solar + ${PPA_COMPANY_DATA.meta.contractedGW.toFixed(3)} Meta live-map numeric US wind/solar + ${PPA_COMPANY_DATA.microsoft.contractedGW.toFixed(3)} Microsoft US zero-water adjusted (26.252 GW official map - 0.102 GW identified Hawk's Nest hydro) = ${DEFAULT_TRACKED_SIGNED_PPA_GW.toFixed(3)} GW signed incl. not-yet-built.`,
+        `Solar/wind split diagnostic for the ${DEFAULT_TRACKED_SIGNED_PPA_GW.toFixed(3)} GW contracted default: exact Amazon+Meta split = ${PPA_EXACT_SPLIT_SOLAR_GW.toFixed(3)} GW solar / ${PPA_EXACT_SPLIT_WIND_GW.toFixed(3)} GW wind; chart-inferred Google+Microsoft split = ${PPA_INFERRED_SPLIT_SOLAR_GW.toFixed(3)} GW solar / ${PPA_INFERRED_SPLIT_WIND_GW.toFixed(3)} GW wind; mixed estimate = ${PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW.toFixed(3)} GW solar / ${PPA_DEFAULT_WIND_SPLIT_ESTIMATE_GW.toFixed(3)} GW wind (${PPA_DEFAULT_SOLAR_SPLIT_ESTIMATE_PCT.toFixed(1)}% / ${PPA_DEFAULT_WIND_SPLIT_ESTIMATE_PCT.toFixed(1)}%). Diagnostic only; it does not change default capacity.`,
+        "Traceability ledger: every PPA component is now traceable across five surfaces - the on-page PPA ledger, Source Mapping rows, Evidence Snippets rows, ppa_big4_us_dataset.csv, and this export trace. Each component has an exact source link, extraction method, zero-water exclusion rule, confidence label, and known failure mode.",
+        "PPA confidence/failure-mode ledger: Google = medium lower-bound confidence, main failure mode is no public US/NA wind-solar project table; Amazon = high contracted-capacity confidence from live CSV, main failure mode is changing CSV/COD fields; Meta = medium-high confidence from live map, main failure mode is blank-capacity records and page schema changes; Microsoft = high map confidence / medium-high zero-water confidence, main failure mode is additional undisclosed hydro inside regional map; default total = medium-high because the strict value uses only named or conservatively adjusted zero-water capacity.",
+        `Non-default aggregate cross-check = Google ${GOOGLE_AGGREGATE_ZERO_WATER_LOW_GW.toFixed(1)}-${GOOGLE_AGGREGATE_ZERO_WATER_HIGH_GW.toFixed(1)} GW (29+ GW NA clean-energy aggregate + 2.17 GW 2026 solar/wind PPAs - known non-zero-water CFE) + Amazon ${PPA_COMPANY_DATA.amazon.contractedGW.toFixed(3)} + Meta ${PPA_COMPANY_DATA.meta.contractedGW.toFixed(3)} + Microsoft ${PPA_COMPANY_DATA.microsoft.contractedGW.toFixed(3)} = ${BIG4_AGGREGATE_ZERO_WATER_LOW_GW.toFixed(1)}-${BIG4_AGGREGATE_ZERO_WATER_HIGH_GW.toFixed(1)} GW. Not used as default because Google aggregate includes storage/EAC/resource ambiguity and Microsoft lacks a complete US project-level resource table.`,
+        `Google delivered: 2024 Environmental Report NA renewable-allocated table 11.875 TWh CY2023 (18.748 TWh CY2024), trimmed to US; ~0% unbundled RECs (Bloomberg 2024); hourly CFE US 68% (2023) / 70% (2024). Google 2026 report/operations page: 29+ GW North America clean-energy through 2025; total GW includes PPAs, storage agreements, and EAC agreements, so it is not directly a zero-water wind/solar capacity table. BNEF/BCSE 2026 Factbook page 44 reports Google 4.181 GW of US offsite corporate PPAs in 2025; digitized stacked-bar split implies ${GOOGLE_BNEF_2025_US_OFFSITE_SOLAR_GW.toFixed(3)} GW solar, ${GOOGLE_BNEF_2025_US_OFFSITE_WIND_GW.toFixed(3)} GW wind, and ${GOOGLE_BNEF_2025_US_OFFSITE_HYDRO_NUCLEAR_GW.toFixed(3)} GW hydro/nuclear. Applying the BNEF zero-water chart ratio to Google's default floor gives ${GOOGLE_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW.toFixed(3)} GW solar / ${GOOGLE_DEFAULT_WIND_SPLIT_ESTIMATE_GW.toFixed(3)} GW wind.`,
+        `Amazon delivered: reconstructed from Amazon's per-project CSV (operational dates x EIA capacity factors): strict named US wind/solar fleet online end-2023 = 6.226 GW -> 11.7-14.9 TWh CY2023. Amazon does not disclose total consumption (denominator of its 100% claim is not public); 52% of 2022 renewable claims were unbundled RECs (Bloomberg). Current contracted full-build input = ${PPA_COMPANY_DATA.amazon.contractedGW.toFixed(3)} GW named US wind/solar from the live 2026 CSV, split exactly into ${AMAZON_CONTRACTED_SOLAR_GW.toFixed(3)} GW solar and ${AMAZON_CONTRACTED_WIND_GW.toFixed(3)} GW wind; date parsing gives 12.129 GW online end-2024, 15.421 GW online end-2025, 16.161 GW online by June 30, 2026; 3.120 GW US nuclear excluded.`,
+        `Meta delivered: 2025 Environmental Data Index assured consumption 15.33 TWh CY2023 global minus non-US owned DCs = 13.50 TWh US matched; x ~82% bundled-PPA share = 11.1 TWh PPA-delivered. Current contracted full-build input = live energy-page map sum, 129 numeric US wind/solar records totaling ${PPA_COMPANY_DATA.meta.contractedGW.toFixed(3)} GW, split exactly into ${META_CONTRACTED_SOLAR_GW.toFixed(3)} GW solar and ${META_CONTRACTED_WIND_GW.toFixed(3)} GW wind; five blank-capacity records excluded.`,
+        `Microsoft delivered: Deloitte-reviewed fact sheets: NA consumed=matched 13.78 TWh FY23 / 16.60 TWh FY24; direct (PPA/long-term) share 59% FY23 -> 78% FY24 -> >90% CY2025; CY2023 PPA-delivered central ~9.5 TWh. Map-derived ${MICROSOFT_US_RENEWABLE_MAP_GW.toFixed(3)} GW contracted / 11.484 GW active verified per-ISO (Dec 31, 2025); zero-water default subtracts ${MICROSOFT_IDENTIFIED_HYDRO_GW.toFixed(3)} GW Hawk's Nest hydropower, leaving ${PPA_COMPANY_DATA.microsoft.contractedGW.toFixed(3)} GW. BNEF/BCSE 2026 Factbook page 44 gives Microsoft 1.244 GW US offsite corporate PPAs in 2025; chart digitization implies ${MICROSOFT_BNEF_2025_US_OFFSITE_SOLAR_GW.toFixed(3)} GW solar / ${MICROSOFT_BNEF_2025_US_OFFSITE_WIND_GW.toFixed(3)} GW wind, which is used only to estimate a ${MICROSOFT_DEFAULT_SOLAR_SPLIT_ESTIMATE_GW.toFixed(3)} GW solar / ${MICROSOFT_DEFAULT_WIND_SPLIT_ESTIMATE_GW.toFixed(3)} GW wind diagnostic split for the map total. Residual caveat: Microsoft map is renewable capacity by region, not a complete US resource-level wind/solar table.`,
+        "Exclusions: nuclear, hydro, geothermal, and fusion procurement where identifiable (Meta ~7.7 GW nuclear; Amazon ~4 GW 2025 nuclear / 3.120 GW listed US nuclear; Google Duane Arnold 600 MW nuclear, Kairos up to 500 MW nuclear, Brookfield hydro 670 MW signed / up to 3,000 MW framework, 115 MW enhanced geothermal, 200 MW fusion; Microsoft Crane 835 MW nuclear and Hawk's Nest 102 MW hydro) — zero-carbon but NOT zero-water.",
+        "Method: credit TWh (from basis) x displaced thermal L/kWh = avoided liters/year; avoided AF/year capped at the no-hydro off-site baseline; coverage vs 2023 load shown uncapped to surface basis inconsistencies. Full audit: ppa_big4_us_dataset.csv."
+      ].join("\n");
 
       const fullHtml = document.documentElement.outerHTML;
 
@@ -2029,7 +3040,7 @@
         `- DC total as fraction of US annual rainfall (${(US_ANNUAL_PRECIP_AF / 1000).toFixed(0)} kAF/yr): ~1/${fmt(rainFracTrace, 0)}`,
         "",
         "Replenishment note (not modeled — gross consumption only):",
-        "Google replenished 4.5B gal in 2024 (~64% of consumption; 112 projects, 68 watersheds).",
+        "Google replenished 4.5B gal in 2024 (~64% of freshwater consumption; 112 projects, 68 watersheds).",
         "Meta replenished 1.5B gal in 2024.",
         "Microsoft committed to zero-water cooling on all new builds (Aug 2024).",
         "AWS operates at 0.15 L/kWh WUE (lowest among the big four).",
@@ -2041,8 +3052,8 @@
         "Methods summary:",
         methodsSummary,
         "",
-        "Traceability check status:",
-        traceabilityStatus,
+        "Zero-water procurement capacity extraction trace:",
+        ppaExtractionLines,
         "",
         "Current scenario JSON:",
         JSON.stringify(latestState, null, 2),
@@ -2050,8 +3061,11 @@
         "Assumptions CSV:",
         assumptionsCsv,
         "",
-        "Industry comparison trace (kAF/year):",
+        "Industry comparison trace (kAF/year; excludes RFS ethanol policy module):",
         industryLines,
+        "",
+        "RFS ethanol policy-module trace (kAF/year):",
+        rfsLines,
         "",
         "Agriculture comparison trace (kAF/year; individual denominators, not additive):",
         agricultureLines,
@@ -2106,8 +3120,13 @@
       const includeHydro = document.getElementById("hydroToggle").checked;
       const applyPpa = document.getElementById("ppaToggle").checked;
 
+      const ppaBasis = document.getElementById("ppaBasisSelect").value;
+      const ppaScenario = PPA_SCENARIOS[ppaBasis] || PPA_SCENARIOS.delivered2023_central;
+      const ppaCustomInput = document.getElementById("ppaCustomTWh");
+      ppaCustomInput.style.display = ppaBasis === "customTWh" ? "" : "none";
+
       const ppaCapacityGW = Math.max(readNumber("ppaCapacityGW", DEFAULT_TRACKED_SIGNED_PPA_GW), 0);
-      const ppaCapacityFactorPct = clamp(readNumber("ppaCapacityFactorPct", 30), 0, 100);
+      const ppaCapacityFactorPct = clamp(readNumber("ppaCapacityFactorPct", 27), 0, 100);
       const presetVal = document.getElementById("displacedThermalPreset").value;
       const customInput = document.getElementById("displacedThermalLkwh");
       if (presetVal === "custom") {
@@ -2126,10 +3145,33 @@
       const ppaCapacityFactor = ppaCapacityFactorPct / 100;
       const thermalShareFixed = thermalSharePctFixed / 100;
 
-      const ppaAnnualTWh = ppaCapacityGW * ppaCapacityFactor * 8.76;
-      const ppaCoverageShare = clamp(ppaAnnualTWh / INPUT.electricity2023TWh, 0, 1);
+      let ppaAnnualTWh;
+      if (ppaBasis === "contracted") {
+        ppaAnnualTWh = ppaCapacityGW * ppaCapacityFactor * 8.76;
+      } else if (ppaBasis === "customTWh") {
+        ppaAnnualTWh = Math.max(readNumber("ppaCustomTWh", 46.7), 0);
+      } else {
+        ppaAnnualTWh = ppaScenario.twh;
+      }
+      // Vintage alignment: the footprint pipeline subtracts the credit from the
+      // 2023 base and THEN scales by the 2025 buildout factor. A CY2025-vintage
+      // credit must therefore be expressed on the 2023 base (divided by the
+      // factor) so that, after scaling, the headline reflects the true 2025
+      // avoided volume. CY2023 credits pass through unchanged (their implicit
+      // assumption — delivery grows with the buildout — now understates the
+      // researched 2025 values, i.e., it errs conservative).
+      const ppaVintage2025 = !!ppaScenario.vintage2025;
+      const ppaVintageDeflator = ppaVintage2025 ? buildout2025CombinedFactor : 1;
+      const ppaFootprintLoadTWh = ppaVintage2025
+        ? INPUT.electricity2023TWh * buildout2025CombinedFactor
+        : INPUT.electricity2023TWh;
+      // Raw (uncapped) coverage is shown to the reader; >100% flags a basis
+      // inconsistency (e.g., contracted pipeline vs one year's load) instead of hiding it.
+      const ppaCoverageRawPct = (ppaAnnualTWh / ppaFootprintLoadTWh) * 100;
+      const ppaCoverageShare = clamp(ppaAnnualTWh / ppaFootprintLoadTWh, 0, 1);
       const ppaCoveragePct = ppaCoverageShare * 100;
-      const ppaAvoidedLitersYearPotential = ppaAnnualTWh * 1e9 * displacedThermalLkwh * thermalShareFixed;
+      const ppaAvoidedLitersYearTrue = ppaAnnualTWh * 1e9 * displacedThermalLkwh * thermalShareFixed;
+      const ppaAvoidedLitersYearPotential = ppaAvoidedLitersYearTrue / ppaVintageDeflator;
       const ppaAvoidedAFYearPotential = ppaAvoidedLitersYearPotential / litersPerAF;
       const ppaAvoidedAFYearPotentialCapped = Math.min(ppaAvoidedAFYearPotential, indirectNoHydroAFYear);
       const ppaAvoidedAFDayPotential = ppaAvoidedAFYearPotentialCapped / daysPerYear;
@@ -2189,13 +3231,15 @@
 
       const ppaFlag = document.getElementById("ppaFlag");
       ppaFlag.className = applyPpa ? "pill warn" : "pill good";
-      ppaFlag.textContent = applyPpa ? "PPA: YES" : "PPA: NO";
+      ppaFlag.textContent = applyPpa
+        ? `PPA credit: ON (${ppaScenario.label}, ${ppaAnnualTWh.toFixed(1)} TWh)`
+        : "PPA credit: OFF";
 
       document.getElementById("boundaryNote").textContent =
         `Hydro: ${includeHydro ? "included" : "excluded"}. ` +
-        `PPA reduction: ${applyPpa
-          ? `ON (−${fmtKaf(ppaAvoidedAFYr, 1)} kAF/yr at ${displacedThermalLkwh.toFixed(2)} L/kWh displaced thermal).`
-          : `OFF (potential: ${fmtKaf(ppaAvoidedAFDayPotential * daysPerYear, 1)} kAF/yr).`}`;
+        `Clean-energy procurement credit: ${applyPpa
+          ? `ON — ${ppaScenario.label} (${ppaAnnualTWh.toFixed(1)} TWh/yr), offsetting ${(netReductionShareNoHydro * 100).toFixed(0)}% of no-hydro off-site water (−${fmtKaf(ppaAvoidedAFYr * ppaVintageDeflator, 1)} kAF/yr${ppaVintage2025 ? " on the 2025 modeled footprint" : ""} at ${displacedThermalLkwh.toFixed(2)} L/kWh displaced thermal).`
+          : `OFF (potential at current settings: ${fmtKaf(ppaAvoidedAFDayPotential * daysPerYear * ppaVintageDeflator, 1)} kAF/yr).`}`;
 
       document.getElementById("headlineDirect").textContent =
         `${buildoutDirectShareUsgs.toFixed(3)}%`;
@@ -2214,13 +3258,15 @@
       document.getElementById("heroFootnote").textContent =
         `2025 modeled, all US data centers. Direct + grid = ${fmtKaf(buildoutTotalAFYear, 1)} kAF/year.`;
 
+      renderWaterCascade(buildoutTotalAFYear);
       renderIndustryChart(buildoutDirectAFYear, buildoutTotalAFYear);
+      renderRfsEthanolChart(buildoutDirectAFYear, buildoutTotalAFYear);
       renderAgricultureChart(buildoutTotalAFYear);
 
       document.getElementById("methodsSummary").textContent =
         `Default 2025 path: buildout-calibrated point estimate using ${(buildout2024Factor).toFixed(4)}x (2024 vs 2023) x ${buildout2025From2024Factor.toFixed(4)}x (2025 vs 2024) = ${buildout2025CombinedFactor.toFixed(4)}x. ` +
         `Boundary: ${includeHydro ? "include hydro evaporation" : "exclude hydro evaporation"}. ` +
-        `PPA adjustment: ${applyPpa ? "on" : "off"} (renewables-only, near-zero operational water assumption with full displacement of delivered renewable generation using assumed displaced thermal intensity ${displacedThermalLkwh.toFixed(2)} L/kWh; current avoided off-site: ${fmtKaf(ppaAvoidedAFYr, 1)} kAF/year). ` +
+        `Zero-water procurement adjustment: ${applyPpa ? "on" : "off"} (clean-energy procurement displacement sensitivity with full displacement of delivered generation using assumed displaced thermal intensity ${displacedThermalLkwh.toFixed(2)} L/kWh; current avoided off-site: ${fmtKaf(ppaAvoidedAFYr, 1)} kAF/year). ` +
         `Default 2025 output under current settings: direct ${fmtKaf(buildoutDirectAFYear, 1)} kAF/year (${buildoutDirectShareUsgs.toFixed(3)}%); direct + indirect ${fmtKaf(buildoutTotalAFYear, 1)} kAF/year (${buildoutTotalShareUsgs.toFixed(3)}%). ` +
         `Sensitivity range (from LBNL 2028 bounds) for the same toggles: direct ${projLowDirectShare.toFixed(3)}% to ${projHighDirectShare.toFixed(3)}%; direct + indirect ${projLowShare.toFixed(3)}% to ${projHighShare.toFixed(3)}%.`;
 
@@ -2234,7 +3280,7 @@
           <td class="num">${pct(totalShareUsgs, 3)}</td>
         </tr>
         <tr>
-          <td>PPA-avoided off-site (thermal only)</td>
+          <td>Zero-water-procurement avoided off-site (thermal only)</td>
           <td class="num">-${pct(ppaShareUsgs, 3)}</td>
         </tr>
       `;
@@ -2263,7 +3309,13 @@
         `${rainfallSharePct.toFixed(3)}% of estimated annual CONUS precipitation ` +
         `(${fmtKaf(US_ANNUAL_PRECIP_AF, 0)} kAF/year), about ${rainfallFracText}.`;
 
+      // Bar width clamps at 100%, but the label shows the raw value so a
+      // contracted-pipeline > one-year-load inconsistency stays visible.
       setBar("barCoverage", ppaCoveragePct, "barCoverageVal");
+      document.getElementById("barCoverageName").textContent =
+        `Procurement coverage of ${ppaVintage2025 ? "2025 modeled" : "2023"} load`;
+      document.getElementById("barCoverageVal").textContent =
+        `${ppaCoverageRawPct.toFixed(1)}%${ppaCoverageRawPct > 100 ? ` (signed > ${ppaVintage2025 ? "2025" : "2023"} load)` : ""}`;
       const thermalIntensityBarPct = clamp((displacedThermalLkwh / 5) * 100, 0, 100);
       document.getElementById("barThermalIntensity").style.width = `${thermalIntensityBarPct}%`;
       document.getElementById("barThermalIntensityVal").textContent = `${displacedThermalLkwh.toFixed(2)} L/kWh`;
@@ -2293,25 +3345,28 @@ Hydro-implied AF/year = include-hydro indirect - exclude-hydro indirect
                       = ${indirectWithHydroAFYr.toFixed(6)} - ${indirectNoHydroAFYear.toFixed(6)}
                       = ${hydroImpliedAFYr.toFixed(6)}
 
-Default tracked signed PPA baseline (strict US renewables PPA-focused; GW)
-                           = ${GOOGLE_US_RENEWABLE_PPA_GW.toFixed(3)} + ${AMAZON_US_RENEWABLE_PPA_GW.toFixed(3)} + ${META_US_RENEWABLE_PPA_GW.toFixed(3)} + ${MICROSOFT_US_RENEWABLE_PPA_GW.toFixed(3)}
+Procurement credit basis selected = ${ppaBasis} (${ppaScenario.note})
+Per-company audit (US wind/solar; nuclear/hydro excluded; full trace in ppa_big4_us_dataset.csv, June 2026):
+  Google    contracted ${PPA_COMPANY_DATA.google.contractedGW.toFixed(3)} GW NA strict floor (${PPA_COMPANY_DATA.google.contractedVintage}); aggregate-adjusted cross-check ${GOOGLE_AGGREGATE_ZERO_WATER_LOW_GW.toFixed(1)}-${GOOGLE_AGGREGATE_ZERO_WATER_HIGH_GW.toFixed(1)} GW is excluded from the default pending a regional resource table; delivered CY2023 ${PPA_COMPANY_DATA.google.delivered2023TWhLow.toFixed(1)}-${PPA_COMPANY_DATA.google.delivered2023TWh.toFixed(1)} TWh; CY2024 ${PPA_COMPANY_DATA.google.deliveredRecentTWh.toFixed(1)} TWh; unbundled RECs ~${PPA_COMPANY_DATA.google.recPct2022}% (2022)
+  Amazon    contracted ${PPA_COMPANY_DATA.amazon.contractedGW.toFixed(3)} GW US (${PPA_COMPANY_DATA.amazon.contractedVintage}); operating ${PPA_COMPANY_DATA.amazon.operatingGW.toFixed(3)} GW end-2024 (6.226 end-2023, 15.421 end-2025, 16.161 by Jun 30 2026, strict named wind/solar); delivered CY2023 ${PPA_COMPANY_DATA.amazon.delivered2023TWhLow.toFixed(1)}-${PPA_COMPANY_DATA.amazon.delivered2023TWh.toFixed(1)} TWh (fleet COD reconstruction); unbundled RECs ${PPA_COMPANY_DATA.amazon.recPct2022}% (2022)
+  Meta      contracted ${PPA_COMPANY_DATA.meta.contractedGW.toFixed(3)} GW US (${PPA_COMPANY_DATA.meta.contractedVintage}); operating ~${PPA_COMPANY_DATA.meta.operatingGW.toFixed(1)} GW end-2024; delivered CY2023 ${PPA_COMPANY_DATA.meta.delivered2023TWhLow.toFixed(1)}-${PPA_COMPANY_DATA.meta.delivered2023TWh.toFixed(1)} TWh (matched x bundled-PPA share); unbundled RECs ${PPA_COMPANY_DATA.meta.recPct2022}% (2022)
+  Microsoft contracted ${PPA_COMPANY_DATA.microsoft.contractedGW.toFixed(3)} GW US zero-water adjusted (${MICROSOFT_US_RENEWABLE_MAP_GW.toFixed(3)} official map: 8.089 PJM + 7.897 MISO + 4.696 ERCOT + 3.431 WECC + 1.054 SERC + 0.907 CAISO + 0.178 SPP; minus ${MICROSOFT_IDENTIFIED_HYDRO_GW.toFixed(3)} Hawk's Nest hydro); active ${PPA_COMPANY_DATA.microsoft.operatingGW.toFixed(3)} GW; delivered CY2023 ${PPA_COMPANY_DATA.microsoft.delivered2023TWhLow.toFixed(1)}-${PPA_COMPANY_DATA.microsoft.delivered2023TWh.toFixed(1)} TWh (NA matched x direct-PPA share); unbundled RECs ${PPA_COMPANY_DATA.microsoft.recPct2022}% (2022)
+Scenario totals (TWh/yr): CY2023 conservative ${PPA_SCENARIOS.delivered2023_conservative.twh.toFixed(1)} / central ${PPA_SCENARIOS.delivered2023_central.twh.toFixed(1)}; CY2025 conservative ${PPA_SCENARIOS.delivered2025_conservative.twh.toFixed(1)} / central ${PPA_SCENARIOS.delivered2025_central.twh.toFixed(1)}; CY2024/FY24 reference ${ppaSum("deliveredRecentTWh").toFixed(1)}
+Contracted full-build capacity (GW, signed incl. unbuilt)
+                           = ${PPA_COMPANY_DATA.google.contractedGW.toFixed(3)} + ${PPA_COMPANY_DATA.amazon.contractedGW.toFixed(3)} + ${PPA_COMPANY_DATA.meta.contractedGW.toFixed(3)} + ${PPA_COMPANY_DATA.microsoft.contractedGW.toFixed(3)}
                            = ${DEFAULT_TRACKED_SIGNED_PPA_GW.toFixed(3)}
-Microsoft US-contracted estimate method (GW; map-derived reference)
-                           = 7.897 (MISO) + 8.089 (PJM) + 4.696 (ERCOT) + 3.431 (WECC non-CAISO)
-                           + 1.054 (SERC) + 0.907 (CAISO) + 0.178 (SPP)
-                           = ${MICROSOFT_US_CONTRACTED_GW_CONTEXT.toFixed(3)}
-Microsoft renewables-PPA proxy factor
-                           = ${(MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR * 100).toFixed(1)}%
-Microsoft included renewables-PPA proxy GW
-                           = ${MICROSOFT_US_CONTRACTED_GW_CONTEXT.toFixed(3)} x ${MICROSOFT_RENEWABLE_PPA_PROXY_FACTOR.toFixed(3)}
-                           = ${MICROSOFT_US_RENEWABLE_PPA_GW.toFixed(3)}
+Non-default aggregate-adjusted cross-check (GW)
+                           = Google ${GOOGLE_AGGREGATE_ZERO_WATER_LOW_GW.toFixed(1)}-${GOOGLE_AGGREGATE_ZERO_WATER_HIGH_GW.toFixed(1)} + ${PPA_COMPANY_DATA.amazon.contractedGW.toFixed(3)} + ${PPA_COMPANY_DATA.meta.contractedGW.toFixed(3)} + ${PPA_COMPANY_DATA.microsoft.contractedGW.toFixed(3)}
+                           = ${BIG4_AGGREGATE_ZERO_WATER_LOW_GW.toFixed(1)}-${BIG4_AGGREGATE_ZERO_WATER_HIGH_GW.toFixed(1)} (not used in default; Google/Microsoft resource split still incomplete)
 
-PPA annual energy (TWh/yr) = signed GW x capacity factor x 8.76
-                           = ${ppaCapacityGW.toFixed(3)} x ${ppaCapacityFactor.toFixed(4)} x 8.76
-                           = ${ppaAnnualTWh.toFixed(6)}
-PPA boundary assumption    = renewables-only PPAs (wind/solar/non-hydro) treated as near-zero operational consumptive water
-PPA coverage of 2023 load  = ${ppaAnnualTWh.toFixed(6)} / ${INPUT.electricity2023TWh}
-                           = ${(ppaCoverageShare * 100).toFixed(6)}%
+Procurement credit annual energy (TWh/yr)
+                           = ${ppaBasis === "contracted"
+                               ? `${ppaCapacityGW.toFixed(3)} GW x ${ppaCapacityFactor.toFixed(4)} CF x 8.76 = ${ppaAnnualTWh.toFixed(6)}`
+                               : `${ppaAnnualTWh.toFixed(6)} (delivered-energy basis; no GW x CF conversion needed)`}
+Procurement boundary assumption = delivered US wind/solar energy treated as displacing thermal generation grid-wide (annual volumetric matching, not hourly/locational)
+Vintage alignment: credit year ${ppaVintage2025 ? "CY2025; avoided volume divided by the 2025 buildout factor (" + buildout2025CombinedFactor.toFixed(6) + "x) before the 2023-base pipeline, so the scaled headline reflects the true CY2025 avoided water" : "CY2023 (or user-set); applied directly to the 2023 base and scaled with the buildout factor"}
+Procurement coverage of ${ppaVintage2025 ? "2025 modeled load" : "2023 load"} (uncapped) = ${ppaAnnualTWh.toFixed(6)} / ${ppaFootprintLoadTWh.toFixed(1)}
+                           = ${ppaCoverageRawPct.toFixed(6)}%${ppaCoverageRawPct > 100 ? "  ** >100%: basis inconsistency (e.g., contracted pipeline vs one year's load) — surfaced, not hidden **" : ""}
 Thermal displacement scope = ${thermalSharePctFixed.toFixed(3)}%
 LBNL thermoelectric ref    = ${LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH.toFixed(3)} gal/kWh (LBNL 2024 report pp. 55–57)
 Converted to L/kWh         = ${LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH.toFixed(3)} x ${INPUT.litersPerGallon.toFixed(9)}
@@ -2319,22 +3374,22 @@ Converted to L/kWh         = ${LBNL_THERMOELECTRIC_CONSUMPTION_GAL_PER_KWH.toFix
 Note: same rate used to derive no-hydro boundary (275 Mgd = 176 TWh x 0.47 gal/kWh upper bound + direct)
 Displacement preset selected = ${presetVal === "custom" ? "Custom" : document.getElementById("displacedThermalPreset").selectedOptions[0].textContent}
 Assumed displaced thermal intensity = ${displacedThermalLkwh.toFixed(6)} L/kWh
-Potential PPA avoided liters/year = ${ppaAnnualTWh.toFixed(6)} x 1,000,000,000 x ${displacedThermalLkwh.toFixed(6)}
+Potential zero-water procurement avoided liters/year = ${ppaAnnualTWh.toFixed(6)} x 1,000,000,000 x ${displacedThermalLkwh.toFixed(6)}
                                   = ${ppaAvoidedLitersYearPotential.toFixed(6)}
-Potential PPA avoided AF/year (before no-hydro cap)
+Potential zero-water procurement avoided AF/year (before no-hydro cap)
                                   = ${ppaAvoidedLitersYearPotential.toFixed(6)} / ${litersPerAF.toFixed(6)}
                                   = ${ppaAvoidedAFYearPotential.toFixed(6)}
-Potential PPA avoided AF/year (capped to no-hydro baseline)
+Potential zero-water procurement avoided AF/year (capped to no-hydro baseline)
                                   = min(${ppaAvoidedAFYearPotential.toFixed(6)}, ${indirectNoHydroAFYear.toFixed(6)})
                                   = ${ppaAvoidedAFYearPotentialCapped.toFixed(6)}
 Net reduction share (no-hydro indirect) = capped potential / no-hydro indirect baseline
                                         = ${ppaAvoidedAFYearPotentialCapped.toFixed(6)} / ${indirectNoHydroAFYear.toFixed(6)}
                                         = ${(netReductionShareNoHydro * 100).toFixed(6)}%
 
-Potential PPA avoided AF/year (no-hydro only)
+Potential zero-water procurement avoided AF/year (no-hydro only)
                             = ${ppaAvoidedAFYearPotentialCapped.toFixed(6)}
                             = ${(ppaAvoidedAFDayPotential * daysPerYear).toFixed(6)}
-Applied PPA avoided AF/year = ${applyPpa ? ppaAvoidedAFYr.toFixed(6) : "0.000000"}  (${applyPpa ? "PPA ON" : "PPA OFF"})
+Applied zero-water procurement avoided AF/year = ${applyPpa ? ppaAvoidedAFYr.toFixed(6) : "0.000000"}  (${applyPpa ? "zero-water procurement ON" : "zero-water procurement OFF"})
 Adjusted no-hydro AF/year   = ${indirectNoHydroAFYear.toFixed(6)} - ${ppaAvoidedAFYr.toFixed(6)}
                             = ${adjustedNoHydroAFYear.toFixed(6)}
 
@@ -2393,12 +3448,14 @@ Share (%) = (numerator AF/year / denominator AF/year) x 100`;
           applyPpa
         },
         assumptions: {
+          ppaBasis,
           ppaCapacityGW,
           ppaCapacityFactorPct,
           thermalSharePctFixed,
           displacedThermalLkwh,
           ppaAnnualTWh,
-          ppaCoveragePct
+          ppaCoveragePct,
+          ppaCoverageRawPct
         },
         results2023: {
           directAFYear,
@@ -2429,7 +3486,6 @@ Share (%) = (numerator AF/year / denominator AF/year) x 100`;
         }
       };
 
-      updateTraceabilityStatus(latestState);
     }
 
     document.getElementById("hydroToggle").addEventListener("change", update);
@@ -2462,7 +3518,8 @@ Share (%) = (numerator AF/year / denominator AF/year) x 100`;
       if (e.key === "Escape") closeTraceModal();
     });
     document.getElementById("displacedThermalPreset").addEventListener("change", update);
-    ["ppaCapacityGW", "ppaCapacityFactorPct", "displacedThermalLkwh"].forEach((id) => {
+    document.getElementById("ppaBasisSelect").addEventListener("change", update);
+    ["ppaCapacityGW", "ppaCapacityFactorPct", "displacedThermalLkwh", "ppaCustomTWh"].forEach((id) => {
       document.getElementById(id).addEventListener("input", update);
       document.getElementById(id).addEventListener("change", update);
     });
