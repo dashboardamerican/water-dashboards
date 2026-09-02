@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>AI &amp; Water, In Context</title>
-  <meta name="description" content="Two views of AI and data-center water use: US data centers compared with other water users, and AI prompts in one person's day-to-day water footprint. Every claim source-traced and fact-checked." />
+  <meta name="description" content="Three views of AI and data-center water use: national context, everyday comparisons, and accelerator efficiency across generations." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>" />
   <style>
     :root {
@@ -118,16 +118,22 @@
         <span class="t">Your Daily Life</span>
         <span class="d">AI prompts in one person's water footprint</span>
       </a>
+      <a class="tab" id="tab-accelerators" href="#accelerators">
+        <span class="t">Hardware Efficiency</span>
+        <span class="d">Water per million tokens by accelerator generation</span>
+      </a>
     </div>
   </nav>
   <div class="views">
     <iframe id="view-big-picture" title="US Data Center Water Calculator" src="us_data_center_water_calc_explicit.html"></iframe>
     <iframe id="view-daily-life" title="Prompt Water Footprint, In Context" data-src="gemini_jacket_blue_equivalence.html"></iframe>
+    <iframe id="view-accelerators" title="AI Accelerator Water Intensity" data-src="accelerator-energy-water/index.html"></iframe>
   </div>
   <script>
     const VIEWS = {
       "big-picture": { title: "AI & Water, In Context — The Big Picture" },
-      "daily-life": { title: "AI & Water, In Context — Your Daily Life" }
+      "daily-life": { title: "AI & Water, In Context — Your Daily Life" },
+      "accelerators": { title: "AI & Water, In Context — Hardware Efficiency" }
     };
 
     function currentView() {
